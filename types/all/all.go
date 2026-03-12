@@ -4,14 +4,13 @@ import (
 	// Executables
 	_ "github.com/coalaura/onda/types/dex"
 	_ "github.com/coalaura/onda/types/elf"
-	_ "github.com/coalaura/onda/types/java"
 	_ "github.com/coalaura/onda/types/macho"
 	_ "github.com/coalaura/onda/types/pe"
-	_ "github.com/coalaura/onda/types/wasm"
 
 	// Images
 	_ "github.com/coalaura/onda/types/avif"
 	_ "github.com/coalaura/onda/types/bmp"
+	_ "github.com/coalaura/onda/types/cur"
 	_ "github.com/coalaura/onda/types/dds"
 	_ "github.com/coalaura/onda/types/gif"
 	_ "github.com/coalaura/onda/types/hdr"
@@ -20,7 +19,9 @@ import (
 	_ "github.com/coalaura/onda/types/ico"
 	_ "github.com/coalaura/onda/types/jp2"
 	_ "github.com/coalaura/onda/types/jpeg"
+	_ "github.com/coalaura/onda/types/pcx"
 	_ "github.com/coalaura/onda/types/png"
+	_ "github.com/coalaura/onda/types/pnm"
 	_ "github.com/coalaura/onda/types/psd"
 	_ "github.com/coalaura/onda/types/qoi"
 	_ "github.com/coalaura/onda/types/tga"
@@ -32,11 +33,13 @@ import (
 	_ "github.com/coalaura/onda/types/aiff"
 	_ "github.com/coalaura/onda/types/amr"
 	_ "github.com/coalaura/onda/types/au"
+	_ "github.com/coalaura/onda/types/caf"
 	_ "github.com/coalaura/onda/types/flac"
 	_ "github.com/coalaura/onda/types/midi"
 	_ "github.com/coalaura/onda/types/mp3"
 	_ "github.com/coalaura/onda/types/ogg"
 	_ "github.com/coalaura/onda/types/wav"
+	_ "github.com/coalaura/onda/types/wave64"
 
 	// Video
 	_ "github.com/coalaura/onda/types/avi"
@@ -48,10 +51,14 @@ import (
 
 	// Binaries
 	_ "github.com/coalaura/onda/types/java"
+	_ "github.com/coalaura/onda/types/swf"
 	_ "github.com/coalaura/onda/types/wasm"
 
 	// Documents / data
+	_ "github.com/coalaura/onda/types/dicom"
+	_ "github.com/coalaura/onda/types/fits"
 	_ "github.com/coalaura/onda/types/ole"
+	_ "github.com/coalaura/onda/types/parquet"
 	_ "github.com/coalaura/onda/types/pdf"
 	_ "github.com/coalaura/onda/types/pgp"
 	_ "github.com/coalaura/onda/types/rtf"
@@ -68,9 +75,12 @@ import (
 	_ "github.com/coalaura/onda/types/ar"
 	_ "github.com/coalaura/onda/types/bzip2"
 	_ "github.com/coalaura/onda/types/cab"
+	_ "github.com/coalaura/onda/types/deb"
 	_ "github.com/coalaura/onda/types/gzip"
 	_ "github.com/coalaura/onda/types/lz4"
+	_ "github.com/coalaura/onda/types/lzma"
 	_ "github.com/coalaura/onda/types/rar"
+	_ "github.com/coalaura/onda/types/rpm"
 	_ "github.com/coalaura/onda/types/tar"
 	_ "github.com/coalaura/onda/types/xz"
 	_ "github.com/coalaura/onda/types/zip"
@@ -80,8 +90,17 @@ import (
 	_ "github.com/coalaura/onda/types/pcap"
 	_ "github.com/coalaura/onda/types/pcapng"
 
-	// Disk images
+	// Disk images / filesystems
+	_ "github.com/coalaura/onda/types/dmg"
+	_ "github.com/coalaura/onda/types/ext"
+	_ "github.com/coalaura/onda/types/fat"
+	_ "github.com/coalaura/onda/types/gpt"
+	_ "github.com/coalaura/onda/types/iso9660"
 	_ "github.com/coalaura/onda/types/qcow2"
 	_ "github.com/coalaura/onda/types/vdi"
 	_ "github.com/coalaura/onda/types/vhd"
+
+	// ROMs
+	_ "github.com/coalaura/onda/types/gameboy"
+	_ "github.com/coalaura/onda/types/nes"
 )
