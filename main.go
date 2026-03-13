@@ -29,7 +29,21 @@ func main() {
 
 	name := filepath.Base(path)
 
-	file, err := os.OpenFile(os.Args[1], os.O_RDONLY, 0)
+	info, err := os.Lstat(path)
+	if err != nil {
+		log.Errorln(err)
+
+		os.Exit(1)
+	}
+
+	meta := detectPath(name, info)
+	if meta != nil {
+		log.Println(meta.Format())
+
+		return
+	}
+
+	file, err := os.Open(path)
 	if err != nil {
 		log.Errorln(err)
 
@@ -47,7 +61,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	meta, err := types.Detect(name, buf[:n])
+	meta, err = types.Detect(name, buf[:n])
 	if err != nil {
 		log.Errorln(err)
 
@@ -55,4 +69,66 @@ func main() {
 	}
 
 	log.Println(meta.Format())
+}
+
+func detectPath(name string, info os.FileInfo) *types.Metadata {
+	mode := info.Mode()
+
+	if mode&os.ModeSymlink != 0 {
+		return &types.Metadata{
+			File: name,
+			Name: "Filesystem entry",
+			Type: "Symbolic link",
+		}
+	}
+
+	if mode.IsDir() {
+		return &types.Metadata{
+			File: name,
+			Name: "Filesystem entry",
+			Type: "Directory",
+		}
+	}
+
+	if mode&os.ModeNamedPipe != 0 {
+		return &types.Metadata{
+			File: name,
+			Name: "Filesystem entry",
+			Type: "Named pipe",
+		}
+	}
+
+	if mode&os.ModeSocket != 0 {
+		return &types.Metadata{
+			File: name,
+			Name: "Filesystem entry",
+			Type: "Socket",
+		}
+	}
+
+	if mode&os.ModeDevice != 0 {
+		if mode&os.ModeCharDevice != 0 {
+			return &types.Metadata{
+				File: name,
+				Name: "Filesystem entry",
+				Type: "Character device",
+			}
+		}
+
+		return &types.Metadata{
+			File: name,
+			Name: "Filesystem entry",
+			Type: "Block device",
+		}
+	}
+
+	if !mode.IsRegular() {
+		return &types.Metadata{
+			File: name,
+			Name: "Filesystem entry",
+			Type: "Special",
+		}
+	}
+
+	return nil
 }
