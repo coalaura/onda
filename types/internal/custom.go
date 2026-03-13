@@ -1,0 +1,20 @@
+package internal
+
+import (
+	"github.com/coalaura/onda/types"
+	"github.com/coalaura/onda/types/internal/custom"
+)
+
+func init() {
+	types.Register(types.DetectFunc(custom.DetectPE))
+	types.Register(types.DetectFunc(custom.DetectELF))
+	types.Register(types.DetectFunc(custom.DetectMachO))
+	types.Register(types.DetectFunc(custom.DetectICO))
+	types.Register(types.DetectFunc(custom.DetectRIFF))
+	types.Register(types.DetectFunc(custom.DetectISOBaseMedia))
+	types.Register(types.DetectFunc(custom.DetectOLE))
+	types.Register(types.DetectFunc(custom.DetectTar))
+	types.Register(types.DetectFunc(custom.DetectIFF))
+	types.Register(types.DetectFunc(custom.DetectEBML))
+	types.Register(types.DetectFunc(custom.DetectMetafile))
+}

@@ -1,14 +1,14 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"os"
 	"path/filepath"
 
 	"github.com/coalaura/onda/types"
-	_ "github.com/coalaura/onda/types/all"
 	"github.com/coalaura/plain"
+
+	_ "github.com/coalaura/onda/types/all"
 )
 
 var log = plain.New()
@@ -38,18 +38,16 @@ func main() {
 
 	defer file.Close()
 
-	chunk := make([]byte, 4096)
+	var buf [4096]byte
 
-	n, err := io.ReadFull(file, chunk)
-	if err != nil {
+	n, err := file.Read(buf[:])
+	if err != nil && err != io.EOF {
 		log.Errorln(err)
 
 		os.Exit(1)
 	}
 
-	rd := bytes.NewReader(chunk[:n])
-
-	meta, err := types.Detect(name, rd)
+	meta, err := types.Detect(name, buf[:n])
 	if err != nil {
 		log.Errorln(err)
 
