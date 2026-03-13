@@ -40,4 +40,16 @@ func init() {
 	types.RegisterSignature("Shockwave Flash", "uncompressed", 0, []byte("FWS"))
 	types.RegisterSignature("Shockwave Flash", "zlib compressed", 0, []byte("CWS"))
 	types.RegisterSignature("Shockwave Flash", "lzma compressed", 0, []byte("ZWS"))
+
+	types.RegisterSignature("LLVM bitcode", "", 0, []byte{
+		'B', 'C', 0xc0, 0xde,
+	})
+
+	types.RegisterSignature("Windows shortcut", "", 0, []byte{
+		0x4c, 0x00, 0x00, 0x00,
+		0x01, 0x14, 0x02, 0x00,
+		0x00, 0x00, 0x00, 0x00,
+		0xc0, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x46,
+	})
 }

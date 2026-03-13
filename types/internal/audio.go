@@ -12,4 +12,8 @@ func init() {
 	types.RegisterSignature("AAC audio", "ADTS", 0, []byte{0xff, 0xf1})
 	types.RegisterSignature("AAC audio", "ADTS", 0, []byte{0xff, 0xf9})
 	types.RegisterSignature("CAF audio", "", 0, []byte("caff"))
+	types.RegisterSignature("WavPack audio", "", 0, []byte("wvpk"))
+	types.RegisterSignature("Monkey's Audio", "", 0, []byte("MAC "))
+	types.RegisterSignature("Musepack audio", "stream version 7", 0, []byte("MP+"))
+	types.RegisterSignature("Musepack audio", "stream version 8", 0, []byte("MPCK"))
 }

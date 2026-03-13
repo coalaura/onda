@@ -52,7 +52,7 @@ func main() {
 
 	defer file.Close()
 
-	var buf [4096]byte
+	var buf [65536]byte
 
 	n, err := file.Read(buf[:])
 	if err != nil && err != io.EOF {

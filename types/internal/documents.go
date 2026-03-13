@@ -13,4 +13,10 @@ func init() {
 	types.RegisterSignature("DICOM medical image", "", 128, []byte("DICM"))
 	types.RegisterSignature("Windows registry hive", "", 0, []byte("regf"))
 	types.RegisterSignature("Apple binary property list", "", 0, []byte("bplist00"))
+
+	types.RegisterSignature("Avro object container", "", 0, []byte{
+		'O', 'b', 'j', 0x01,
+	})
+
+	types.RegisterSignature("ORC columnar data", "", 0, []byte("ORC"))
 }

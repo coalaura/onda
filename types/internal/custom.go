@@ -17,4 +17,6 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectIFF))
 	types.Register(types.DetectFunc(custom.DetectEBML))
 	types.Register(types.DetectFunc(custom.DetectMetafile))
+	types.Register(types.DetectFunc(custom.DetectMP3))
+	types.Register(types.DetectFunc(custom.DetectNetpbm))
 }

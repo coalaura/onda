@@ -10,4 +10,5 @@ func init() {
 	types.RegisterSignature("OpenType font", "", 0, []byte("OTTO"))
 	types.RegisterSignature("WOFF font", "", 0, []byte("wOFF"))
 	types.RegisterSignature("WOFF2 font", "", 0, []byte("wOF2"))
+	types.RegisterSignature("TrueType collection", "", 0, []byte("ttcf"))
 }

@@ -54,4 +54,9 @@ func init() {
 	})
 
 	types.RegisterSignature("ICNS icon", "", 0, []byte("icns"))
+	types.RegisterSignature("Farbfeld image", "", 0, []byte("farbfeld"))
+
+	types.RegisterSignature("JPEG 2000 image", "", 0, []byte{
+		0x00, 0x00, 0x00, 0x0c, 'j', 'P', ' ', ' ', 0x0d, 0x0a, 0x87, 0x0a,
+	})
 }

@@ -45,5 +45,15 @@ func init() {
 
 	types.RegisterSignature("Cabinet archive", "", 0, []byte("MSCF"))
 	types.RegisterSignature("Windows Imaging Format", "", 0, []byte("MSWIM\x00\x00\x00"))
-	types.RegisterSignature("Debian package", "", 0, []byte("!<arch>\n"))
+	types.RegisterSignature("AR archive", "", 0, []byte("!<arch>\n"))
+
+	types.RegisterSignature("CPIO archive", "new ASCII", 0, []byte("070701"))
+	types.RegisterSignature("CPIO archive", "new ASCII with CRC", 0, []byte("070702"))
+	types.RegisterSignature("CPIO archive", "old ASCII", 0, []byte("070707"))
+	types.RegisterSignature("CPIO archive", "binary big-endian", 0, []byte{0x71, 0xc7})
+	types.RegisterSignature("CPIO archive", "binary little-endian", 0, []byte{0xc7, 0x71})
+
+	types.RegisterSignature("RPM package", "", 0, []byte{
+		0xed, 0xab, 0xee, 0xdb,
+	})
 }

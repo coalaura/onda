@@ -60,12 +60,6 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 		}
 	}
 
-	if b.Has(4, []byte("jP  ")) {
-		return &types.Metadata{
-			Name: "JPEG 2000 image",
-		}
-	}
-
 	return &types.Metadata{
 		Name: "ISO Base Media file",
 	}
