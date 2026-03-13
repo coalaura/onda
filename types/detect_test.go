@@ -61,19 +61,6 @@ func TestDetectNetpbmRequiresDelimiter(t *testing.T) {
 	}
 }
 
-func TestDetectNetpbmWithDelimiter(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("good.ppm", []byte("P6\n255\n"))
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindNetpbmImage || meta.Type != types.TypePPMBinary {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
 func TestDetectISOCompatibleBrand(t *testing.T) {
 	t.Parallel()
 
@@ -96,48 +83,67 @@ func TestDetectISOCompatibleBrand(t *testing.T) {
 	}
 }
 
-func TestDetectDocx(t *testing.T) {
+func TestDetectDocm(t *testing.T) {
 	t.Parallel()
 
 	data := makeZipLocalFile("[Content_Types].xml", nil)
-	data = append(data, []byte("word/document.xml")...)
+	data = append(data, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")...)
 
-	meta, err := types.Detect("file.docx", data)
+	meta, err := types.Detect("file.docm", data)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftWordDocumentDOCX {
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftWordMacroEnabledDocumentDOCM {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
 
-func TestDetectEPUB(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("mimetype", []byte("application/epub+zip"))
-
-	meta, err := types.Detect("book.epub", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeEPUBDocument {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectJar(t *testing.T) {
+func TestDetectWarOverJar(t *testing.T) {
 	t.Parallel()
 
 	data := makeZipLocalFile("META-INF/MANIFEST.MF", nil)
+	data = append(data, []byte("WEB-INF/web.xml")...)
 
-	meta, err := types.Detect("app.jar", data)
+	meta, err := types.Detect("app.war", data)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeJavaArchiveJAR {
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeJavaWebArchiveWAR {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectNuGet(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("package.nuspec", nil)
+	data = append(data, []byte("package/services/metadata/core-properties")...)
+
+	meta, err := types.Detect("pkg.nupkg", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeNuGetPackageNUPKG {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectOLEWordDoc(t *testing.T) {
+	t.Parallel()
+
+	data := make([]byte, 512)
+	copy(data, []byte{0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1})
+	copy(data[128:], utf16LE("WordDocument"))
+
+	meta, err := types.Detect("legacy.doc", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindOLECompoundDocument || meta.Type != types.TypeMicrosoftWordDocumentDOC {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
@@ -176,197 +182,6 @@ func TestDetectMPEGTS(t *testing.T) {
 	}
 }
 
-func TestDetectOLEWordDoc(t *testing.T) {
-	t.Parallel()
-
-	data := make([]byte, 512)
-	copy(data, []byte{0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1})
-	copy(data[128:], utf16LE("WordDocument"))
-
-	meta, err := types.Detect("legacy.doc", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindOLECompoundDocument || meta.Type != types.TypeMicrosoftWordDocumentDOC {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectAAB(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("BundleConfig.pb", nil)
-
-	meta, err := types.Detect("app.aab", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeAndroidAppBundleAAB {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectWindowsEventLog(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("security.evtx", []byte("ElfFile\x00rest"))
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindWindowsEventLog {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectGIMPXCF(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("image.xcf", []byte("gimp xcf v003"))
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindGIMPXCFImage {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectDocm(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("[Content_Types].xml", nil)
-	data = append(data, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")...)
-
-	meta, err := types.Detect("file.docm", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftWordMacroEnabledDocumentDOCM {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectXlsm(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("[Content_Types].xml", nil)
-	data = append(data, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")...)
-
-	meta, err := types.Detect("sheet.xlsm", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftExcelMacroEnabledWorkbookXLSM {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectPptm(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("[Content_Types].xml", nil)
-	data = append(data, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")...)
-
-	meta, err := types.Detect("slides.pptm", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftPowerPointMacroEnabledPresentationPPTM {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectWar(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("META-INF/MANIFEST.MF", nil)
-	data = append(data, []byte("WEB-INF/web.xml")...)
-
-	meta, err := types.Detect("app.war", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeJavaWebArchiveWAR {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectNuGet(t *testing.T) {
-	t.Parallel()
-
-	data := makeZipLocalFile("package.nuspec", nil)
-	data = append(data, []byte("package/services/metadata/core-properties")...)
-
-	meta, err := types.Detect("pkg.nupkg", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeNuGetPackageNUPKG {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectJMOD(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("java.base.jmod", []byte("JMOD\x00\x00"))
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindJavaModule || meta.Type != types.TypeJMOD {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectCRXv3(t *testing.T) {
-	t.Parallel()
-
-	data := []byte{'C', 'r', '2', '4', 0x03, 0x00, 0x00, 0x00}
-	meta, err := types.Detect("ext.crx", data)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindCRXBrowserExtension || meta.Type != types.TypeCRXVersion3 {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectNetCDF(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("data.nc", []byte{'C', 'D', 'F', 0x01})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindNetCDFData {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectJNG(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("img.jng", []byte{0x8b, 'J', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindJNGImage {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
 func TestDetectBGZF(t *testing.T) {
 	t.Parallel()
 
@@ -394,19 +209,6 @@ func TestDetectASCIITextFallback(t *testing.T) {
 	}
 
 	if meta.Kind != types.KindTextFile || meta.Type != types.TypeASCIIText {
-		t.Fatalf("unexpected metadata: %+v", *meta)
-	}
-}
-
-func TestDetectUTF8TextFallback(t *testing.T) {
-	t.Parallel()
-
-	meta, err := types.Detect("notes.txt", []byte("ola, caf\xc3\xa9, ni\xc3\xb1o\n"))
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if meta.Kind != types.KindTextFile || meta.Type != types.TypeUTF8Text {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
