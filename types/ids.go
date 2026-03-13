@@ -119,6 +119,15 @@ const (
 	KindMPEGTransportStream
 	KindICOCURImage
 	KindOggContainer
+	KindGIMPXCFImage
+	KindCanonRAWImage
+	KindOlympusRAWImage
+	KindFujifilmRAWImage
+	KindRealMedia
+	KindWindowsEventLog
+	KindAndroidBootImage
+	KindUBootImage
+	KindWARCFile
 )
 
 const (
@@ -234,6 +243,13 @@ const (
 	TypePE32PlusX8664
 	TypePE32PlusARM64
 	TypePE32PlusUnknown
+	TypeMicrosoftWordDocumentDOC
+	TypeMicrosoftExcelWorkbookXLS
+	TypeMicrosoftPowerPointPresentationPPT
+	TypeAndroidAppBundleAAB
+	TypeVisualStudioExtensionVSIX
+	TypeKMZArchive
+	TypeFirefoxExtensionXPI
 )
 
 var kindNames = [...]string{
@@ -352,6 +368,15 @@ var kindNames = [...]string{
 	KindMPEGTransportStream:         "MPEG Transport Stream",
 	KindICOCURImage:                 "ICO/CUR Image",
 	KindOggContainer:                "Ogg Container",
+	KindGIMPXCFImage:                "GIMP XCF Image",
+	KindCanonRAWImage:               "Canon RAW Image",
+	KindOlympusRAWImage:             "Olympus RAW Image",
+	KindFujifilmRAWImage:            "Fujifilm RAW Image",
+	KindRealMedia:                   "RealMedia",
+	KindWindowsEventLog:             "Windows Event Log",
+	KindAndroidBootImage:            "Android Boot Image",
+	KindUBootImage:                  "U-Boot Image",
+	KindWARCFile:                    "WARC File",
 }
 
 var typeNames = [...]string{
@@ -467,6 +492,13 @@ var typeNames = [...]string{
 	TypePE32PlusX8664:                       "PE32+ x86-64",
 	TypePE32PlusARM64:                       "PE32+ ARM64",
 	TypePE32PlusUnknown:                     "PE32+ Unknown",
+	TypeMicrosoftWordDocumentDOC:            "Microsoft Word Document (DOC)",
+	TypeMicrosoftExcelWorkbookXLS:           "Microsoft Excel Workbook (XLS)",
+	TypeMicrosoftPowerPointPresentationPPT:  "Microsoft PowerPoint Presentation (PPT)",
+	TypeAndroidAppBundleAAB:                 "Android App Bundle (AAB)",
+	TypeVisualStudioExtensionVSIX:           "Visual Studio Extension (VSIX)",
+	TypeKMZArchive:                          "KMZ Archive",
+	TypeFirefoxExtensionXPI:                 "Firefox Extension (XPI)",
 }
 
 func (k KindID) String() string {

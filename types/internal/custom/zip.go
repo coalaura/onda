@@ -50,6 +50,22 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		}
 	}
 
+	if lowerName == "bundleconfig.pb" || bytes.Contains(b, []byte("BundleConfig.pb")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundleAAB}
+	}
+
+	if lowerName == "extension.vsixmanifest" || bytes.Contains(b, []byte("extension.vsixmanifest")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
+	}
+
+	if lowerName == "doc.kml" {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
+	}
+
+	if lowerName == "install.rdf" || bytes.Contains(b, []byte("manifest.json")) && bytes.Contains(b, []byte("browser_specific_settings")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
+	}
+
 	if lowerName == "androidmanifest.xml" || bytes.Contains(b, []byte("classes.dex")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageAPK}
 	}

@@ -176,6 +176,64 @@ func TestDetectMPEGTS(t *testing.T) {
 	}
 }
 
+func TestDetectOLEWordDoc(t *testing.T) {
+	t.Parallel()
+
+	data := make([]byte, 512)
+	copy(data, []byte{0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1})
+	copy(data[128:], utf16LE("WordDocument"))
+
+	meta, err := types.Detect("legacy.doc", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindOLECompoundDocument || meta.Type != types.TypeMicrosoftWordDocumentDOC {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectAAB(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("BundleConfig.pb", nil)
+
+	meta, err := types.Detect("app.aab", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeAndroidAppBundleAAB {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectWindowsEventLog(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("security.evtx", []byte("ElfFile\x00rest"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindWindowsEventLog {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectGIMPXCF(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("image.xcf", []byte("gimp xcf v003"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindGIMPXCFImage {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
 func makeZipLocalFile(name string, data []byte) []byte {
 	buf := make([]byte, 30+len(name)+len(data))
 
@@ -197,4 +255,14 @@ func makeZipLocalFile(name string, data []byte) []byte {
 	copy(buf[30+len(name):], data)
 
 	return buf
+}
+
+func utf16LE(s string) []byte {
+	b := make([]byte, len(s)*2)
+
+	for i := 0; i < len(s); i++ {
+		b[i*2] = s[i]
+	}
+
+	return b
 }

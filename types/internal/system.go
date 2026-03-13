@@ -65,4 +65,8 @@ func init() {
 		0xc0, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x46,
 	})
+
+	types.RegisterSignature(types.KindWindowsEventLog, types.TypeNone, 0, []byte("ElfFile\x00"))
+	types.RegisterSignature(types.KindAndroidBootImage, types.TypeNone, 0, []byte("ANDROID!"))
+	types.RegisterSignature(types.KindUBootImage, types.TypeNone, 0, []byte{0x27, 0x05, 0x19, 0x56})
 }

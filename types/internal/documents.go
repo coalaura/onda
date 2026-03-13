@@ -22,4 +22,5 @@ func init() {
 	})
 
 	types.RegisterSignature(types.KindORCColumnarData, types.TypeNone, 0, []byte("ORC"))
+	types.RegisterSignature(types.KindWARCFile, types.TypeNone, 0, []byte("WARC/"))
 }
