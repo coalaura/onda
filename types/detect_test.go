@@ -95,3 +95,106 @@ func TestDetectISOCompatibleBrand(t *testing.T) {
 		t.Fatalf("expected AVIF image, got %q", meta.Name)
 	}
 }
+
+func TestDetectDocx(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("[Content_Types].xml", nil)
+	data = append(data, []byte("word/document.xml")...)
+
+	meta, err := types.Detect("file.docx", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Name != "Microsoft Word document" || meta.Type != "DOCX" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectEPUB(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("mimetype", []byte("application/epub+zip"))
+
+	meta, err := types.Detect("book.epub", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Name != "EPUB document" {
+		t.Fatalf("expected EPUB document, got %q", meta.Name)
+	}
+}
+
+func TestDetectJar(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("META-INF/MANIFEST.MF", nil)
+
+	meta, err := types.Detect("app.jar", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Name != "Java archive" || meta.Type != "JAR" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectOggOpus(t *testing.T) {
+	t.Parallel()
+
+	data := append([]byte("OggS"), make([]byte, 64)...)
+	copy(data[32:], []byte("OpusHead"))
+
+	meta, err := types.Detect("voice.ogg", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Name != "Opus audio" {
+		t.Fatalf("expected Opus audio, got %q", meta.Name)
+	}
+}
+
+func TestDetectMPEGTS(t *testing.T) {
+	t.Parallel()
+
+	data := make([]byte, 3*188)
+	data[0] = 0x47
+	data[188] = 0x47
+	data[376] = 0x47
+
+	meta, err := types.Detect("stream.ts", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Name != "MPEG transport stream" || meta.Type != "TS" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func makeZipLocalFile(name string, data []byte) []byte {
+	buf := make([]byte, 30+len(name)+len(data))
+
+	copy(buf[0:], []byte{'P', 'K', 3, 4})
+	buf[8] = 0
+	buf[9] = 0
+	buf[18] = byte(len(data))
+	buf[19] = byte(len(data) >> 8)
+	buf[20] = byte(len(data) >> 16)
+	buf[21] = byte(len(data) >> 24)
+	buf[22] = buf[18]
+	buf[23] = buf[19]
+	buf[24] = buf[20]
+	buf[25] = buf[21]
+	buf[26] = byte(len(name))
+	buf[27] = byte(len(name) >> 8)
+
+	copy(buf[30:], []byte(name))
+	copy(buf[30+len(name):], data)
+
+	return buf
+}

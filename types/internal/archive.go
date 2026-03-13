@@ -3,9 +3,9 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
-	types.RegisterSignature("ZIP archive", "", 0, []byte{'P', 'K', 3, 4})
 	types.RegisterSignature("ZIP archive", "empty", 0, []byte{'P', 'K', 5, 6})
 	types.RegisterSignature("ZIP archive", "spanned", 0, []byte{'P', 'K', 7, 8})
+	types.RegisterSignature("Unix compress archive", "", 0, []byte{0x1f, 0x9d})
 
 	types.RegisterSignature("7-Zip archive", "", 0, []byte{
 		'7', 'z', 0xbc, 0xaf, 0x27, 0x1c,

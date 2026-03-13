@@ -52,19 +52,19 @@ func main() {
 ## Supported types
 
 #### Archive/package/filesystem:
-7-Zip archive, AR archive, Bzip2 archive, Cabinet archive, CPIO archive (new ASCII, new ASCII with CRC, old ASCII, binary big-endian, binary little-endian), Debian package, Gzip archive, LZ4 frame, LZIP archive, LZOP archive, RAR archive (RAR4, RAR5), RPM package, Snappy framed data, SquashFS filesystem, TAR archive, Windows Imaging Format, XAR archive, XZ archive, ZIP archive (standard, empty, spanned), Zstandard archive.
+7-Zip archive, AR archive, Android package (APK), Bzip2 archive, Cabinet archive, CPIO archive (new ASCII, new ASCII with CRC, old ASCII, binary big-endian, binary little-endian), Debian package, Gzip archive, iOS application archive (IPA), Java archive (JAR), LZ4 frame, LZIP archive, LZOP archive, RAR archive (RAR4, RAR5), RPM package, Snappy framed data, SquashFS filesystem, TAR archive, Unix compress archive, Windows Imaging Format, XAR archive, XZ archive, ZIP archive (standard, empty, spanned), Zstandard archive.
 
 #### Audio/tracker:
-AAC audio (ADTS), AIFF audio (AIFF, AIFC), AMR audio, AMR-WB audio, AU audio, CAF audio, DSF audio, FLAC audio, Impulse Tracker module, FastTracker module, MIDI sequence, Monkey's Audio, MP3 audio (ID3 tagged, MPEG audio frame), Musepack audio (stream version 7, stream version 8), Ogg container, Scream Tracker module, TAK audio, VOC audio, WAV audio, WavPack audio, MPEG-4 audio (M4A family).
+AAC audio (ADTS), AIFF audio (AIFF, AIFC), AMR audio, AMR-WB audio, AU audio, CAF audio, DSF audio, FLAC audio, Impulse Tracker module, FastTracker module, MIDI sequence, Monkey's Audio, MP3 audio (ID3 tagged, MPEG audio frame), Musepack audio (stream version 7, stream version 8), Ogg container, Opus audio, Scream Tracker module, Speex audio, TAK audio, VOC audio, Vorbis audio, WAV audio, WavPack audio, MPEG-4 audio (M4A family).
 
 #### Image/texture/icon:
 AVIF image (single image, sequence), BMP image, BPG image, DDS image, Enhanced Metafile image, Farbfeld image, GIF image (GIF87a, GIF89a), HEIF image, ICNS icon, JPEG image, JPEG 2000 image, JPEG XL image (codestream, container), JPEG XR image (little-endian, big-endian), KTX texture (KTX, KTX2), Netpbm image (PBM ASCII, PGM ASCII, PPM ASCII, PBM binary, PGM binary, PPM binary, PAM), OpenEXR image, PNG image, Photoshop document (PSD, PSB), QOI image, Radiance HDR image, Sun raster image, TIFF image (little-endian, big-endian), WebP image, Windows Metafile image, Windows icon, Windows cursor.
 
 #### Video/container:
-3GPP media, ASF container, AVI video, EBML container, FLV video, IVF video, ISO Base Media file, Matroska container, MP4 video, MPEG program stream, QuickTime movie, RIFF container, WebM container.
+3GPP media, ASF container, AVI video, EBML container, FLV video, IVF video, ISO Base Media file, Matroska container, MP4 video, MPEG program stream, MPEG transport stream (TS, M2TS), QuickTime movie, RIFF container, Theora video, WebM container.
 
 #### Document/data/database:
-Apache Arrow file, Apache Parquet, Apple binary property list, Avro object container, DICOM medical image, FITS astronomical image, HDF5 data, KeePass database (KDBX), OLE compound document, ORC columnar data, PDF document, PGP message, PostScript document, Rich Text Format document, SQLite database, Windows registry hive.
+Apache Arrow file, Apache Parquet, Apple binary property list, Avro object container, DICOM medical image, EPUB document, FITS astronomical image, HDF5 data, KeePass database (KDBX), Microsoft Excel spreadsheet (XLSX), Microsoft PowerPoint presentation (PPTX), Microsoft Word document (DOCX), OLE compound document, OpenDocument presentation (ODP), OpenDocument spreadsheet (ODS), OpenDocument text (ODT), ORC columnar data, PDF document, PGP message, PostScript document, Rich Text Format document, SQLite database, Windows registry hive.
 
 #### Font:
 OpenType font, TrueType font, TrueType collection, WOFF font, WOFF2 font.
