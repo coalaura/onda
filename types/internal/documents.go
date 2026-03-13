@@ -23,4 +23,9 @@ func init() {
 
 	types.RegisterSignature(types.KindORCColumnarData, types.TypeNone, 0, []byte("ORC"))
 	types.RegisterSignature(types.KindWARCFile, types.TypeNone, 0, []byte("WARC/"))
+	types.RegisterSignature(types.KindNetCDFData, types.TypeNone, 0, []byte{'C', 'D', 'F', 0x01})
+	types.RegisterSignature(types.KindNetCDFData, types.TypeNone, 0, []byte{'C', 'D', 'F', 0x02})
+	types.RegisterSignature(types.KindGRIBData, types.TypeNone, 0, []byte("GRIB"))
+	types.RegisterSignature(types.KindBAMData, types.TypeNone, 0, []byte{'B', 'A', 'M', 0x01})
+	types.RegisterSignature(types.KindCRAMData, types.TypeNone, 0, []byte("CRAM"))
 }

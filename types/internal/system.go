@@ -3,7 +3,6 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
-	types.RegisterSignature(types.KindCRXBrowserExtension, types.TypeNone, 0, []byte("Cr24"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX035, 0, []byte("dex\n035\x00"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX036, 0, []byte("dex\n036\x00"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX037, 0, []byte("dex\n037\x00"))

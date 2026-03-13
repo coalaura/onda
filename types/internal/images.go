@@ -65,6 +65,7 @@ func init() {
 	types.RegisterSignature(types.KindJPEGXRImage, types.TypeLittleEndian, 0, []byte{'I', 'I', 0xbc, 0x01})
 	types.RegisterSignature(types.KindJPEGXRImage, types.TypeBigEndian, 0, []byte{'M', 'M', 0x01, 0xbc})
 	types.RegisterSignature(types.KindSunRasterImage, types.TypeNone, 0, []byte{0x59, 0xa6, 0x6a, 0x95})
+	types.RegisterSignature(types.KindJNGImage, types.TypeNone, 0, []byte{0x8b, 'J', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
 	types.RegisterSignature(types.KindGIMPXCFImage, types.TypeNone, 0, []byte("gimp xcf "))
 	types.RegisterSignature(types.KindCanonRAWImage, types.TypeNone, 0, []byte{'I', 'I', 0x2a, 0x00, 0x10, 0x00, 0x00, 0x00, 'C', 'R'})
 	types.RegisterSignature(types.KindOlympusRAWImage, types.TypeNone, 0, []byte{'I', 'I', 'R', 'O', 0x08, 0x00})

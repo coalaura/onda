@@ -60,4 +60,6 @@ func init() {
 	types.RegisterSignature(types.KindRPMPackage, types.TypeNone, 0, []byte{
 		0xed, 0xab, 0xee, 0xdb,
 	})
+
+	types.RegisterSignature(types.KindRubyGemPackage, types.TypeNone, 0, []byte("RubyGems"))
 }

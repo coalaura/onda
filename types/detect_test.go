@@ -327,6 +327,64 @@ func TestDetectJMOD(t *testing.T) {
 	}
 }
 
+func TestDetectCRXv3(t *testing.T) {
+	t.Parallel()
+
+	data := []byte{'C', 'r', '2', '4', 0x03, 0x00, 0x00, 0x00}
+	meta, err := types.Detect("ext.crx", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindCRXBrowserExtension || meta.Type != types.TypeCRXVersion3 {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectNetCDF(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("data.nc", []byte{'C', 'D', 'F', 0x01})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindNetCDFData {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectJNG(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("img.jng", []byte{0x8b, 'J', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindJNGImage {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectBGZF(t *testing.T) {
+	t.Parallel()
+
+	data := make([]byte, 32)
+	data[0] = 0x1f
+	data[1] = 0x8b
+	copy(data[12:], []byte{'B', 'C', 0x02, 0x00})
+
+	meta, err := types.Detect("data.bgz", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindGzipData || meta.Type != types.TypeBGZF {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
 func makeZipLocalFile(name string, data []byte) []byte {
 	buf := make([]byte, 30+len(name)+len(data))
 

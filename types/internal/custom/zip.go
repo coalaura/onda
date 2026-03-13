@@ -90,12 +90,36 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundleAAB}
 	}
 
+	if lowerName == "toc.pb" || bytes.Contains(b, []byte("toc.pb")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSplitAPKS}
+	}
+
 	if lowerName == "extension.vsixmanifest" || bytes.Contains(b, []byte("extension.vsixmanifest")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
 	}
 
+	if lowerName == "appxmanifest.xml" || bytes.Contains(b, []byte("AppxManifest.xml")) {
+		if bytes.Contains(b, []byte("AppxBlockMap.xml")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAPPXPackage}
+		}
+
+		if bytes.Contains(b, []byte("AppxSignature.p7x")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMSIXPackage}
+		}
+
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAPPXPackage}
+	}
+
 	if lowerName == "doc.kml" {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
+	}
+
+	if strings.HasSuffix(lowerName, ".dist-info/wheel") || bytes.Contains(b, []byte(".dist-info/WHEEL")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePythonWheelWHL}
+	}
+
+	if lowerName == "manifest.json" && bytes.Contains(b, []byte("xapk_version")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
 	}
 
 	if lowerName == "install.rdf" || bytes.Contains(b, []byte("manifest.json")) && bytes.Contains(b, []byte("browser_specific_settings")) {

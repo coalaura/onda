@@ -42,8 +42,8 @@ func RegisterMaskedSignature(kind KindID, typ TypeID, offset int, magic []byte, 
 func Detect(name string, data []byte) (*Metadata, error) {
 	buf := Buffer(data)
 
-	for _, d := range detectors {
-		meta := d.Detect(buf)
+	for i := len(detectors) - 1; i >= 0; i-- {
+		meta := detectors[i].Detect(buf)
 		if meta == nil {
 			continue
 		}

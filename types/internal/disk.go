@@ -4,6 +4,7 @@ import "github.com/coalaura/onda/types"
 
 func init() {
 	types.RegisterSignature(types.KindQCOWDiskImage, types.TypeQCOW2, 0, []byte("QFI\xfb"))
+	types.RegisterSignature(types.KindVHDDiskImage, types.TypeNone, 0, []byte("cxsparse"))
 	types.RegisterSignature(types.KindVHDXDiskImage, types.TypeNone, 0, []byte("vhdxfile"))
 	types.RegisterSignature(types.KindVMwareDiskImage, types.TypeVMDK, 0, []byte("KDMV"))
 	types.RegisterSignature(types.KindAndroidSparseImage, types.TypeNone, 0, []byte{0x3a, 0xff, 0x26, 0xed})

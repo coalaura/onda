@@ -68,6 +68,7 @@ const (
 	KindWOFFFont
 	KindWOFF2Font
 	KindTrueTypeCollection
+	KindEOTFont
 	KindPNGImage
 	KindJPEGImage
 	KindGIFImage
@@ -84,6 +85,7 @@ const (
 	KindFarbfeldImage
 	KindJPEG2000Image
 	KindBPGImage
+	KindJNGImage
 	KindJPEGXRImage
 	KindSunRasterImage
 	KindCRXBrowserExtension
@@ -129,6 +131,18 @@ const (
 	KindUBootImage
 	KindWARCFile
 	KindJavaModule
+	KindPKCS12
+	KindTorrentFile
+	KindNetCDFData
+	KindGRIBData
+	KindBAMData
+	KindCRAMData
+	KindGzipData
+	KindMPEGAudioFrame
+	KindDTSAudio
+	KindMPEG2TransportStream
+	KindVHDDiskImage
+	KindRubyGemPackage
 )
 
 const (
@@ -269,6 +283,32 @@ const (
 	TypeJavaEnterpriseArchiveEAR
 	TypeNuGetPackageNUPKG
 	TypeJMOD
+	TypePythonWheelWHL
+	TypeAndroidSplitAPKS
+	TypeAndroidPackageXAPK
+	TypeMSIXPackage
+	TypeAPPXPackage
+	TypeCRXVersion2
+	TypeCRXVersion3
+	TypeM4VVideo
+	TypeF4VVideo
+	Type3G2Media
+	TypeM2TSBDAV
+	TypeBGZF
+	TypeAC3
+	TypeEAC3
+	TypeMPEGLayer2
+	TypeMPEGLayer3
+	TypeNikonRAWNEF
+	TypePentaxRAWPEF
+	TypeSonyRAWARW
+	TypeSonyRAWSR2
+	TypeAdobeDNGDNG
+	TypePanasonicRAWRW2
+	TypeOCIImageLayoutTar
+	TypeNpmPackageTarball
+	TypePythonSourceDistributionSDist
+	TypeCondaPackage
 )
 
 var kindNames = [...]string{
@@ -336,6 +376,7 @@ var kindNames = [...]string{
 	KindWOFFFont:                    "WOFF Font",
 	KindWOFF2Font:                   "WOFF2 Font",
 	KindTrueTypeCollection:          "TrueType Collection",
+	KindEOTFont:                     "EOT Font",
 	KindPNGImage:                    "PNG Image",
 	KindJPEGImage:                   "JPEG Image",
 	KindGIFImage:                    "GIF Image",
@@ -352,6 +393,7 @@ var kindNames = [...]string{
 	KindFarbfeldImage:               "Farbfeld Image",
 	KindJPEG2000Image:               "JPEG 2000 Image",
 	KindBPGImage:                    "BPG Image",
+	KindJNGImage:                    "JNG Image",
 	KindJPEGXRImage:                 "JPEG XR Image",
 	KindSunRasterImage:              "Sun Raster Image",
 	KindCRXBrowserExtension:         "CRX Browser Extension",
@@ -397,6 +439,18 @@ var kindNames = [...]string{
 	KindUBootImage:                  "U-Boot Image",
 	KindWARCFile:                    "WARC File",
 	KindJavaModule:                  "Java Module",
+	KindPKCS12:                      "PKCS#12",
+	KindTorrentFile:                 "Torrent File",
+	KindNetCDFData:                  "NetCDF Data",
+	KindGRIBData:                    "GRIB Data",
+	KindBAMData:                     "BAM Data",
+	KindCRAMData:                    "CRAM Data",
+	KindGzipData:                    "Gzip Data",
+	KindMPEGAudioFrame:              "MPEG Audio",
+	KindDTSAudio:                    "DTS Audio",
+	KindMPEG2TransportStream:        "MPEG Transport Stream",
+	KindVHDDiskImage:                "VHD Disk Image",
+	KindRubyGemPackage:              "RubyGem Package",
 }
 
 var typeNames = [...]string{
@@ -497,6 +551,32 @@ var typeNames = [...]string{
 	TypeJavaEnterpriseArchiveEAR:                        "Java Enterprise Archive (EAR)",
 	TypeNuGetPackageNUPKG:                               "NuGet Package (NUPKG)",
 	TypeJMOD:                                            "JMOD",
+	TypePythonWheelWHL:                                  "Python Wheel (WHL)",
+	TypeAndroidSplitAPKS:                                "Android Split APK Set (APKS)",
+	TypeAndroidPackageXAPK:                              "Android Package (XAPK)",
+	TypeMSIXPackage:                                     "MSIX Package",
+	TypeAPPXPackage:                                     "APPX Package",
+	TypeCRXVersion2:                                     "Version 2",
+	TypeCRXVersion3:                                     "Version 3",
+	TypeM4VVideo:                                        "M4V Video",
+	TypeF4VVideo:                                        "F4V Video",
+	Type3G2Media:                                        "3G2 Media",
+	TypeM2TSBDAV:                                        "M2TS/BDAV",
+	TypeBGZF:                                            "BGZF",
+	TypeAC3:                                             "AC-3",
+	TypeEAC3:                                            "E-AC-3",
+	TypeMPEGLayer2:                                      "MPEG Layer II",
+	TypeMPEGLayer3:                                      "MPEG Layer III",
+	TypeNikonRAWNEF:                                     "Nikon RAW (NEF)",
+	TypePentaxRAWPEF:                                    "Pentax RAW (PEF)",
+	TypeSonyRAWARW:                                      "Sony RAW (ARW)",
+	TypeSonyRAWSR2:                                      "Sony RAW (SR2)",
+	TypeAdobeDNGDNG:                                     "Adobe DNG (DNG)",
+	TypePanasonicRAWRW2:                                 "Panasonic RAW (RW2)",
+	TypeOCIImageLayoutTar:                               "OCI Image Layout (TAR)",
+	TypeNpmPackageTarball:                               "npm Package Tarball",
+	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
+	TypeCondaPackage:                                    "Conda Package",
 	TypeOpusAudio:                                       "Opus Audio",
 	TypeVorbisAudio:                                     "Vorbis Audio",
 	TypeSpeexAudio:                                      "Speex Audio",
