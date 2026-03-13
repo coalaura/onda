@@ -234,6 +234,99 @@ func TestDetectGIMPXCF(t *testing.T) {
 	}
 }
 
+func TestDetectDocm(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("[Content_Types].xml", nil)
+	data = append(data, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")...)
+
+	meta, err := types.Detect("file.docm", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftWordMacroEnabledDocumentDOCM {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectXlsm(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("[Content_Types].xml", nil)
+	data = append(data, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")...)
+
+	meta, err := types.Detect("sheet.xlsm", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftExcelMacroEnabledWorkbookXLSM {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectPptm(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("[Content_Types].xml", nil)
+	data = append(data, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")...)
+
+	meta, err := types.Detect("slides.pptm", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeMicrosoftPowerPointMacroEnabledPresentationPPTM {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectWar(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("META-INF/MANIFEST.MF", nil)
+	data = append(data, []byte("WEB-INF/web.xml")...)
+
+	meta, err := types.Detect("app.war", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeJavaWebArchiveWAR {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectNuGet(t *testing.T) {
+	t.Parallel()
+
+	data := makeZipLocalFile("package.nuspec", nil)
+	data = append(data, []byte("package/services/metadata/core-properties")...)
+
+	meta, err := types.Detect("pkg.nupkg", data)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindZIPArchive || meta.Type != types.TypeNuGetPackageNUPKG {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectJMOD(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("java.base.jmod", []byte("JMOD\x00\x00"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindJavaModule || meta.Type != types.TypeJMOD {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
 func makeZipLocalFile(name string, data []byte) []byte {
 	buf := make([]byte, 30+len(name)+len(data))
 

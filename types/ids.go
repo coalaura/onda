@@ -128,6 +128,7 @@ const (
 	KindAndroidBootImage
 	KindUBootImage
 	KindWARCFile
+	KindJavaModule
 )
 
 const (
@@ -250,6 +251,24 @@ const (
 	TypeVisualStudioExtensionVSIX
 	TypeKMZArchive
 	TypeFirefoxExtensionXPI
+	TypeMicrosoftWordTemplateDOTX
+	TypeMicrosoftWordMacroEnabledDocumentDOCM
+	TypeMicrosoftWordMacroEnabledTemplateDOTM
+	TypeMicrosoftExcelMacroEnabledWorkbookXLSM
+	TypeMicrosoftExcelTemplateXLTX
+	TypeMicrosoftExcelMacroEnabledTemplateXLTM
+	TypeMicrosoftExcelAddInXLAM
+	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM
+	TypeMicrosoftPowerPointTemplatePOTX
+	TypeMicrosoftPowerPointMacroEnabledTemplatePOTM
+	TypeMicrosoftPowerPointSlideshowPPSX
+	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM
+	TypeMicrosoftPowerPointAddInPPAM
+	TypeAndroidArchiveAAR
+	TypeJavaWebArchiveWAR
+	TypeJavaEnterpriseArchiveEAR
+	TypeNuGetPackageNUPKG
+	TypeJMOD
 )
 
 var kindNames = [...]string{
@@ -377,6 +396,7 @@ var kindNames = [...]string{
 	KindAndroidBootImage:            "Android Boot Image",
 	KindUBootImage:                  "U-Boot Image",
 	KindWARCFile:                    "WARC File",
+	KindJavaModule:                  "Java Module",
 }
 
 var typeNames = [...]string{
@@ -459,46 +479,64 @@ var typeNames = [...]string{
 	TypeAndroidPackageAPK:                   "Android Package (APK)",
 	TypeJavaArchiveJAR:                      "Java Archive (JAR)",
 	TypeIOSApplicationArchiveIPA:            "iOS Application Archive (IPA)",
-	TypeOpusAudio:                           "Opus Audio",
-	TypeVorbisAudio:                         "Vorbis Audio",
-	TypeSpeexAudio:                          "Speex Audio",
-	TypeTheoraVideo:                         "Theora Video",
-	TypeFLACAudio:                           "FLAC Audio",
-	TypePBMASCII:                            "PBM ASCII",
-	TypePGMASCII:                            "PGM ASCII",
-	TypePPMASCII:                            "PPM ASCII",
-	TypePBMBinary:                           "PBM binary",
-	TypePGMBinary:                           "PGM binary",
-	TypePPMBinary:                           "PPM binary",
-	TypePAM:                                 "PAM",
-	TypeTS:                                  "TS",
-	TypeM2TS:                                "M2TS",
-	TypeWindowsIcon:                         "Windows Icon",
-	TypeWindowsCursor:                       "Windows Cursor",
-	TypeELF:                                 "ELF",
-	TypeELF32:                               "ELF32",
-	TypeELF64:                               "ELF64",
-	TypeELF32LittleEndian:                   "ELF32 Little-Endian",
-	TypeELF32BigEndian:                      "ELF32 Big-Endian",
-	TypeELF64LittleEndian:                   "ELF64 Little-Endian",
-	TypeELF64BigEndian:                      "ELF64 Big-Endian",
-	TypePE32X86:                             "PE32 x86",
-	TypePE32X8664:                           "PE32 x86-64",
-	TypePE32ARM:                             "PE32 ARM",
-	TypePE32ARMv7:                           "PE32 ARMv7",
-	TypePE32ARM64:                           "PE32 ARM64",
-	TypePE32Itanium:                         "PE32 Itanium",
-	TypePE32Unknown:                         "PE32 Unknown",
-	TypePE32PlusX8664:                       "PE32+ x86-64",
-	TypePE32PlusARM64:                       "PE32+ ARM64",
-	TypePE32PlusUnknown:                     "PE32+ Unknown",
-	TypeMicrosoftWordDocumentDOC:            "Microsoft Word Document (DOC)",
-	TypeMicrosoftExcelWorkbookXLS:           "Microsoft Excel Workbook (XLS)",
-	TypeMicrosoftPowerPointPresentationPPT:  "Microsoft PowerPoint Presentation (PPT)",
-	TypeAndroidAppBundleAAB:                 "Android App Bundle (AAB)",
-	TypeVisualStudioExtensionVSIX:           "Visual Studio Extension (VSIX)",
-	TypeKMZArchive:                          "KMZ Archive",
-	TypeFirefoxExtensionXPI:                 "Firefox Extension (XPI)",
+	TypeMicrosoftWordTemplateDOTX:           "Microsoft Word Template (DOTX)",
+	TypeMicrosoftWordMacroEnabledDocumentDOCM:           "Microsoft Word Macro-Enabled Document (DOCM)",
+	TypeMicrosoftWordMacroEnabledTemplateDOTM:           "Microsoft Word Macro-Enabled Template (DOTM)",
+	TypeMicrosoftExcelMacroEnabledWorkbookXLSM:          "Microsoft Excel Macro-Enabled Workbook (XLSM)",
+	TypeMicrosoftExcelTemplateXLTX:                      "Microsoft Excel Template (XLTX)",
+	TypeMicrosoftExcelMacroEnabledTemplateXLTM:          "Microsoft Excel Macro-Enabled Template (XLTM)",
+	TypeMicrosoftExcelAddInXLAM:                         "Microsoft Excel Add-In (XLAM)",
+	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM: "Microsoft PowerPoint Macro-Enabled Presentation (PPTM)",
+	TypeMicrosoftPowerPointTemplatePOTX:                 "Microsoft PowerPoint Template (POTX)",
+	TypeMicrosoftPowerPointMacroEnabledTemplatePOTM:     "Microsoft PowerPoint Macro-Enabled Template (POTM)",
+	TypeMicrosoftPowerPointSlideshowPPSX:                "Microsoft PowerPoint Slideshow (PPSX)",
+	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM:    "Microsoft PowerPoint Macro-Enabled Slideshow (PPSM)",
+	TypeMicrosoftPowerPointAddInPPAM:                    "Microsoft PowerPoint Add-In (PPAM)",
+	TypeAndroidArchiveAAR:                               "Android Archive (AAR)",
+	TypeJavaWebArchiveWAR:                               "Java Web Archive (WAR)",
+	TypeJavaEnterpriseArchiveEAR:                        "Java Enterprise Archive (EAR)",
+	TypeNuGetPackageNUPKG:                               "NuGet Package (NUPKG)",
+	TypeJMOD:                                            "JMOD",
+	TypeOpusAudio:                                       "Opus Audio",
+	TypeVorbisAudio:                                     "Vorbis Audio",
+	TypeSpeexAudio:                                      "Speex Audio",
+	TypeTheoraVideo:                                     "Theora Video",
+	TypeFLACAudio:                                       "FLAC Audio",
+	TypePBMASCII:                                        "PBM ASCII",
+	TypePGMASCII:                                        "PGM ASCII",
+	TypePPMASCII:                                        "PPM ASCII",
+	TypePBMBinary:                                       "PBM binary",
+	TypePGMBinary:                                       "PGM binary",
+	TypePPMBinary:                                       "PPM binary",
+	TypePAM:                                             "PAM",
+	TypeTS:                                              "TS",
+	TypeM2TS:                                            "M2TS",
+	TypeWindowsIcon:                                     "Windows Icon",
+	TypeWindowsCursor:                                   "Windows Cursor",
+	TypeELF:                                             "ELF",
+	TypeELF32:                                           "ELF32",
+	TypeELF64:                                           "ELF64",
+	TypeELF32LittleEndian:                               "ELF32 Little-Endian",
+	TypeELF32BigEndian:                                  "ELF32 Big-Endian",
+	TypeELF64LittleEndian:                               "ELF64 Little-Endian",
+	TypeELF64BigEndian:                                  "ELF64 Big-Endian",
+	TypePE32X86:                                         "PE32 x86",
+	TypePE32X8664:                                       "PE32 x86-64",
+	TypePE32ARM:                                         "PE32 ARM",
+	TypePE32ARMv7:                                       "PE32 ARMv7",
+	TypePE32ARM64:                                       "PE32 ARM64",
+	TypePE32Itanium:                                     "PE32 Itanium",
+	TypePE32Unknown:                                     "PE32 Unknown",
+	TypePE32PlusX8664:                                   "PE32+ x86-64",
+	TypePE32PlusARM64:                                   "PE32+ ARM64",
+	TypePE32PlusUnknown:                                 "PE32+ Unknown",
+	TypeMicrosoftWordDocumentDOC:                        "Microsoft Word Document (DOC)",
+	TypeMicrosoftExcelWorkbookXLS:                       "Microsoft Excel Workbook (XLS)",
+	TypeMicrosoftPowerPointPresentationPPT:              "Microsoft PowerPoint Presentation (PPT)",
+	TypeAndroidAppBundleAAB:                             "Android App Bundle (AAB)",
+	TypeVisualStudioExtensionVSIX:                       "Visual Studio Extension (VSIX)",
+	TypeKMZArchive:                                      "KMZ Archive",
+	TypeFirefoxExtensionXPI:                             "Firefox Extension (XPI)",
 }
 
 func (k KindID) String() string {

@@ -41,6 +41,38 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 	if lowerName == "[content_types].xml" {
 		switch {
+		case bytes.Contains(b, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordMacroEnabledDocumentDOCM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordTemplateDOTX}
+		case bytes.Contains(b, []byte("application/vnd.ms-word.template.macroEnabledTemplate.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordMacroEnabledTemplateDOTM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordDocumentDOCX}
+		case bytes.Contains(b, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelMacroEnabledWorkbookXLSM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelTemplateXLTX}
+		case bytes.Contains(b, []byte("application/vnd.ms-excel.template.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelMacroEnabledTemplateXLTM}
+		case bytes.Contains(b, []byte("application/vnd.ms-excel.addin.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelAddInXLAM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelSpreadsheetXLSX}
+		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledPresentationPPTM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointTemplatePOTX}
+		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.template.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledTemplatePOTM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointSlideshowPPSX}
+		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM}
+		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.addin.macroEnabled.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointAddInPPAM}
+		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")):
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointPresentationPPTX}
 		case bytes.Contains(b, []byte("word/")):
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordDocumentDOCX}
 		case bytes.Contains(b, []byte("xl/")):
@@ -48,6 +80,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		case bytes.Contains(b, []byte("ppt/")):
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointPresentationPPTX}
 		}
+	}
+
+	if bytes.Contains(b, []byte(".nuspec")) && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
 	}
 
 	if lowerName == "bundleconfig.pb" || bytes.Contains(b, []byte("BundleConfig.pb")) {
@@ -66,11 +102,23 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
 	}
 
+	if lowerName == "androidmanifest.xml" && bytes.Contains(b, []byte("classes.jar")) && !bytes.Contains(b, []byte("classes.dex")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidArchiveAAR}
+	}
+
 	if lowerName == "androidmanifest.xml" || bytes.Contains(b, []byte("classes.dex")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageAPK}
 	}
 
 	if lowerName == "meta-inf/manifest.mf" || bytes.Contains(b, []byte("META-INF/MANIFEST.MF")) {
+		if bytes.Contains(b, []byte("WEB-INF/web.xml")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
+		}
+
+		if bytes.Contains(b, []byte("META-INF/application.xml")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaEnterpriseArchiveEAR}
+		}
+
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
 	}
 

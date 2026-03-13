@@ -17,6 +17,7 @@ func init() {
 	types.RegisterSignature(types.KindJavaClass, types.TypeNone, 0, []byte{
 		0xca, 0xfe, 0xba, 0xbe,
 	})
+	types.RegisterSignature(types.KindJavaModule, types.TypeJMOD, 0, []byte("JMOD"))
 
 	types.RegisterSignature(types.KindJavaKeyStore, types.TypeNone, 0, []byte{0xfe, 0xed, 0xfe, 0xed})
 
