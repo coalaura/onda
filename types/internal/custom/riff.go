@@ -9,26 +9,26 @@ func DetectRIFF(b types.Buffer) *types.Metadata {
 
 	if b.Has(8, []byte("WAVE")) {
 		return &types.Metadata{
-			Name: "RIFF Container",
-			Type: "WAV Audio",
+			Kind: types.KindRIFFContainer,
+			Type: types.TypeWAVAudio,
 		}
 	}
 
 	if b.Has(8, []byte("AVI ")) {
 		return &types.Metadata{
-			Name: "RIFF Container",
-			Type: "AVI Video",
+			Kind: types.KindRIFFContainer,
+			Type: types.TypeAVIVideo,
 		}
 	}
 
 	if b.Has(8, []byte("WEBP")) {
 		return &types.Metadata{
-			Name: "RIFF Container",
-			Type: "WebP Image",
+			Kind: types.KindRIFFContainer,
+			Type: types.TypeWebPImage,
 		}
 	}
 
 	return &types.Metadata{
-		Name: "RIFF Container",
+		Kind: types.KindRIFFContainer,
 	}
 }

@@ -18,26 +18,35 @@ func DetectELF(b types.Buffer) *types.Metadata {
 		data = b[5]
 	}
 
-	var typ string
-
-	switch class {
-	case 1:
-		typ = "ELF32"
-	case 2:
-		typ = "ELF64"
-	default:
-		typ = "ELF"
-	}
-
-	switch data {
-	case 1:
-		typ += " Little-Endian"
-	case 2:
-		typ += " Big-Endian"
-	}
+	typ := elfType(class, data)
 
 	return &types.Metadata{
-		Name: "Executable and Linkable Format",
+		Kind: types.KindExecutableAndLinkableFormat,
 		Type: typ,
+	}
+}
+
+func elfType(class byte, data byte) types.TypeID {
+	switch class {
+	case 1:
+		switch data {
+		case 1:
+			return types.TypeELF32LittleEndian
+		case 2:
+			return types.TypeELF32BigEndian
+		default:
+			return types.TypeELF32
+		}
+	case 2:
+		switch data {
+		case 1:
+			return types.TypeELF64LittleEndian
+		case 2:
+			return types.TypeELF64BigEndian
+		default:
+			return types.TypeELF64
+		}
+	default:
+		return types.TypeELF
 	}
 }

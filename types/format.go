@@ -17,7 +17,10 @@ func (m *Metadata) Format() string {
 
 	var b bytes.Buffer
 
-	b.Grow(len(m.File) + len(m.Name) + len(m.Type) + 64)
+	kind := m.Kind.String()
+	typ := m.Type.String()
+
+	b.Grow(len(m.File) + len(kind) + len(typ) + 64)
 
 	if m.File != "" {
 		b.WriteString(ansiFile)
@@ -26,24 +29,24 @@ func (m *Metadata) Format() string {
 		b.WriteByte('\n')
 	}
 
-	if m.Name != "" {
+	if kind != "" {
 		b.WriteString("  ")
 		b.WriteString(ansiFile)
 		b.WriteString("⮡ ")
 		b.WriteString(ansiReset)
 		b.WriteString(ansiName)
-		b.WriteString(m.Name)
+		b.WriteString(kind)
 		b.WriteString(ansiReset)
 	}
 
-	if m.Type != "" {
+	if typ != "" {
 		b.WriteByte('\n')
 		b.WriteString("    ")
 		b.WriteString(ansiLabel)
 		b.WriteString("Type: ")
 		b.WriteString(ansiReset)
 		b.WriteString(ansiValue)
-		b.WriteString(m.Type)
+		b.WriteString(typ)
 		b.WriteString(ansiReset)
 	}
 

@@ -45,7 +45,7 @@ func main() {
 		return
 	}
 
-	fmt.Println(meta.Name, meta.Type)
+	fmt.Println(meta.Kind.String(), meta.Type.String())
 }
 ```
 

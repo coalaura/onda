@@ -7,8 +7,8 @@ type Detector interface {
 type DetectFunc func(Buffer) *Metadata
 
 type Signature struct {
-	Name   string
-	Type   string
+	Kind   KindID
+	Type   TypeID
 	Offset int
 	Magic  []byte
 	Mask   []byte
@@ -20,18 +20,18 @@ func Register(d Detector) {
 	detectors = append(detectors, d)
 }
 
-func RegisterSignature(name string, typ string, offset int, magic []byte) {
+func RegisterSignature(kind KindID, typ TypeID, offset int, magic []byte) {
 	Register(Signature{
-		Name:   name,
+		Kind:   kind,
 		Type:   typ,
 		Offset: offset,
 		Magic:  magic,
 	})
 }
 
-func RegisterMaskedSignature(name string, typ string, offset int, magic []byte, mask []byte) {
+func RegisterMaskedSignature(kind KindID, typ TypeID, offset int, magic []byte, mask []byte) {
 	Register(Signature{
-		Name:   name,
+		Kind:   kind,
 		Type:   typ,
 		Offset: offset,
 		Magic:  magic,
@@ -74,7 +74,7 @@ func (s Signature) Detect(b Buffer) *Metadata {
 	}
 
 	return &Metadata{
-		Name: s.Name,
+		Kind: s.Kind,
 		Type: s.Type,
 	}
 }

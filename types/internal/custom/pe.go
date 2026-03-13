@@ -28,38 +28,49 @@ func DetectPE(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
-	var typ string
+	var typ types.TypeID
 
 	switch magic {
 	case 0x10b:
-		typ = "PE32"
+		typ = pe32MachineType(machine)
 	case 0x20b:
-		typ = "PE32+"
+		typ = pe32PlusMachineType(machine)
 	default:
 		return nil
 	}
 
 	return &types.Metadata{
-		Name: "Portable Executable",
-		Type: typ + " " + peMachine(machine),
+		Kind: types.KindPortableExecutable,
+		Type: typ,
 	}
 }
 
-func peMachine(machine uint16) string {
+func pe32MachineType(machine uint16) types.TypeID {
 	switch machine {
 	case 0x014c:
-		return "x86"
+		return types.TypePE32X86
 	case 0x8664:
-		return "x86-64"
+		return types.TypePE32X8664
 	case 0x01c0:
-		return "ARM"
+		return types.TypePE32ARM
 	case 0x01c4:
-		return "ARMv7"
+		return types.TypePE32ARMv7
 	case 0xaa64:
-		return "ARM64"
+		return types.TypePE32ARM64
 	case 0x0200:
-		return "Itanium"
+		return types.TypePE32Itanium
 	default:
-		return "Unknown"
+		return types.TypePE32Unknown
+	}
+}
+
+func pe32PlusMachineType(machine uint16) types.TypeID {
+	switch machine {
+	case 0x8664:
+		return types.TypePE32PlusX8664
+	case 0xaa64:
+		return types.TypePE32PlusARM64
+	default:
+		return types.TypePE32PlusUnknown
 	}
 }

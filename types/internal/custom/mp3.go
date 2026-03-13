@@ -5,8 +5,8 @@ import "github.com/coalaura/onda/types"
 func DetectMP3(b types.Buffer) *types.Metadata {
 	if b.Has(0, []byte("ID3")) {
 		return &types.Metadata{
-			Name: "MPEG Audio",
-			Type: "MP3 (ID3 Tagged)",
+			Kind: types.KindMPEGAudio,
+			Type: types.TypeMP3ID3Tagged,
 		}
 	}
 
@@ -28,7 +28,7 @@ func DetectMP3(b types.Buffer) *types.Metadata {
 	}
 
 	return &types.Metadata{
-		Name: "MPEG Audio",
-		Type: "MP3",
+		Kind: types.KindMPEGAudio,
+		Type: types.TypeMP3,
 	}
 }

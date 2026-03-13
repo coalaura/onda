@@ -24,13 +24,13 @@ func DetectICO(b types.Buffer) *types.Metadata {
 	switch typ {
 	case 1:
 		return &types.Metadata{
-			Name: "ICO/CUR Image",
-			Type: "Windows Icon",
+			Kind: types.KindICOCURImage,
+			Type: types.TypeWindowsIcon,
 		}
 	case 2:
 		return &types.Metadata{
-			Name: "ICO/CUR Image",
-			Type: "Windows Cursor",
+			Kind: types.KindICOCURImage,
+			Type: types.TypeWindowsCursor,
 		}
 	default:
 		return nil

@@ -12,20 +12,20 @@ func DetectEBML(b types.Buffer) *types.Metadata {
 	for i := 4; i+4 <= limit; i++ {
 		if b.Has(i, []byte("webm")) {
 			return &types.Metadata{
-				Name: "EBML Container",
-				Type: "WebM",
+				Kind: types.KindEBMLContainer,
+				Type: types.TypeWebM,
 			}
 		}
 
 		if b.Has(i, []byte("matroska")) {
 			return &types.Metadata{
-				Name: "EBML Container",
-				Type: "Matroska",
+				Kind: types.KindEBMLContainer,
+				Type: types.TypeMatroska,
 			}
 		}
 	}
 
 	return &types.Metadata{
-		Name: "EBML Container",
+		Kind: types.KindEBMLContainer,
 	}
 }

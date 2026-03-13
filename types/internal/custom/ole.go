@@ -8,6 +8,6 @@ func DetectOLE(b types.Buffer) *types.Metadata {
 	}
 
 	return &types.Metadata{
-		Name: "OLE Compound Document",
+		Kind: types.KindOLECompoundDocument,
 	}
 }

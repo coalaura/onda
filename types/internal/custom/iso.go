@@ -46,55 +46,55 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avif") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "AVIF Image",
+			Kind: types.KindISOBaseMedia,
+			Type: types.TypeAVIFImage,
 		}
 	}
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avis") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "AVIF Image Sequence",
+			Kind: types.KindISOBaseMedia,
+			Type: types.TypeAVIFImageSequence,
 		}
 	}
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "heic", "heix", "hevc", "hevx", "mif1", "msf1") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "HEIF Image",
+			Kind: types.KindISOBaseMedia,
+			Type: types.TypeHEIFImage,
 		}
 	}
 
 	if hasISOBrandPrefix(b, brandOffset, compatibleOffset, boxEnd, "3gp", "3g2") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "3GPP Media",
+			Kind: types.KindISOBaseMedia,
+			Type: types.Type3GPPMedia,
 		}
 	}
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "M4A ", "M4B ", "M4P ") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "MPEG-4 Audio (M4A Family)",
+			Kind: types.KindISOBaseMedia,
+			Type: types.TypeMPEG4AudioM4AFamily,
 		}
 	}
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "qt  ") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "QuickTime Movie",
+			Kind: types.KindISOBaseMedia,
+			Type: types.TypeQuickTimeMovie,
 		}
 	}
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash") {
 		return &types.Metadata{
-			Name: "ISO Base Media",
-			Type: "MP4 Video",
+			Kind: types.KindISOBaseMedia,
+			Type: types.TypeMP4Video,
 		}
 	}
 
 	return &types.Metadata{
-		Name: "ISO Base Media",
+		Kind: types.KindISOBaseMedia,
 	}
 }
 

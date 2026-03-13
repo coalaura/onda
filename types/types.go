@@ -10,9 +10,15 @@ type Sniffer interface {
 }
 
 type Metadata struct {
-	File string // File name
-	Name string // Main human-readable type
-	Type string // Optional subtype
+	File string
+
+	// Kind is the primary format family (for example: ZIP Archive).
+	// Keep this as the broad, stable classification.
+	Kind KindID
+
+	// Type is the optional subtype within the Kind (for example: Microsoft Word Document (DOCX)).
+	// Use TypeNone when there is no meaningful subtype.
+	Type TypeID
 }
 
 var ErrUnknownFormat = errors.New("unknown file format")

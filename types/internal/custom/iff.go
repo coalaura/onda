@@ -9,19 +9,19 @@ func DetectIFF(b types.Buffer) *types.Metadata {
 
 	if b.Has(8, []byte("AIFF")) {
 		return &types.Metadata{
-			Name: "IFF Container",
-			Type: "AIFF Audio",
+			Kind: types.KindIFFContainer,
+			Type: types.TypeAIFFAudio,
 		}
 	}
 
 	if b.Has(8, []byte("AIFC")) {
 		return &types.Metadata{
-			Name: "IFF Container",
-			Type: "AIFC Audio",
+			Kind: types.KindIFFContainer,
+			Type: types.TypeAIFCAudio,
 		}
 	}
 
 	return &types.Metadata{
-		Name: "IFF Container",
+		Kind: types.KindIFFContainer,
 	}
 }
