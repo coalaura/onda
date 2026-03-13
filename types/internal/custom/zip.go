@@ -14,7 +14,7 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 	fileName, ok := firstZipLocalName(b)
 	if !ok {
-		return &types.Metadata{Name: "ZIP archive"}
+		return &types.Metadata{Name: "ZIP Archive"}
 	}
 
 	lowerName := strings.ToLower(fileName)
@@ -22,19 +22,19 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	if lowerName == "mimetype" {
 		if data := firstZipStoredData(b); len(data) > 0 {
 			if bytes.Equal(data, []byte("application/epub+zip")) {
-				return &types.Metadata{Name: "EPUB document"}
+				return &types.Metadata{Name: "ZIP Archive", Type: "EPUB Document"}
 			}
 
 			if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.text")) {
-				return &types.Metadata{Name: "OpenDocument text", Type: "ODT"}
+				return &types.Metadata{Name: "ZIP Archive", Type: "OpenDocument Text (ODT)"}
 			}
 
 			if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.spreadsheet")) {
-				return &types.Metadata{Name: "OpenDocument spreadsheet", Type: "ODS"}
+				return &types.Metadata{Name: "ZIP Archive", Type: "OpenDocument Spreadsheet (ODS)"}
 			}
 
 			if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.presentation")) {
-				return &types.Metadata{Name: "OpenDocument presentation", Type: "ODP"}
+				return &types.Metadata{Name: "ZIP Archive", Type: "OpenDocument Presentation (ODP)"}
 			}
 		}
 	}
@@ -42,27 +42,27 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	if lowerName == "[content_types].xml" {
 		switch {
 		case bytes.Contains(b, []byte("word/")):
-			return &types.Metadata{Name: "Microsoft Word document", Type: "DOCX"}
+			return &types.Metadata{Name: "ZIP Archive", Type: "Microsoft Word Document (DOCX)"}
 		case bytes.Contains(b, []byte("xl/")):
-			return &types.Metadata{Name: "Microsoft Excel spreadsheet", Type: "XLSX"}
+			return &types.Metadata{Name: "ZIP Archive", Type: "Microsoft Excel Spreadsheet (XLSX)"}
 		case bytes.Contains(b, []byte("ppt/")):
-			return &types.Metadata{Name: "Microsoft PowerPoint presentation", Type: "PPTX"}
+			return &types.Metadata{Name: "ZIP Archive", Type: "Microsoft PowerPoint Presentation (PPTX)"}
 		}
 	}
 
 	if lowerName == "androidmanifest.xml" || bytes.Contains(b, []byte("classes.dex")) {
-		return &types.Metadata{Name: "Android package", Type: "APK"}
+		return &types.Metadata{Name: "ZIP Archive", Type: "Android Package (APK)"}
 	}
 
 	if lowerName == "meta-inf/manifest.mf" || bytes.Contains(b, []byte("META-INF/MANIFEST.MF")) {
-		return &types.Metadata{Name: "Java archive", Type: "JAR"}
+		return &types.Metadata{Name: "ZIP Archive", Type: "Java Archive (JAR)"}
 	}
 
 	if strings.HasPrefix(lowerName, "payload/") || bytes.Contains(b, []byte("Payload/")) {
-		return &types.Metadata{Name: "iOS application archive", Type: "IPA"}
+		return &types.Metadata{Name: "ZIP Archive", Type: "iOS Application Archive (IPA)"}
 	}
 
-	return &types.Metadata{Name: "ZIP archive"}
+	return &types.Metadata{Name: "ZIP Archive"}
 }
 
 func firstZipLocalName(b types.Buffer) (string, bool) {

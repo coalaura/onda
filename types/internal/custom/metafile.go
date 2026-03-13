@@ -5,13 +5,15 @@ import "github.com/coalaura/onda/types"
 func DetectMetafile(b types.Buffer) *types.Metadata {
 	if isEMF(b) {
 		return &types.Metadata{
-			Name: "Enhanced Metafile image",
+			Name: "Metafile Image",
+			Type: "Enhanced Metafile (EMF)",
 		}
 	}
 
 	if b.Has(0, []byte{0xd7, 0xcd, 0xc6, 0x9a}) {
 		return &types.Metadata{
-			Name: "Windows Metafile image",
+			Name: "Metafile Image",
+			Type: "Windows Metafile (WMF)",
 		}
 	}
 

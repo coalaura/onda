@@ -16,16 +16,16 @@ func DetectOgg(b types.Buffer) *types.Metadata {
 
 	switch {
 	case bytes.Contains(data, []byte("OpusHead")):
-		return &types.Metadata{Name: "Opus audio"}
+		return &types.Metadata{Name: "Ogg Container", Type: "Opus Audio"}
 	case bytes.Contains(data, []byte{0x01, 'v', 'o', 'r', 'b', 'i', 's'}):
-		return &types.Metadata{Name: "Vorbis audio"}
+		return &types.Metadata{Name: "Ogg Container", Type: "Vorbis Audio"}
 	case bytes.Contains(data, []byte("Speex   ")):
-		return &types.Metadata{Name: "Speex audio"}
+		return &types.Metadata{Name: "Ogg Container", Type: "Speex Audio"}
 	case bytes.Contains(data, []byte{0x80, 't', 'h', 'e', 'o', 'r', 'a'}):
-		return &types.Metadata{Name: "Theora video"}
+		return &types.Metadata{Name: "Ogg Container", Type: "Theora Video"}
 	case bytes.Contains(data, []byte{0x7f, 'F', 'L', 'A', 'C'}):
-		return &types.Metadata{Name: "FLAC audio", Type: "Ogg container"}
+		return &types.Metadata{Name: "Ogg Container", Type: "FLAC Audio"}
 	default:
-		return &types.Metadata{Name: "Ogg container"}
+		return &types.Metadata{Name: "Ogg Container"}
 	}
 }

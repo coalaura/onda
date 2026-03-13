@@ -31,9 +31,9 @@ func DetectELF(b types.Buffer) *types.Metadata {
 
 	switch data {
 	case 1:
-		typ += " little-endian"
+		typ += " Little-Endian"
 	case 2:
-		typ += " big-endian"
+		typ += " Big-Endian"
 	}
 
 	return &types.Metadata{

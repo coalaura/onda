@@ -18,8 +18,8 @@ func TestDetectJavaClassNotMachOUniversal(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "Java class" {
-		t.Fatalf("expected Java class, got %q", meta.Name)
+	if meta.Name != "Java Class" {
+		t.Fatalf("expected Java Class, got %q", meta.Name)
 	}
 }
 
@@ -47,8 +47,8 @@ func TestDetectEMF(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "Enhanced Metafile image" {
-		t.Fatalf("expected Enhanced Metafile image, got %q", meta.Name)
+	if meta.Name != "Metafile Image" || meta.Type != "Enhanced Metafile (EMF)" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
 
@@ -69,7 +69,7 @@ func TestDetectNetpbmWithDelimiter(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "Netpbm image" || meta.Type != "PPM binary" {
+	if meta.Name != "Netpbm Image" || meta.Type != "PPM binary" {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
@@ -91,8 +91,8 @@ func TestDetectISOCompatibleBrand(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "AVIF image" {
-		t.Fatalf("expected AVIF image, got %q", meta.Name)
+	if meta.Name != "ISO Base Media" || meta.Type != "AVIF Image" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
 
@@ -107,7 +107,7 @@ func TestDetectDocx(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "Microsoft Word document" || meta.Type != "DOCX" {
+	if meta.Name != "ZIP Archive" || meta.Type != "Microsoft Word Document (DOCX)" {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
@@ -122,8 +122,8 @@ func TestDetectEPUB(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "EPUB document" {
-		t.Fatalf("expected EPUB document, got %q", meta.Name)
+	if meta.Name != "ZIP Archive" || meta.Type != "EPUB Document" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
 
@@ -137,7 +137,7 @@ func TestDetectJar(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "Java archive" || meta.Type != "JAR" {
+	if meta.Name != "ZIP Archive" || meta.Type != "Java Archive (JAR)" {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
@@ -153,8 +153,8 @@ func TestDetectOggOpus(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "Opus audio" {
-		t.Fatalf("expected Opus audio, got %q", meta.Name)
+	if meta.Name != "Ogg Container" || meta.Type != "Opus Audio" {
+		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }
 
@@ -171,7 +171,7 @@ func TestDetectMPEGTS(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if meta.Name != "MPEG transport stream" || meta.Type != "TS" {
+	if meta.Name != "MPEG Transport Stream" || meta.Type != "TS" {
 		t.Fatalf("unexpected metadata: %+v", *meta)
 	}
 }

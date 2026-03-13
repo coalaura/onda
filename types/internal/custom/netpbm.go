@@ -18,37 +18,37 @@ func DetectNetpbm(b types.Buffer) *types.Metadata {
 	switch b[1] {
 	case '1':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PBM ASCII",
 		}
 	case '2':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PGM ASCII",
 		}
 	case '3':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PPM ASCII",
 		}
 	case '4':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PBM binary",
 		}
 	case '5':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PGM binary",
 		}
 	case '6':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PPM binary",
 		}
 	case '7':
 		return &types.Metadata{
-			Name: "Netpbm image",
+			Name: "Netpbm Image",
 			Type: "PAM",
 		}
 	default:

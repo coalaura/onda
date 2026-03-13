@@ -60,6 +60,6 @@ func peMachine(machine uint16) string {
 	case 0x0200:
 		return "Itanium"
 	default:
-		return "unknown"
+		return "Unknown"
 	}
 }

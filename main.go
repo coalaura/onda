@@ -77,15 +77,15 @@ func detectPath(name string, info os.FileInfo) *types.Metadata {
 	if mode&os.ModeSymlink != 0 {
 		return &types.Metadata{
 			File: name,
-			Name: "Filesystem entry",
-			Type: "Symbolic link",
+			Name: "Filesystem Entry",
+			Type: "Symbolic Link",
 		}
 	}
 
 	if mode.IsDir() {
 		return &types.Metadata{
 			File: name,
-			Name: "Filesystem entry",
+			Name: "Filesystem Entry",
 			Type: "Directory",
 		}
 	}
@@ -93,15 +93,15 @@ func detectPath(name string, info os.FileInfo) *types.Metadata {
 	if mode&os.ModeNamedPipe != 0 {
 		return &types.Metadata{
 			File: name,
-			Name: "Filesystem entry",
-			Type: "Named pipe",
+			Name: "Filesystem Entry",
+			Type: "Named Pipe",
 		}
 	}
 
 	if mode&os.ModeSocket != 0 {
 		return &types.Metadata{
 			File: name,
-			Name: "Filesystem entry",
+			Name: "Filesystem Entry",
 			Type: "Socket",
 		}
 	}
@@ -110,22 +110,22 @@ func detectPath(name string, info os.FileInfo) *types.Metadata {
 		if mode&os.ModeCharDevice != 0 {
 			return &types.Metadata{
 				File: name,
-				Name: "Filesystem entry",
-				Type: "Character device",
+				Name: "Filesystem Entry",
+				Type: "Character Device",
 			}
 		}
 
 		return &types.Metadata{
 			File: name,
-			Name: "Filesystem entry",
-			Type: "Block device",
+			Name: "Filesystem Entry",
+			Type: "Block Device",
 		}
 	}
 
 	if !mode.IsRegular() {
 		return &types.Metadata{
 			File: name,
-			Name: "Filesystem entry",
+			Name: "Filesystem Entry",
 			Type: "Special",
 		}
 	}

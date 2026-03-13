@@ -9,8 +9,8 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{
-			Name: "Mach-O binary",
-			Type: "32-bit big-endian",
+			Name: "Mach-O Binary",
+			Type: "32-bit Big-Endian",
 		}
 	}
 
@@ -20,8 +20,8 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{
-			Name: "Mach-O binary",
-			Type: "32-bit little-endian",
+			Name: "Mach-O Binary",
+			Type: "32-bit Little-Endian",
 		}
 	}
 
@@ -31,8 +31,8 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{
-			Name: "Mach-O binary",
-			Type: "64-bit big-endian",
+			Name: "Mach-O Binary",
+			Type: "64-bit Big-Endian",
 		}
 	}
 
@@ -42,8 +42,8 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{
-			Name: "Mach-O binary",
-			Type: "64-bit little-endian",
+			Name: "Mach-O Binary",
+			Type: "64-bit Little-Endian",
 		}
 	}
 
@@ -62,7 +62,7 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{
-			Name: "Mach-O universal binary",
+			Name: "Mach-O Universal Binary",
 		}
 	}
 
@@ -81,7 +81,7 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{
-			Name: "Mach-O universal binary",
+			Name: "Mach-O Universal Binary",
 			Type: "64-bit",
 		}
 	}
