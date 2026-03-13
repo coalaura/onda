@@ -14,6 +14,12 @@ func init() {
 	types.RegisterSignature("CAF audio", "", 0, []byte("caff"))
 	types.RegisterSignature("WavPack audio", "", 0, []byte("wvpk"))
 	types.RegisterSignature("Monkey's Audio", "", 0, []byte("MAC "))
+	types.RegisterSignature("DSF audio", "", 0, []byte("DSD "))
+	types.RegisterSignature("TAK audio", "", 0, []byte("tBaK"))
+	types.RegisterSignature("VOC audio", "", 0, []byte("Creative Voice File\x1a"))
 	types.RegisterSignature("Musepack audio", "stream version 7", 0, []byte("MP+"))
 	types.RegisterSignature("Musepack audio", "stream version 8", 0, []byte("MPCK"))
+	types.RegisterSignature("Impulse Tracker module", "", 0, []byte("IMPM"))
+	types.RegisterSignature("FastTracker module", "", 0, []byte("Extended Module: "))
+	types.RegisterSignature("Scream Tracker module", "", 44, []byte("SCRM"))
 }

@@ -3,11 +3,15 @@ package custom
 import "github.com/coalaura/onda/types"
 
 func DetectNetpbm(b types.Buffer) *types.Metadata {
-	if b.Len() < 2 {
+	if b.Len() < 3 {
 		return nil
 	}
 
 	if b[0] != 'P' {
+		return nil
+	}
+
+	if !isNetpbmDelimiter(b[2]) {
 		return nil
 	}
 
@@ -49,5 +53,14 @@ func DetectNetpbm(b types.Buffer) *types.Metadata {
 		}
 	default:
 		return nil
+	}
+}
+
+func isNetpbmDelimiter(c byte) bool {
+	switch c {
+	case ' ', '\t', '\r', '\n', '\f':
+		return true
+	default:
+		return false
 	}
 }

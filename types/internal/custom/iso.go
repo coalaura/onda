@@ -3,64 +3,144 @@ package custom
 import "github.com/coalaura/onda/types"
 
 func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
-	size, ok := b.U32BE(0)
-	if !ok {
+	boxSize32, ok := b.U32BE(0)
+	if !ok || !b.Has(4, []byte("ftyp")) {
 		return nil
 	}
 
-	if size < 8 {
+	brandOffset := 8
+	compatibleOffset := 16
+	boxEnd := int(boxSize32)
+
+	if boxSize32 == 1 {
+		high, ok := b.U32BE(8)
+		if !ok {
+			return nil
+		}
+
+		low, ok := b.U32BE(12)
+		if !ok {
+			return nil
+		}
+
+		if high != 0 {
+			return nil
+		}
+
+		boxEnd = int(low)
+		brandOffset = 16
+		compatibleOffset = 24
+	}
+
+	if boxEnd <= compatibleOffset {
 		return nil
 	}
 
-	if !b.Has(4, []byte("ftyp")) {
+	if boxEnd > b.Len() {
+		boxEnd = b.Len()
+	}
+
+	if !hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "M4A ", "M4B ", "M4P ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b") {
 		return nil
 	}
 
-	if b.Has(8, []byte("avif")) {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avif") {
 		return &types.Metadata{
 			Name: "AVIF image",
 		}
 	}
 
-	if b.Has(8, []byte("avis")) {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avis") {
 		return &types.Metadata{
 			Name: "AVIF image",
 			Type: "sequence",
 		}
 	}
 
-	if b.Has(8, []byte("heic")) || b.Has(8, []byte("heix")) || b.Has(8, []byte("hevc")) || b.Has(8, []byte("hevx")) || b.Has(8, []byte("mif1")) || b.Has(8, []byte("msf1")) {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "heic", "heix", "hevc", "hevx", "mif1", "msf1") {
 		return &types.Metadata{
 			Name: "HEIF image",
 		}
 	}
 
-	if b.Has(8, []byte("isom")) || b.Has(8, []byte("iso2")) || b.Has(8, []byte("mp41")) || b.Has(8, []byte("mp42")) {
+	if hasISOBrandPrefix(b, brandOffset, compatibleOffset, boxEnd, "3gp", "3g2") {
 		return &types.Metadata{
-			Name: "MP4 video",
+			Name: "3GPP media",
 		}
 	}
 
-	if b.Has(8, []byte("M4A ")) {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "M4A ", "M4B ", "M4P ") {
 		return &types.Metadata{
 			Name: "MPEG-4 audio",
-			Type: "M4A",
+			Type: "M4A family",
 		}
 	}
 
-	if b.Has(8, []byte("qt  ")) {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "qt  ") {
 		return &types.Metadata{
 			Name: "QuickTime movie",
 		}
 	}
 
-	if b.Has(8, []byte("3gp")) || b.Has(8, []byte("3gs")) {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash") {
 		return &types.Metadata{
-			Name: "3GPP media",
+			Name: "MP4 video",
 		}
 	}
 
 	return &types.Metadata{
 		Name: "ISO Base Media file",
 	}
+}
+
+func hasISOBrand(b types.Buffer, majorOffset int, compatOffset int, boxEnd int, brands ...string) bool {
+	for _, brand := range brands {
+		if len(brand) != 4 {
+			continue
+		}
+
+		if b.Has(majorOffset, []byte(brand)) {
+			return true
+		}
+
+		for off := compatOffset; off+4 <= boxEnd; off += 4 {
+			if b.Has(off, []byte(brand)) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func hasISOBrandPrefix(b types.Buffer, majorOffset int, compatOffset int, boxEnd int, prefixes ...string) bool {
+	if hasISOBrandPrefixAt(b, majorOffset, prefixes...) {
+		return true
+	}
+
+	for off := compatOffset; off+4 <= boxEnd; off += 4 {
+		if hasISOBrandPrefixAt(b, off, prefixes...) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func hasISOBrandPrefixAt(b types.Buffer, offset int, prefixes ...string) bool {
+	if offset < 0 || offset+4 > b.Len() {
+		return false
+	}
+
+	for _, prefix := range prefixes {
+		if len(prefix) != 3 {
+			continue
+		}
+
+		if b[offset] == prefix[0] && b[offset+1] == prefix[1] && b[offset+2] == prefix[2] {
+			return true
+		}
+	}
+
+	return false
 }

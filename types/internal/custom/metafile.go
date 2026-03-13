@@ -3,7 +3,7 @@ package custom
 import "github.com/coalaura/onda/types"
 
 func DetectMetafile(b types.Buffer) *types.Metadata {
-	if b.Has(0, []byte{0x01, 0x00, 0x00, 0x00}) {
+	if isEMF(b) {
 		return &types.Metadata{
 			Name: "Enhanced Metafile image",
 		}
@@ -16,4 +16,17 @@ func DetectMetafile(b types.Buffer) *types.Metadata {
 	}
 
 	return nil
+}
+
+func isEMF(b types.Buffer) bool {
+	if !b.Has(0, []byte{0x01, 0x00, 0x00, 0x00}) {
+		return false
+	}
+
+	size, ok := b.U32LE(4)
+	if !ok || size < 88 {
+		return false
+	}
+
+	return b.Has(40, []byte{0x20, 0x45, 0x4d, 0x46})
 }

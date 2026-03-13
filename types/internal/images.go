@@ -27,6 +27,7 @@ func init() {
 	types.RegisterSignature("QOI image", "", 0, []byte("qoif"))
 
 	types.RegisterSignature("Photoshop document", "PSD", 0, []byte("8BPS"))
+	types.RegisterSignature("Photoshop document", "PSB", 0, []byte("8BPB"))
 
 	types.RegisterSignature("Radiance HDR image", "", 0, []byte("#?RADIANCE"))
 	types.RegisterSignature("Radiance HDR image", "", 0, []byte("#?RGBE"))
@@ -59,4 +60,9 @@ func init() {
 	types.RegisterSignature("JPEG 2000 image", "", 0, []byte{
 		0x00, 0x00, 0x00, 0x0c, 'j', 'P', ' ', ' ', 0x0d, 0x0a, 0x87, 0x0a,
 	})
+
+	types.RegisterSignature("BPG image", "", 0, []byte{'B', 'P', 'G', 0xfb})
+	types.RegisterSignature("JPEG XR image", "little-endian", 0, []byte{'I', 'I', 0xbc, 0x01})
+	types.RegisterSignature("JPEG XR image", "big-endian", 0, []byte{'M', 'M', 0x01, 0xbc})
+	types.RegisterSignature("Sun raster image", "", 0, []byte{0x59, 0xa6, 0x6a, 0x95})
 }
