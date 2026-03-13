@@ -385,6 +385,45 @@ func TestDetectBGZF(t *testing.T) {
 	}
 }
 
+func TestDetectASCIITextFallback(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("notes.txt", []byte("hello world\nthis is plain text\n"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindTextFile || meta.Type != types.TypeASCIIText {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestDetectUTF8TextFallback(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("notes.txt", []byte("ola, caf\xc3\xa9, ni\xc3\xb1o\n"))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindTextFile || meta.Type != types.TypeUTF8Text {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
+func TestTextFallbackDoesNotOverrideBinary(t *testing.T) {
+	t.Parallel()
+
+	meta, err := types.Detect("file.png", []byte{0x89, 'P', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if meta.Kind != types.KindPNGImage {
+		t.Fatalf("unexpected metadata: %+v", *meta)
+	}
+}
+
 func makeZipLocalFile(name string, data []byte) []byte {
 	buf := make([]byte, 30+len(name)+len(data))
 

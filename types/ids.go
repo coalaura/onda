@@ -143,6 +143,7 @@ const (
 	KindMPEG2TransportStream
 	KindVHDDiskImage
 	KindRubyGemPackage
+	KindTextFile
 )
 
 const (
@@ -309,6 +310,8 @@ const (
 	TypeNpmPackageTarball
 	TypePythonSourceDistributionSDist
 	TypeCondaPackage
+	TypeASCIIText
+	TypeUTF8Text
 )
 
 var kindNames = [...]string{
@@ -451,6 +454,7 @@ var kindNames = [...]string{
 	KindMPEG2TransportStream:        "MPEG Transport Stream",
 	KindVHDDiskImage:                "VHD Disk Image",
 	KindRubyGemPackage:              "RubyGem Package",
+	KindTextFile:                    "Text File",
 }
 
 var typeNames = [...]string{
@@ -577,6 +581,8 @@ var typeNames = [...]string{
 	TypeNpmPackageTarball:                               "npm Package Tarball",
 	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
 	TypeCondaPackage:                                    "Conda Package",
+	TypeASCIIText:                                       "ASCII Text",
+	TypeUTF8Text:                                        "UTF-8 Text",
 	TypeOpusAudio:                                       "Opus Audio",
 	TypeVorbisAudio:                                     "Vorbis Audio",
 	TypeSpeexAudio:                                      "Speex Audio",
