@@ -11,8 +11,8 @@ The Go compiler flattens this tree into a highly optimized jump table in assembl
 ```bash
 $ time onda onda
 onda
-  ⮡ Executable and Linkable Format
-    Type: ELF64 Little-Endian
+  └─ Executable and Linkable Format
+     Type: ELF64 Little-Endian
 
 real	0m0.002s
 user	0m0.000s

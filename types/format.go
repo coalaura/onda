@@ -32,7 +32,7 @@ func (m *Metadata) Format() string {
 	if kind != "" {
 		b.WriteString("  ")
 		b.WriteString(ansiFile)
-		b.WriteString("⮡ ")
+		b.WriteString("└─ ")
 		b.WriteString(ansiReset)
 		b.WriteString(ansiName)
 		b.WriteString(kind)
@@ -41,7 +41,7 @@ func (m *Metadata) Format() string {
 
 	if typ != "" {
 		b.WriteByte('\n')
-		b.WriteString("    ")
+		b.WriteString("     ")
 		b.WriteString(ansiLabel)
 		b.WriteString("Type: ")
 		b.WriteString(ansiReset)
