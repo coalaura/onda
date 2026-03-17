@@ -1,5 +1,20 @@
 package types
 
+import (
+	"cmp"
+	"slices"
+	"sync"
+)
+
+type priorityClass int
+
+const (
+	classSignature priorityClass = iota
+	classCustom
+	classWeak
+	classFallback
+)
+
 type Detector interface {
 	Detect(Buffer) *Metadata
 }
@@ -14,64 +29,63 @@ type Signature struct {
 	Mask   []byte
 }
 
-var detectors []Detector
-var fallbackDetectors []Detector
-
-func Register(d Detector) {
-	detectors = append(detectors, d)
+type registered struct {
+	d     Detector
+	class priorityClass
+	len   int
 }
 
+var (
+	detectors []registered
+	sortOnce  sync.Once
+)
+
+// Register adds a standard custom detector.
+func Register(d Detector) {
+	detectors = append(detectors, registered{d: d, class: classCustom})
+}
+
+// RegisterWeak adds a structural detector that is prone to false positives (e.g., LZMA).
+func RegisterWeak(d Detector) {
+	detectors = append(detectors, registered{d: d, class: classWeak})
+}
+
+// RegisterFallback adds a detector of last resort (e.g., Plain Text).
 func RegisterFallback(d Detector) {
-	fallbackDetectors = append(fallbackDetectors, d)
+	detectors = append(detectors, registered{d: d, class: classFallback})
 }
 
 func RegisterSignature(kind KindID, typ TypeID, offset int, magic []byte) {
-	Register(Signature{
-		Kind:   kind,
-		Type:   typ,
-		Offset: offset,
-		Magic:  magic,
-	})
+	sig := Signature{Kind: kind, Type: typ, Offset: offset, Magic: magic}
+
+	detectors = append(detectors, registered{d: sig, class: classSignature, len: len(magic)})
 }
 
 func RegisterMaskedSignature(kind KindID, typ TypeID, offset int, magic []byte, mask []byte) {
-	Register(Signature{
-		Kind:   kind,
-		Type:   typ,
-		Offset: offset,
-		Magic:  magic,
-		Mask:   mask,
-	})
+	sig := Signature{Kind: kind, Type: typ, Offset: offset, Magic: magic, Mask: mask}
+
+	detectors = append(detectors, registered{d: sig, class: classSignature, len: len(magic)})
 }
 
 func Detect(name string, data []byte) (*Metadata, error) {
+	sortOnce.Do(func() {
+		slices.SortStableFunc(detectors, func(a, b registered) int {
+			if a.class != b.class {
+				return cmp.Compare(a.class, b.class)
+			}
+
+			if a.class == classSignature {
+				return cmp.Compare(b.len, a.len)
+			}
+
+			return 0
+		})
+	})
+
 	buf := Buffer(data)
 
-	// signatures (fast)
-	for _, d := range detectors {
-		if sig, ok := d.(Signature); ok {
-			if meta := sig.Detect(buf); meta != nil {
-				meta.File = name
-
-				return meta, nil
-			}
-		}
-	}
-
-	// custom detectors (slower)
-	for _, d := range detectors {
-		if _, ok := d.(Signature); !ok {
-			if meta := d.Detect(buf); meta != nil {
-				meta.File = name
-
-				return meta, nil
-			}
-		}
-	}
-
-	// fallback last
-	for _, d := range fallbackDetectors {
-		if meta := d.Detect(buf); meta != nil {
+	for _, reg := range detectors {
+		if meta := reg.d.Detect(buf); meta != nil {
 			meta.File = name
 
 			return meta, nil

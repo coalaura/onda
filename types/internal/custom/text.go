@@ -1,6 +1,7 @@
 package custom
 
 import (
+	"bytes"
 	"unicode/utf8"
 
 	"github.com/coalaura/onda/types"
@@ -37,14 +38,7 @@ func passesTextLengthGate(b types.Buffer) bool {
 		return true
 	}
 
-	for i := 0; i < b.Len(); i++ {
-		switch b[i] {
-		case ' ', '\t', '\r', '\n':
-			return true
-		}
-	}
-
-	return false
+	return bytes.ContainsAny(b, " \t\r\n")
 }
 
 func isLikelyASCIIText(b types.Buffer) bool {

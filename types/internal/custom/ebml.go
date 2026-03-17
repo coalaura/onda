@@ -1,6 +1,10 @@
 package custom
 
-import "github.com/coalaura/onda/types"
+import (
+	"bytes"
+
+	"github.com/coalaura/onda/types"
+)
 
 func DetectEBML(b types.Buffer) *types.Metadata {
 	if !b.Has(0, []byte{0x1a, 0x45, 0xdf, 0xa3}) {
@@ -8,20 +12,19 @@ func DetectEBML(b types.Buffer) *types.Metadata {
 	}
 
 	limit := min(b.Len(), 256)
+	data := b[:limit]
 
-	for i := 4; i+4 <= limit; i++ {
-		if b.Has(i, []byte("webm")) {
-			return &types.Metadata{
-				Kind: types.KindEBMLContainer,
-				Type: types.TypeWebM,
-			}
+	if bytes.Contains(data, []byte("webm")) {
+		return &types.Metadata{
+			Kind: types.KindEBMLContainer,
+			Type: types.TypeWebM,
 		}
+	}
 
-		if b.Has(i, []byte("matroska")) {
-			return &types.Metadata{
-				Kind: types.KindEBMLContainer,
-				Type: types.TypeMatroska,
-			}
+	if bytes.Contains(data, []byte("matroska")) {
+		return &types.Metadata{
+			Kind: types.KindEBMLContainer,
+			Type: types.TypeMatroska,
 		}
 	}
 

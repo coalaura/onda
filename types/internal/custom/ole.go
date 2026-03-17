@@ -1,12 +1,16 @@
 package custom
 
-import "github.com/coalaura/onda/types"
+import (
+	"bytes"
+
+	"github.com/coalaura/onda/types"
+)
 
 var (
-	oleWordDocument       = utf16LE("WordDocument")
-	oleWorkbook           = utf16LE("Workbook")
-	oleBook               = utf16LE("Book")
-	olePowerPointDocument = utf16LE("PowerPoint Document")
+	oleWordDocument       = []byte{'W', 0, 'o', 0, 'r', 0, 'd', 0, 'D', 0, 'o', 0, 'c', 0, 'u', 0, 'm', 0, 'e', 0, 'n', 0, 't', 0}
+	oleWorkbook           = []byte{'W', 0, 'o', 0, 'r', 0, 'k', 0, 'b', 0, 'o', 0, 'o', 0, 'k', 0}
+	oleBook               = []byte{'B', 0, 'o', 0, 'o', 0, 'k', 0}
+	olePowerPointDocument = []byte{'P', 0, 'o', 0, 'w', 0, 'e', 0, 'r', 0, 'P', 0, 'o', 0, 'i', 0, 'n', 0, 't', 0, ' ', 0, 'D', 0, 'o', 0, 'c', 0, 'u', 0, 'm', 0, 'e', 0, 'n', 0, 't', 0}
 )
 
 func DetectOLE(b types.Buffer) *types.Metadata {
@@ -14,50 +18,22 @@ func DetectOLE(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
-	if hasBytes(b, oleWordDocument) {
+	limit := min(b.Len(), 4096)
+	data := b[:limit]
+
+	if bytes.Contains(data, oleWordDocument) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftWordDocumentDOC}
 	}
 
-	if hasBytes(b, oleWorkbook) || hasBytes(b, oleBook) {
+	if bytes.Contains(data, oleWorkbook) || bytes.Contains(data, oleBook) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftExcelWorkbookXLS}
 	}
 
-	if hasBytes(b, olePowerPointDocument) {
+	if bytes.Contains(data, olePowerPointDocument) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftPowerPointPresentationPPT}
 	}
 
 	return &types.Metadata{
 		Kind: types.KindOLECompoundDocument,
 	}
-}
-
-func hasBytes(b types.Buffer, needle []byte) bool {
-	if len(needle) == 0 || len(needle) > b.Len() {
-		return false
-	}
-
-	limit := min(b.Len(), 4096) - len(needle)
-
-	for i := 0; i <= limit; i += 8 {
-		if b.Has(i, needle) {
-			return true
-		}
-	}
-
-	return false
-}
-
-func utf16LE(s string) []byte {
-	if len(s) == 0 {
-		return nil
-	}
-
-	b := make([]byte, len(s)*2)
-
-	for i := 0; i < len(s); i++ {
-		b[i*2] = s[i]
-		b[i*2+1] = 0
-	}
-
-	return b
 }

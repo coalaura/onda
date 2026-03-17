@@ -3,6 +3,15 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
+	types.RegisterSignature(types.KindAndroidBootImage, types.TypeNone, 0, []byte("ANDROID!"))
+	types.RegisterSignature(types.KindAndroidOAT, types.TypeNone, 0, []byte("oat\n"))
+	types.RegisterSignature(types.KindAndroidODEX, types.TypeNone, 0, []byte("dey\n"))
+	types.RegisterSignature(types.KindAppleDouble, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x07})
+	types.RegisterSignature(types.KindAppleSingle, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x00})
+	types.RegisterSignature(types.KindBlenderFile, types.TypeNone, 0, []byte("BLENDER"))
+	types.RegisterSignature(types.KindCRXBrowserExtension, types.TypeCRXVersion2, 0, []byte("Cr24\x02\x00\x00\x00"))
+	types.RegisterSignature(types.KindCRXBrowserExtension, types.TypeCRXVersion3, 0, []byte("Cr24\x03\x00\x00\x00"))
+	types.RegisterSignature(types.KindCRXBrowserExtension, types.TypeNone, 0, []byte("Cr24"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX035, 0, []byte("dex\n035\x00"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX036, 0, []byte("dex\n036\x00"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX037, 0, []byte("dex\n037\x00"))
@@ -10,72 +19,26 @@ func init() {
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX039, 0, []byte("dex\n039\x00"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX040, 0, []byte("dex\n040\x00"))
 	types.RegisterSignature(types.KindDalvikExecutable, types.TypeDEX041, 0, []byte("dex\n041\x00"))
-	types.RegisterSignature(types.KindAndroidOAT, types.TypeNone, 0, []byte("oat\n"))
-	types.RegisterSignature(types.KindAndroidODEX, types.TypeNone, 0, []byte("dey\n"))
-
-	types.RegisterSignature(types.KindJavaModule, types.TypeJMOD, 0, []byte("JMOD"))
-
+	types.RegisterSignature(types.KindGitIndex, types.TypeNone, 0, []byte("DIRC"))
+	types.RegisterSignature(types.KindGitPack, types.TypeNone, 0, []byte("PACK"))
 	types.RegisterSignature(types.KindJavaKeyStore, types.TypeNone, 0, []byte{0xfe, 0xed, 0xfe, 0xed})
-
-	types.RegisterSignature(types.KindWebAssemblyModule, types.TypeNone, 0, []byte{
-		0x00, 0x61, 0x73, 0x6d,
-	})
-
-	types.RegisterSignature(types.KindNESROM, types.TypeNone, 0, []byte{
-		'N', 'E', 'S', 0x1a,
-	})
-
-	types.RegisterSignature(types.KindPCAPCapture, types.TypeLittleEndian, 0, []byte{
-		0xd4, 0xc3, 0xb2, 0xa1,
-	})
-
-	types.RegisterSignature(types.KindPCAPCapture, types.TypeBigEndian, 0, []byte{
-		0xa1, 0xb2, 0xc3, 0xd4,
-	})
-
-	types.RegisterSignature(types.KindPCAPCapture, types.TypeNanosecondLittleEndian, 0, []byte{
-		0x4d, 0x3c, 0xb2, 0xa1,
-	})
-
-	types.RegisterSignature(types.KindPCAPCapture, types.TypeNanosecondBigEndian, 0, []byte{
-		0xa1, 0xb2, 0x3c, 0x4d,
-	})
-
-	types.RegisterSignature(types.KindPCAPNGCapture, types.TypeNone, 0, []byte{
-		0x0a, 0x0d, 0x0d, 0x0a,
-	})
-
+	types.RegisterSignature(types.KindJavaModule, types.TypeJMOD, 0, []byte("JMOD"))
+	types.RegisterSignature(types.KindLLVMBitcode, types.TypeNone, 0, []byte{'B', 'C', 0xc0, 0xde})
+	types.RegisterSignature(types.KindLLVMBitcode, types.TypeWrapper, 0, []byte{0xde, 0xc0, 0x17, 0x0b})
+	types.RegisterSignature(types.KindLuaBytecode, types.TypeNone, 0, []byte{0x1b, 'L', 'u', 'a'})
+	types.RegisterSignature(types.KindMacBinary, types.TypeNone, 102, []byte("mBIN"))
+	types.RegisterSignature(types.KindNESROM, types.TypeNone, 0, []byte{'N', 'E', 'S', 0x1a})
+	types.RegisterSignature(types.KindPCAPCapture, types.TypeBigEndian, 0, []byte{0xa1, 0xb2, 0xc3, 0xd4})
+	types.RegisterSignature(types.KindPCAPCapture, types.TypeLittleEndian, 0, []byte{0xd4, 0xc3, 0xb2, 0xa1})
+	types.RegisterSignature(types.KindPCAPCapture, types.TypeNanosecondBigEndian, 0, []byte{0xa1, 0xb2, 0x3c, 0x4d})
+	types.RegisterSignature(types.KindPCAPCapture, types.TypeNanosecondLittleEndian, 0, []byte{0x4d, 0x3c, 0xb2, 0xa1})
+	types.RegisterSignature(types.KindPCAPNGCapture, types.TypeNone, 0, []byte{0x0a, 0x0d, 0x0d, 0x0a})
+	types.RegisterSignature(types.KindShockwaveFlash, types.TypeLZMACompressed, 0, []byte("ZWS"))
 	types.RegisterSignature(types.KindShockwaveFlash, types.TypeUncompressed, 0, []byte("FWS"))
 	types.RegisterSignature(types.KindShockwaveFlash, types.TypeZlibCompressed, 0, []byte("CWS"))
-	types.RegisterSignature(types.KindShockwaveFlash, types.TypeLZMACompressed, 0, []byte("ZWS"))
-
-	types.RegisterSignature(types.KindLLVMBitcode, types.TypeNone, 0, []byte{
-		'B', 'C', 0xc0, 0xde,
-	})
-
-	types.RegisterSignature(types.KindLLVMBitcode, types.TypeWrapper, 0, []byte{0xde, 0xc0, 0x17, 0x0b})
-
-	types.RegisterSignature(types.KindWindowsShortcut, types.TypeNone, 0, []byte{
-		0x4c, 0x00, 0x00, 0x00,
-		0x01, 0x14, 0x02, 0x00,
-		0x00, 0x00, 0x00, 0x00,
-		0xc0, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x46,
-	})
-
-	types.RegisterSignature(types.KindWindowsEventLog, types.TypeNone, 0, []byte("ElfFile\x00"))
-	types.RegisterSignature(types.KindAndroidBootImage, types.TypeNone, 0, []byte("ANDROID!"))
 	types.RegisterSignature(types.KindUBootImage, types.TypeNone, 0, []byte{0x27, 0x05, 0x19, 0x56})
+	types.RegisterSignature(types.KindWebAssemblyModule, types.TypeNone, 0, []byte{0x00, 0x61, 0x73, 0x6d})
+	types.RegisterSignature(types.KindWindowsEventLog, types.TypeNone, 0, []byte("ElfFile\x00"))
+	types.RegisterSignature(types.KindWindowsShortcut, types.TypeNone, 0, []byte{0x4c, 0x00, 0x00, 0x00, 0x01, 0x14, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46})
 	types.RegisterSignature(types.KindXFSFilesystem, types.TypeNone, 0, []byte("XFSB"))
-
-	types.RegisterSignature(types.KindLuaBytecode, types.TypeNone, 0, []byte{
-		0x1b, 'L', 'u', 'a',
-	})
-
-	types.RegisterSignature(types.KindGitPack, types.TypeNone, 0, []byte("PACK"))
-	types.RegisterSignature(types.KindGitIndex, types.TypeNone, 0, []byte("DIRC"))
-	types.RegisterSignature(types.KindBlenderFile, types.TypeNone, 0, []byte("BLENDER"))
-	types.RegisterSignature(types.KindAppleDouble, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x07})
-	types.RegisterSignature(types.KindAppleSingle, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x00})
-	types.RegisterSignature(types.KindMacBinary, types.TypeNone, 102, []byte("mBIN"))
 }
