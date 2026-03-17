@@ -29,7 +29,13 @@ sys 	0m0.002s
 
 ## Installation
 
-Prebuilt releases are available [here](https://github.com/coalaura/onda/releases) or install it via Go:
+Prebuilt releases are available [here](https://github.com/coalaura/onda/releases). You can bootstrap **onda** with a single command. This script will detect your OS and CPU (`amd64`/`arm64`), download the correct binary and install it to `/usr/local/bin/onda`.
+
+```bash
+curl -sL https://src.ws2.sh/onda/install.sh | sh
+```
+
+Or install it via Go:
 
 ```bash
 go install github.com/coalaura/onda@latest
