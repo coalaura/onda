@@ -99,17 +99,13 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 
 func hasISOBrand(b types.Buffer, majorOffset int, compatOffset int, boxEnd int, brands ...string) bool {
 	if majorOffset+4 <= b.Len() {
-		major := string(b[majorOffset : majorOffset+4])
-
-		if slices.Contains(brands, major) {
+		if slices.Contains(brands, string(b[majorOffset:majorOffset+4])) {
 			return true
 		}
 	}
 
 	for off := compatOffset; off+4 <= boxEnd && off+4 <= b.Len(); off += 4 {
-		chunk := string(b[off : off+4])
-
-		if slices.Contains(brands, chunk) {
+		if slices.Contains(brands, string(b[off:off+4])) {
 			return true
 		}
 	}
@@ -119,17 +115,13 @@ func hasISOBrand(b types.Buffer, majorOffset int, compatOffset int, boxEnd int, 
 
 func hasISOBrandPrefix(b types.Buffer, majorOffset int, compatOffset int, boxEnd int, prefixes ...string) bool {
 	if majorOffset+3 <= b.Len() {
-		major := string(b[majorOffset : majorOffset+3])
-
-		if slices.Contains(prefixes, major) {
+		if slices.Contains(prefixes, string(b[majorOffset:majorOffset+3])) {
 			return true
 		}
 	}
 
 	for off := compatOffset; off+3 <= boxEnd && off+4 <= b.Len(); off += 4 {
-		chunk := string(b[off : off+3])
-
-		if slices.Contains(prefixes, chunk) {
+		if slices.Contains(prefixes, string(b[off:off+3])) {
 			return true
 		}
 	}

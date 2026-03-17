@@ -114,9 +114,23 @@ func detectOptimized(b Buffer) *Metadata {
 					}
 				}
 			}
+		case 0x02:
+			if b.Len() >= 4 && string(b[:4]) == "\x02!L\x18" {
+				return &Metadata{Kind: KindLZ4Frame, Type: TypeLZ4Legacy}
+			}
 		case 0x03:
-			if b.Len() >= 8 && string(b[:8]) == "\x03٢\x9ag\xfbK\xb5" {
-				return &Metadata{Kind: KindKeePassDatabase, Type: TypeKDBX}
+			if b.Len() > 4 {
+				_ = b[4] // BCE hint
+				switch b[4] {
+				case 0x65:
+					if b.Len() >= 8 && string(b[:8]) == "\x03٢\x9ae\xfbK\xb5" {
+						return &Metadata{Kind: KindKeePassDatabase, Type: TypeKDB}
+					}
+				case 0x67:
+					if b.Len() >= 8 && string(b[:8]) == "\x03٢\x9ag\xfbK\xb5" {
+						return &Metadata{Kind: KindKeePassDatabase, Type: TypeKDBX}
+					}
+				}
 			}
 		case 0x04:
 			if b.Len() >= 4 && string(b[:4]) == "\x04\"M\x18" {
@@ -353,6 +367,10 @@ func detectOptimized(b Buffer) *Metadata {
 						}
 					}
 				}
+			}
+		case 0x31:
+			if b.Len() >= 4 && string(b[:4]) == "1\x18\x10\x06" {
+				return &Metadata{Kind: KindUBIFSFilesystem}
 			}
 		case 0x37:
 			if b.Len() > 1 {
@@ -855,6 +873,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
 				switch b[1] {
+				case 0x2a:
+					if b.Len() >= 4 && string(b[:4]) == "P*M\x18" {
+						return &Metadata{Kind: KindZstandardArchive, Type: TypeZstandardSkinnableFrame}
+					}
 				case 0x41:
 					if b.Len() > 2 {
 						_ = b[2] // BCE hint
@@ -898,6 +920,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x57:
 					if b.Len() >= 4 && string(b[:4]) == "PWAD" {
 						return &Metadata{Kind: KindWADArchive, Type: TypePWAD}
+					}
+				case 0x75:
+					if b.Len() >= 20 && string(b[:20]) == "PuTTY-User-Key-File-" {
+						return &Metadata{Kind: KindPuttyPrivateKey}
 					}
 				}
 			}
@@ -1028,6 +1054,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x6b:
 					if b.Len() >= 14 && string(b[:14]) == "SketchUp Model" {
 						return &Metadata{Kind: KindSketchUpModel}
+					}
+				case 0x74:
+					if b.Len() >= 16 && string(b[:16]) == "StuffIt (c)1997-" {
+						return &Metadata{Kind: KindStuffItArchive}
 					}
 				}
 			}
@@ -1355,6 +1385,10 @@ func detectOptimized(b Buffer) *Metadata {
 					}
 				}
 			}
+		case 0x85:
+			if b.Len() >= 2 && string(b[:2]) == "\x85\x19" {
+				return &Metadata{Kind: KindJFFS2Filesystem}
+			}
 		case 0x89:
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
@@ -1412,6 +1446,10 @@ func detectOptimized(b Buffer) *Metadata {
 		case 0xb7:
 			if b.Len() >= 16 && string(b[:16]) == "\xb7\xd8\x00 7I\xda\x11\xa6N\x00\a\xe9^\xad\x8d" {
 				return &Metadata{Kind: KindWTVVideo}
+			}
+		case 0xc5:
+			if b.Len() >= 4 && string(b[:4]) == "\xc5\xd0\xd3\xc6" {
+				return &Metadata{Kind: KindEncapsulatedPostScript}
 			}
 		case 0xc7:
 			if b.Len() >= 2 && string(b[:2]) == "\xc7q" {
@@ -1571,6 +1609,10 @@ func detectOptimized(b Buffer) *Metadata {
 	if b.Len() > 3 {
 		_ = b[3] // BCE hint
 		switch b[3] {
+		case 0x2d:
+			if b.Len() >= 11 && string(b[3:11]) == "-FVE-FS-" {
+				return &Metadata{Kind: KindBitLockerDiskEncryption}
+			}
 		case 0x45:
 			if b.Len() >= 11 && string(b[3:11]) == "EXFAT   " {
 				return &Metadata{Kind: KindExFATFilesystem}
@@ -1660,20 +1702,36 @@ func detectOptimized(b Buffer) *Metadata {
 		return &Metadata{Kind: KindGameBoyROM}
 	}
 
-	if b.Len() > 1024 && b[1024] == 0x48 {
-		if b.Len() > 1025 {
-			_ = b[1025] // BCE hint
-			switch b[1025] {
-			case 0x2b:
-				if b.Len() >= 1026 && string(b[1024:1026]) == "H+" {
-					return &Metadata{Kind: KindHFSPlusFilesystem}
-				}
-			case 0x58:
-				if b.Len() >= 1026 && string(b[1024:1026]) == "HX" {
-					return &Metadata{Kind: KindHFSPlusFilesystem}
+	if b.Len() > 1024 {
+		_ = b[1024] // BCE hint
+		switch b[1024] {
+		case 0x10:
+			if b.Len() >= 1028 && string(b[1024:1028]) == "\x10 \xf5\xf2" {
+				return &Metadata{Kind: KindF2FSFilesystem}
+			}
+		case 0x48:
+			if b.Len() > 1025 {
+				_ = b[1025] // BCE hint
+				switch b[1025] {
+				case 0x2b:
+					if b.Len() >= 1026 && string(b[1024:1026]) == "H+" {
+						return &Metadata{Kind: KindHFSPlusFilesystem}
+					}
+				case 0x58:
+					if b.Len() >= 1026 && string(b[1024:1026]) == "HX" {
+						return &Metadata{Kind: KindHFSPlusFilesystem}
+					}
 				}
 			}
 		}
+	}
+
+	if b.Len() >= 1036 && string(b[1032:1036]) == "\x02\t\x01\x12" {
+		return &Metadata{Kind: KindNILFS2Filesystem}
+	}
+
+	if b.Len() >= 4112 && string(b[4096:4112]) == "ƅs\xf6N\x1aEʂe\xf5\x7fH\xbam\x81" {
+		return &Metadata{Kind: KindBcachefsFilesystem}
 	}
 
 	if b.Len() > 32769 {

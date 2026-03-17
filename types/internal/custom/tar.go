@@ -19,9 +19,7 @@ func DetectTar(b types.Buffer) *types.Metadata {
 			}
 
 			if nameEnd > 0 {
-				name := string(b[offset : offset+nameEnd])
-
-				switch name {
+				switch string(b[offset : offset+nameEnd]) {
 				case "package/package.json", "package.json":
 					return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeNpmPackageTarball}
 				case "oci-layout", "index.json", "manifest.json":

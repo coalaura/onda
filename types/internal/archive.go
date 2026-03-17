@@ -31,6 +31,7 @@ func init() {
 	types.RegisterSignature(types.KindLHAArchive, types.TypeNone, 2, []byte("-lz4-"))
 	types.RegisterSignature(types.KindLHAArchive, types.TypeNone, 2, []byte("-lz5-"))
 	types.RegisterSignature(types.KindLHAArchive, types.TypeNone, 2, []byte("-lzs-"))
+	types.RegisterSignature(types.KindLZ4Frame, types.TypeLZ4Legacy, 0, []byte{0x02, 0x21, 0x4c, 0x18})
 	types.RegisterSignature(types.KindLZ4Frame, types.TypeNone, 0, []byte{0x04, 0x22, 0x4d, 0x18})
 	types.RegisterSignature(types.KindLZFSEData, types.TypeNone, 0, []byte("bvx2"))
 	types.RegisterSignature(types.KindLZIPArchive, types.TypeNone, 0, []byte("LZIP"))
@@ -43,6 +44,7 @@ func init() {
 	types.RegisterSignature(types.KindSquashFSFilesystem, types.TypeNone, 0, []byte("hsqs"))
 	types.RegisterSignature(types.KindStuffItArchive, types.TypeNone, 0, []byte("SIT!"))
 	types.RegisterSignature(types.KindStuffItArchive, types.TypeNone, 0, []byte("SITD"))
+	types.RegisterSignature(types.KindStuffItArchive, types.TypeNone, 0, []byte("StuffIt (c)1997-"))
 	types.RegisterSignature(types.KindUnixCompressArchive, types.TypeNone, 0, []byte{0x1f, 0x9d})
 	types.RegisterSignature(types.KindWADArchive, types.TypeIWAD, 0, []byte("IWAD"))
 	types.RegisterSignature(types.KindWADArchive, types.TypePWAD, 0, []byte("PWAD"))
@@ -54,6 +56,7 @@ func init() {
 	types.RegisterSignature(types.KindZOOArchive, types.TypeNone, 0, []byte("ZOO "))
 	types.RegisterSignature(types.KindZPAQArchive, types.TypeNone, 0, []byte("7kSt"))
 	types.RegisterSignature(types.KindZstandardArchive, types.TypeNone, 0, []byte{0x28, 0xb5, 0x2f, 0xfd})
+	types.RegisterSignature(types.KindZstandardArchive, types.TypeZstandardSkinnableFrame, 0, []byte{0x50, 0x2a, 0x4d, 0x18})
 	types.RegisterSignature(types.KindZstandardDictionary, types.TypeNone, 0, []byte{0x37, 0xa4, 0x30, 0xec})
 
 	types.RegisterMaskedSignature(types.KindGzipData, types.TypeBGZF, 0, []byte{0x1f, 0x8b, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'B', 'C', 0x02, 0x00}, []byte{0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})

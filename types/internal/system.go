@@ -53,6 +53,7 @@ func init() {
 	types.RegisterSignature(types.KindPEMPrivateKey, types.TypeNone, 0, []byte("-----BEGIN PRIVATE KEY-----"))
 	types.RegisterSignature(types.KindPEMPrivateKey, types.TypeRSAPrivateKey, 0, []byte("-----BEGIN RSA PRIVATE KEY-----"))
 	types.RegisterSignature(types.KindPlayStationPortableISO, types.TypeNone, 0, []byte("CISO"))
+	types.RegisterSignature(types.KindPuttyPrivateKey, types.TypeNone, 0, []byte("PuTTY-User-Key-File-"))
 	types.RegisterSignature(types.KindSegaMegaDriveROM, types.TypeNone, 0x100, []byte("SEGA"))
 	types.RegisterSignature(types.KindShebangScript, types.TypeNone, 0, []byte("#!"))
 	types.RegisterSignature(types.KindShockwaveFlash, types.TypeLZMACompressed, 0, []byte("ZWS"))

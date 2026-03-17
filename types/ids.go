@@ -36,7 +36,9 @@ const (
 	KindAutoCADDrawing
 	KindAvroObjectContainer
 	KindBAMData
+	KindBcachefsFilesystem
 	KindBinkVideo
+	KindBitLockerDiskEncryption
 	KindBlenderFile
 	KindBMPImage
 	KindBPGImage
@@ -63,11 +65,13 @@ const (
 	KindDSFAudio
 	KindDTSAudio
 	KindEBMLContainer
+	KindEncapsulatedPostScript
 	KindEOTFont
 	KindESRIShapefile
 	KindExecutableAndLinkableFormat
 	KindExFATFilesystem
 	KindExtFilesystem
+	KindF2FSFilesystem
 	KindFarbfeldImage
 	KindFastTrackerModule
 	KindFBXModel
@@ -103,6 +107,7 @@ const (
 	KindJavaClass
 	KindJavaKeyStore
 	KindJavaModule
+	KindJFFS2Filesystem
 	KindJNGImage
 	KindJPEG2000Image
 	KindJPEGImage
@@ -144,6 +149,7 @@ const (
 	KindNESROM
 	KindNetCDFData
 	KindNetpbmImage
+	KindNILFS2Filesystem
 	KindNintendo3DSROM
 	KindNintendo64ROM
 	KindNintendoDSROM
@@ -173,6 +179,7 @@ const (
 	KindPortableExecutable
 	KindPostgreSQLCustomDump
 	KindPostScriptDocument
+	KindPuttyPrivateKey
 	KindPVRTexture
 	KindPythonBytecode
 	KindQCOWDiskImage
@@ -213,6 +220,7 @@ const (
 	KindTrueTypeFont
 	KindTTAAudio
 	KindU3DModel
+	KindUBIFSFilesystem
 	KindUBootImage
 	KindUniversalDiskFormat
 	KindUnixCompressArchive
@@ -329,11 +337,13 @@ const (
 	TypeJavaEnterpriseArchiveEAR
 	TypeJavaWebArchiveWAR
 	TypeJMOD
+	TypeKDB
 	TypeKDBX
 	TypeKMZArchive
 	TypeKTX
 	TypeKTX2
 	TypeLittleEndian
+	TypeLZ4Legacy
 	TypeLZMACompressed
 	TypeM2TS
 	TypeM2TSBDAV
@@ -439,6 +449,7 @@ const (
 	TypeWindowsMetafileWMF
 	TypeWrapper
 	TypeZlibCompressed
+	TypeZstandardSkinnableFrame
 )
 
 var kindNames = [...]string{
@@ -474,7 +485,9 @@ var kindNames = [...]string{
 	KindAutoCADDrawing:              "AutoCAD Drawing",
 	KindAvroObjectContainer:         "Avro Object Container",
 	KindBAMData:                     "BAM Data",
+	KindBcachefsFilesystem:          "Bcachefs Filesystem",
 	KindBinkVideo:                   "Bink Video",
+	KindBitLockerDiskEncryption:     "BitLocker Disk Encryption",
 	KindBlenderFile:                 "Blender File",
 	KindBMPImage:                    "BMP Image",
 	KindBPGImage:                    "BPG Image",
@@ -501,11 +514,13 @@ var kindNames = [...]string{
 	KindDSFAudio:                    "DSF Audio",
 	KindDTSAudio:                    "DTS Audio",
 	KindEBMLContainer:               "EBML Container",
+	KindEncapsulatedPostScript:      "Encapsulated PostScript",
 	KindEOTFont:                     "EOT Font",
 	KindESRIShapefile:               "ESRI Shapefile",
 	KindExecutableAndLinkableFormat: "Executable and Linkable Format",
 	KindExFATFilesystem:             "exFAT Filesystem",
 	KindExtFilesystem:               "ext Filesystem",
+	KindF2FSFilesystem:              "F2FS Filesystem",
 	KindFarbfeldImage:               "Farbfeld Image",
 	KindFastTrackerModule:           "FastTracker Module",
 	KindFBXModel:                    "FBX Model",
@@ -541,6 +556,7 @@ var kindNames = [...]string{
 	KindJavaClass:                   "Java Class",
 	KindJavaKeyStore:                "Java KeyStore",
 	KindJavaModule:                  "Java Module",
+	KindJFFS2Filesystem:             "JFFS2 Filesystem",
 	KindJNGImage:                    "JNG Image",
 	KindJPEG2000Image:               "JPEG 2000 Image",
 	KindJPEGImage:                   "JPEG Image",
@@ -582,6 +598,7 @@ var kindNames = [...]string{
 	KindNESROM:                      "NES ROM",
 	KindNetCDFData:                  "NetCDF Data",
 	KindNetpbmImage:                 "Netpbm Image",
+	KindNILFS2Filesystem:            "NILFS2 Filesystem",
 	KindNintendo3DSROM:              "Nintendo 3DS ROM",
 	KindNintendo64ROM:               "Nintendo 64 ROM",
 	KindNintendoDSROM:               "Nintendo DS ROM",
@@ -611,6 +628,7 @@ var kindNames = [...]string{
 	KindPortableExecutable:          "Portable Executable",
 	KindPostgreSQLCustomDump:        "PostgreSQL Custom Dump",
 	KindPostScriptDocument:          "PostScript Document",
+	KindPuttyPrivateKey:             "PuTTY Private Key",
 	KindPVRTexture:                  "PVR Texture",
 	KindPythonBytecode:              "Python Bytecode",
 	KindQCOWDiskImage:               "QCOW Disk Image",
@@ -651,6 +669,7 @@ var kindNames = [...]string{
 	KindTrueTypeFont:                "TrueType Font",
 	KindTTAAudio:                    "TTA Audio",
 	KindU3DModel:                    "U3D Model",
+	KindUBIFSFilesystem:             "UBIFS Filesystem",
 	KindUBootImage:                  "U-Boot Image",
 	KindUniversalDiskFormat:         "Universal Disk Format",
 	KindUnixCompressArchive:         "Unix Compress Archive",
@@ -767,11 +786,13 @@ var typeNames = [...]string{
 	TypeJavaEnterpriseArchiveEAR: "Java Enterprise Archive (EAR)",
 	TypeJavaWebArchiveWAR:        "Java Web Archive (WAR)",
 	TypeJMOD:                     "JMOD",
+	TypeKDB:                      "KDB",
 	TypeKDBX:                     "KDBX",
 	TypeKMZArchive:               "KMZ Archive",
 	TypeKTX:                      "KTX",
 	TypeKTX2:                     "KTX2",
 	TypeLittleEndian:             "Little-Endian",
+	TypeLZ4Legacy:                "LZ4 Legacy",
 	TypeLZMACompressed:           "LZMA Compressed",
 	TypeM2TS:                     "M2TS",
 	TypeM2TSBDAV:                 "M2TS/BDAV",
@@ -877,6 +898,7 @@ var typeNames = [...]string{
 	TypeWindowsMetafileWMF:                              "Windows Metafile (WMF)",
 	TypeWrapper:                                         "Wrapper",
 	TypeZlibCompressed:                                  "Zlib Compressed",
+	TypeZstandardSkinnableFrame:                         "Zstandard Skinnable Frame",
 }
 
 func (k KindID) String() string {

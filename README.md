@@ -4,9 +4,9 @@ onda is a tiny, "hardware-accelerated" file sniffer for Go.
 
 ## Blazing Fast
 
-onda achieves sub-millisecond detection times through extreme mechanical sympathy. Instead of allocating memory, iterating slices, or using locks at runtime, onda uses a custom Ahead-of-Time (AOT) compiler to generate a deeply nested Radix Trie (Prefix Tree) in pure Go.
+onda achieves sub-millisecond detection times through extreme mechanical sympathy. Instead of allocating memory, iterating slices or using locks at runtime, onda uses a custom Ahead-of-Time (AOT) compiler to generate a deeply nested Radix Trie (Prefix Tree) in pure Go.
 
-The Go compiler flattens this tree into a highly optimized jump table in assembly. The CPU branch predictor routes file signatures in nanoseconds-resulting in **zero-allocation startup**, **zero runtime locks**, and $O(1)$ time complexity for 95% of files.
+The Go compiler flattens this tree into a highly optimized jump table in assembly. The CPU branch predictor routes file signatures in nanoseconds-resulting in **zero-allocation startup**, **zero runtime locks** and $O(1)$ time complexity for 95% of files.
 
 ```bash
 $ time onda onda
@@ -72,26 +72,13 @@ func main() {
 
 ## Supported types
 
-#### Archive/package/filesystem:
-7-Zip archive, ACE archive, ALZ archive, APFS filesystem, AR archive, ARJ archive, Android app bundle (AAB), Android archive (AAR), Android package (APK), Android split APK set (APKS), Android package (XAPK), Android system package (APEX), APPX package, AppleDouble file, AppleSingle file, Btrfs filesystem, Bzip2 archive, Cabinet archive, Conda package (tar), CPIO archive (new ASCII, new ASCII with CRC, old ASCII, binary big-endian, binary little-endian), Debian package, exFAT filesystem, ext filesystem (ext2, ext3, ext4), Firefox extension (XPI), Git index, Git pack, Gzip archive, HFS+ filesystem, iOS application archive (IPA), Java archive (JAR), Java enterprise archive (EAR), Java web archive (WAR), KMZ archive, LHA archive, LUKS disk encryption, LZ4 frame, LZFSE data, LZIP archive, LZOP archive, MacBinary, MSIX package, NuGet package (NUPKG), npm package tarball, NTFS filesystem, OCI image layout (tar), Python source distribution (sdist), Python wheel (WHL), RAR archive (RAR4, RAR5), RPM package, RubyGem package, Sketch document, Snappy framed data, SquashFS filesystem, StuffIt archive, TAR archive, Unix compress archive, Visual Studio extension (VSIX), WAD archive (IWAD, PWAD), Windows Imaging Format, XAR archive, XFS filesystem, XZ archive, ZIP archive (standard, empty, spanned), ZOO archive, ZPAQ archive, Zstandard archive, Zstandard dictionary.
+onda currently detects over **250+ file formats** across various categories. Instead of listing every single format, we maintain a robust, ever-growing library of signatures and custom detectors.
 
-#### Audio/tracker:
-AAC audio (ADTS), AC-3, E-AC-3, AIFF audio (AIFF, AIFC), AMR audio, AMR-WB audio, AU audio, CAF audio, CD audio (CDA), DSDIFF audio, DSF audio, DTS audio, Downloadable Sounds (DLS), FLAC audio, Impulse Tracker module, FastTracker module, MIDI sequence, Monkey's Audio, MP3 audio (ID3 tagged, MPEG audio frame), MPEG Layer II, MPEG Layer III, Musepack audio (stream version 7, stream version 8), Ogg container, OptimFROG audio, Opus audio, QCP audio, RKAudio, Scream Tracker module, SoundFont 2 (SF2), Speex audio, TAK audio, TTA audio, VOC audio, Vorbis audio, WAV audio, WavPack audio, MPEG-4 audio (M4A family).
-
-#### Image/texture/icon:
-ASTC texture, AVIF image (single image, sequence), BMP image, BPG image, Canon RAW image (CR2, CR3), Cineon image, DDS image, DjVu document, DPX image (little-endian, big-endian), Enhanced Metafile image (EMF), Farbfeld image, Fujifilm RAW image (RAF), GIF image (GIF87a, GIF89a), GIMP XCF image, glTF binary (GLB), HEIF image, ICNS icon, ICC profile, JPEG image, JPEG 2000 image (codestream), JPEG XL image (codestream, container), JNG image, JPEG XR image (little-endian, big-endian), KTX texture (KTX, KTX2), MNG image, Netpbm image (PBM ASCII, PGM ASCII, PPM ASCII, PBM binary, PGM binary, PPM binary, PAM), Nikon RAW image (NEF), Olympus RAW image (ORF), OpenEXR image, OpenRaster image (ORA), Panasonic RAW image (RW2), Pentax RAW image (PEF), PCX image, PNG image, Photoshop document (PSD, PSB), PVR texture, QOI image, Radiance HDR image, SGI image, Sony RAW image (ARW/SR2), Sun raster image, SVG image, TIFF image (little-endian, big-endian), Adobe DNG image, WebP image, Windows Metafile image (WMF), Windows icon, Windows cursor, XPM image.
-
-#### Video/container:
-3GPP media, 3G2 media, ASF container, AVI video, Bink video, EBML container, FLV video, F4V video, IVF video, ISO Base Media file, M3U8 playlist, M4V video, Matroska container, MP4 video, MPEG program stream, MPEG transport stream (TS, M2TS, M2TS/BDAV), MPEG video (MPEG-1/2), QuickTime movie, RealMedia, RIFF container, Smacker video, Theora video, WebM container, WTV video.
-
-#### Document/data/database/model:
-3MF document, Apache Arrow file, Apache Parquet, Apple binary property list, Apple iWork document, Avro object container, BAM data, CBOR data, CRAM data, DICOM medical image, EPUB document, FBX model, FITS astronomical image, GRIB data, HDF5 data, HTML document, iCalendar (ICS), KeePass database (KDBX), Microsoft Excel workbook (XLS), Microsoft Excel spreadsheet (XLSX), Microsoft Excel macro-enabled workbook/template/add-in (XLSM, XLTM, XLAM), Microsoft Installer (MSI), Microsoft Outlook email folder (PST/OST), Microsoft PowerPoint presentation (PPT, PPTX), Microsoft PowerPoint macro-enabled presentation/template/slideshow/add-in (PPTM, POTM, PPSM, PPAM), Microsoft Word document (DOC, DOCX), Microsoft Word template/macro-enabled variants (DOTX, DOCM, DOTM), MOBI document, NetCDF data, OLE compound document, OpenDocument presentation (ODP), OpenDocument spreadsheet (ODS), OpenDocument text (ODT), ORC columnar data, PDF document, PEM certificate, PEM private key, PGP message, PLY model, PostgreSQL custom dump, PostScript document, Rich Text Format document, SQLite database, SQLite Write-Ahead Log (WAL), Torrent file, U3D model, vCard (VCF), WARC file, WebVTT, Windows registry hive, XML document.
-
-#### Font:
-EOT font, OpenType font, TrueType font, TrueType collection, WOFF font, WOFF2 font.
-
-#### Executable/system/disk/game:
-Android ART, Android boot image, Android oat, Android odex, Android sparse image, Android VDEX, AppImage, Blender file, CRX browser extension (v2/v3), Dalvik executable (DEX 035, DEX 036, DEX 037, DEX 038, DEX 039, DEX 040, DEX 041), Executable and Linkable Format (ELF/ELF32/ELF64, little-endian/big-endian), Game Boy ROM, Game Boy Advance ROM, GameCube ROM, ISO 9660 image, Java class, Java KeyStore, Java module (JMOD), LLVM bitcode (raw, wrapper), Lua bytecode, Mach-O binary (32-bit/64-bit, little-endian/big-endian), Mach-O universal binary (32-bit, 64-bit), NES ROM, Nintendo 3DS ROM, Nintendo 64 ROM, Nintendo DS ROM, Nintendo Switch Package, Nintendo Switch ROM, PCAP capture (little-endian, big-endian, nanosecond little-endian, nanosecond big-endian), PCAPNG capture, PKCS#12, PlayStation Portable ISO, Portable Executable (PE32/PE32+), Python bytecode, QCOW disk image (QCOW2), Sega Mega Drive ROM, Shebang script, Shockwave Flash (uncompressed, zlib compressed, lzma compressed), Symbian Installation Format, U-Boot image, VHD disk image, VirtualBox disk image, VHDX disk image, VMware disk image (VMDK), WebAssembly module, Wii Backup File System, Wii ROM, Windows event log (EVTX), Windows shortcut, Xbox ISO, ZX Spectrum Tape.
-
-#### Text fallback:
-ASCII text, UTF-8 text.
+- **Archive/package/filesystem:** 7-Zip, APFS, APK, Btrfs, Bzip2, CAB, Debian, exFAT, ext2/3/4, Gzip, HFS+, JAR, LUKS, LZ4, NTFS, RAR, RPM, SquashFS, TAR, XFS, XZ, ZIP, Zstandard and many more.
+- **Audio/tracker:** AAC, AIFF, FLAC, MIDI, MP3, Ogg, Opus, Vorbis, WAV, WavPack and more.
+- **Image/texture/icon:** AVIF, BMP, DDS, GIF, HEIF, ICO, JPEG, JPEG XL, PNG, PSD, SVG, TIFF, WebP and more.
+- **Video/container:** AVI, FLV, Matroska (MKV), MP4, MPEG, QuickTime, WebM and more.
+- **Document/data:** Apache Arrow/Parquet, DICOM, EPUB, HDF5, Microsoft Office (DOCX, XLSX, PPTX), PDF, RTF, SQLite, XML and more.
+- **Font:** EOT, OpenType, TrueType, WOFF, WOFF2.
+- **Executable/system/disk:** AppImage, Dalvik (DEX), ELF, Java Class, LLVM, Mach-O, Nintendo ROMs, PE, PCAP, QCOW, VHD, VMDK, WebAssembly and more.
+- **Text fallback:** ASCII and UTF-8 text detection.
