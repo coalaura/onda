@@ -48,23 +48,18 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 	}
 
 	if b.Has(0, []byte{0xca, 0xfe, 0xba, 0xbe}) {
-		// java classes start the same way
+		// java class check
 		if b.Len() >= 8 {
-			major, ok := b.U16BE(4)
-			if ok && major >= 0x2c && major <= 0x3d {
-				return &types.Metadata{
-					Kind: types.KindJavaClass,
+			val, ok := b.U32BE(4)
+			if ok {
+				if val >= 0x20 {
+					return &types.Metadata{Kind: types.KindJavaClass}
+				}
+
+				if val == 0 {
+					return nil
 				}
 			}
-		}
-
-		nfatArch, ok := b.U32BE(4)
-		if !ok {
-			return nil
-		}
-
-		if nfatArch == 0 || nfatArch > 32 {
-			return nil
 		}
 
 		if !isValidFatArchCPUType(b, 8) {

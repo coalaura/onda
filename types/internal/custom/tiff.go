@@ -4,6 +4,11 @@ import "github.com/coalaura/onda/types"
 
 func DetectTIFFSubtypes(b types.Buffer) *types.Metadata {
 	if !isTIFFHeader(b) {
+		// Olympus RAW doesn't use standard TIFF magic, but belongs in this family
+		if b.Has(0, []byte{'I', 'I', 'R', 'O', 0x08, 0x00}) || b.Has(0, []byte{'M', 'M', 'O', 'R', 0x00, 0x00}) {
+			return &types.Metadata{Kind: types.KindOlympusRAWImage}
+		}
+
 		return nil
 	}
 
@@ -31,7 +36,15 @@ func DetectTIFFSubtypes(b types.Buffer) *types.Metadata {
 		return &types.Metadata{Kind: types.KindTIFFImage, Type: types.TypeAdobeDNGDNG}
 	}
 
-	return nil
+	if b.Has(0, []byte{'I', 'I', 0x2a, 0x00, 0x10, 0x00, 0x00, 0x00, 'C', 'R'}) {
+		return &types.Metadata{Kind: types.KindCanonRAWImage}
+	}
+
+	if b.Has(0, []byte{'I', 'I'}) {
+		return &types.Metadata{Kind: types.KindTIFFImage, Type: types.TypeLittleEndian}
+	}
+
+	return &types.Metadata{Kind: types.KindTIFFImage, Type: types.TypeBigEndian}
 }
 
 func isTIFFHeader(b types.Buffer) bool {

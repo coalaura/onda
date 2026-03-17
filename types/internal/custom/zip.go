@@ -12,14 +12,12 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
-	fileName, ok := firstZipLocalName(b)
-	if !ok {
+	names := extractZipFilenames(b)
+	if len(names) == 0 {
 		return &types.Metadata{Kind: types.KindZIPArchive}
 	}
 
-	lowerName := strings.ToLower(fileName)
-
-	if lowerName == "mimetype" {
+	if strings.ToLower(names[0]) == "mimetype" {
 		if data := firstZipStoredData(b); len(data) > 0 {
 			if bytes.Equal(data, []byte("application/epub+zip")) {
 				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeEPUBDocument}
@@ -43,152 +41,230 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		}
 	}
 
-	if lowerName == "[content_types].xml" {
-		switch {
-		case bytes.Contains(b, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")):
+	var (
+		hasManifest      bool
+		hasDex           bool
+		hasAppxManifest  bool
+		hasAppxBlockMap  bool
+		hasAppxSignature bool
+		hasSketchMeta    bool
+		hasSketchUser    bool
+		hasSketchDoc     bool
+		hasWord          bool
+		hasExcel         bool
+		hasPowerPoint    bool
+	)
+
+	for _, name := range names {
+		lower := strings.ToLower(name)
+
+		if lower == "androidmanifest.xml" {
+			hasManifest = true
+		}
+
+		if strings.HasSuffix(lower, ".dex") || lower == "classes.dex" {
+			hasDex = true
+		}
+
+		if lower == "appxmanifest.xml" {
+			hasAppxManifest = true
+		}
+
+		if lower == "appxblockmap.xml" {
+			hasAppxBlockMap = true
+		}
+
+		if lower == "appxsignature.p7x" {
+			hasAppxSignature = true
+		}
+
+		if lower == "document.json" {
+			hasSketchDoc = true
+		}
+
+		if lower == "meta.json" {
+			hasSketchMeta = true
+		}
+
+		if lower == "user.json" {
+			hasSketchUser = true
+		}
+
+		if strings.HasPrefix(lower, "word/") {
+			hasWord = true
+		}
+
+		if strings.HasPrefix(lower, "xl/") {
+			hasExcel = true
+		}
+
+		if strings.HasPrefix(lower, "ppt/") {
+			hasPowerPoint = true
+		}
+
+		if lower == "doc.kml" {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
+		}
+
+		if strings.HasSuffix(lower, ".dist-info/wheel") {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePythonWheelWHL}
+		}
+
+		if lower == "manifest.json" && bytes.Contains(b, []byte("xapk_version")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
+		}
+
+		if lower == "install.rdf" || (lower == "manifest.json" && bytes.Contains(b, []byte("browser_specific_settings"))) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
+		}
+
+		if lower == "meta-inf/manifest.mf" {
+			if bytes.Contains(b, []byte("WEB-INF/web.xml")) {
+				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
+			}
+			if bytes.Contains(b, []byte("META-INF/application.xml")) {
+				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaEnterpriseArchiveEAR}
+			}
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
+		}
+
+		if strings.HasPrefix(lower, "payload/") {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeIOSApplicationArchiveIPA}
+		}
+
+		if lower == "bundleconfig.pb" {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundleAAB}
+		}
+
+		if lower == "toc.pb" {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSplitAPKS}
+		}
+
+		if strings.Contains(lower, "apex_manifest") {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSystemPackageAPEX}
+		}
+
+		if lower == "extension.vsixmanifest" {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
+		}
+
+		if strings.HasSuffix(lower, ".nuspec") && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
+		}
+	}
+
+	if hasWord {
+		if bytes.Contains(b, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordMacroEnabledDocumentDOCM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordTemplateDOTX}
-		case bytes.Contains(b, []byte("application/vnd.ms-word.template.macroEnabledTemplate.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.ms-word.template.macroEnabledTemplate.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordMacroEnabledTemplateDOTM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml")):
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordDocumentDOCX}
-		case bytes.Contains(b, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")):
+		}
+
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordDocumentDOCX}
+	}
+
+	if hasExcel {
+		if bytes.Contains(b, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelMacroEnabledWorkbookXLSM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelTemplateXLTX}
-		case bytes.Contains(b, []byte("application/vnd.ms-excel.template.macroEnabled.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.ms-excel.template.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelMacroEnabledTemplateXLTM}
-		case bytes.Contains(b, []byte("application/vnd.ms-excel.addin.macroEnabled.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.ms-excel.addin.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelAddInXLAM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")):
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelSpreadsheetXLSX}
-		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")):
+		}
+
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelSpreadsheetXLSX}
+	}
+
+	if hasPowerPoint {
+		if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledPresentationPPTM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointTemplatePOTX}
-		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.template.macroEnabled.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.template.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledTemplatePOTM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointSlideshowPPSX}
-		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM}
-		case bytes.Contains(b, []byte("application/vnd.ms-powerpoint.addin.macroEnabled.main+xml")):
+		}
+
+		if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.addin.macroEnabled.main+xml")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointAddInPPAM}
-		case bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")):
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointPresentationPPTX}
-		case bytes.Contains(b, []byte("word/")):
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordDocumentDOCX}
-		case bytes.Contains(b, []byte("xl/")):
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelSpreadsheetXLSX}
-		case bytes.Contains(b, []byte("ppt/")):
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointPresentationPPTX}
-		}
-	}
-
-	if bytes.Contains(b, []byte(".nuspec")) && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
-	}
-
-	if lowerName == "bundleconfig.pb" || bytes.Contains(b, []byte("BundleConfig.pb")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundleAAB}
-	}
-
-	if strings.Contains(lowerName, "apex_manifest") || bytes.Contains(b, []byte("apex_manifest.pb")) || bytes.Contains(b, []byte("apex_manifest.json")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSystemPackageAPEX}
-	}
-
-	if lowerName == "toc.pb" || bytes.Contains(b, []byte("toc.pb")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSplitAPKS}
-	}
-
-	if lowerName == "extension.vsixmanifest" || bytes.Contains(b, []byte("extension.vsixmanifest")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
-	}
-
-	if lowerName == "appxmanifest.xml" || bytes.Contains(b, []byte("AppxManifest.xml")) {
-		if bytes.Contains(b, []byte("AppxBlockMap.xml")) {
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAPPXPackage}
 		}
 
-		if bytes.Contains(b, []byte("AppxSignature.p7x")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointPresentationPPTX}
+	}
+
+	if hasManifest {
+		if hasDex {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageAPK}
+		}
+
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidArchiveAAR}
+	}
+
+	if hasAppxManifest {
+		if hasAppxSignature {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMSIXPackage}
+		}
+
+		if hasAppxBlockMap {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAPPXPackage}
 		}
 
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAPPXPackage}
 	}
 
-	if bytes.Contains(b, []byte("document.json")) && (bytes.Contains(b, []byte("meta.json")) || bytes.Contains(b, []byte("user.json"))) {
+	if hasSketchDoc && (hasSketchMeta || hasSketchUser) {
 		if bytes.Contains(b, []byte("com.bohemiancoding.sketch")) || bytes.Contains(b, []byte("com.sketch3")) {
 			return &types.Metadata{Kind: types.KindSketchDocument, Type: types.TypeSketchDocument}
 		}
 	}
 
-	if lowerName == "doc.kml" {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
-	}
-
-	if strings.HasSuffix(lowerName, ".dist-info/wheel") || bytes.Contains(b, []byte(".dist-info/WHEEL")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePythonWheelWHL}
-	}
-
-	if lowerName == "manifest.json" && bytes.Contains(b, []byte("xapk_version")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
-	}
-
-	if lowerName == "install.rdf" || bytes.Contains(b, []byte("manifest.json")) && bytes.Contains(b, []byte("browser_specific_settings")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
-	}
-
-	if lowerName == "androidmanifest.xml" && bytes.Contains(b, []byte("classes.jar")) && !bytes.Contains(b, []byte("classes.dex")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidArchiveAAR}
-	}
-
-	if lowerName == "androidmanifest.xml" || bytes.Contains(b, []byte("classes.dex")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageAPK}
-	}
-
-	if lowerName == "meta-inf/manifest.mf" || bytes.Contains(b, []byte("META-INF/MANIFEST.MF")) {
-		if bytes.Contains(b, []byte("WEB-INF/web.xml")) {
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
-		}
-
-		if bytes.Contains(b, []byte("META-INF/application.xml")) {
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaEnterpriseArchiveEAR}
-		}
-
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
-	}
-
-	if strings.HasPrefix(lowerName, "payload/") || bytes.Contains(b, []byte("Payload/")) {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeIOSApplicationArchiveIPA}
-	}
-
 	return &types.Metadata{Kind: types.KindZIPArchive}
 }
 
-func firstZipLocalName(b types.Buffer) (string, bool) {
-	if !b.Has(0, []byte{'P', 'K', 3, 4}) {
-		return "", false
+func extractZipFilenames(b types.Buffer) []string {
+	var names []string
+
+	limit := b.Len() - 30
+
+	for i := 0; i <= limit; i++ {
+		if b[i] == 'P' && b[i+1] == 'K' && b[i+2] == 3 && b[i+3] == 4 {
+			nameLen, ok := b.U16LE(i + 26)
+			if !ok || nameLen == 0 || i+30+int(nameLen) > b.Len() {
+				continue
+			}
+
+			names = append(names, string(b[i+30:i+30+int(nameLen)]))
+
+			i += 29 + int(nameLen)
+		}
 	}
 
-	nameLen, ok := b.U16LE(26)
-	if !ok || nameLen == 0 {
-		return "", false
-	}
-
-	_, ok = b.U16LE(28)
-	if !ok {
-		return "", false
-	}
-
-	nameStart := 30
-	nameEnd := nameStart + int(nameLen)
-	if nameEnd > b.Len() {
-		return "", false
-	}
-
-	return string(b[nameStart:nameEnd]), true
+	return names
 }
 
 func firstZipStoredData(b types.Buffer) []byte {

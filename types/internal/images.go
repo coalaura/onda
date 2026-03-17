@@ -16,14 +16,6 @@ func init() {
 
 	types.RegisterSignature(types.KindBMPImage, types.TypeNone, 0, []byte("BM"))
 
-	types.RegisterSignature(types.KindTIFFImage, types.TypeLittleEndian, 0, []byte{
-		'I', 'I', 42, 0,
-	})
-
-	types.RegisterSignature(types.KindTIFFImage, types.TypeBigEndian, 0, []byte{
-		'M', 'M', 0, 42,
-	})
-
 	types.RegisterSignature(types.KindQOIImage, types.TypeNone, 0, []byte("qoif"))
 
 	types.RegisterSignature(types.KindPhotoshopDocument, types.TypePSD, 0, []byte("8BPS"))
@@ -67,9 +59,6 @@ func init() {
 	types.RegisterSignature(types.KindSunRasterImage, types.TypeNone, 0, []byte{0x59, 0xa6, 0x6a, 0x95})
 	types.RegisterSignature(types.KindJNGImage, types.TypeNone, 0, []byte{0x8b, 'J', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
 	types.RegisterSignature(types.KindGIMPXCFImage, types.TypeNone, 0, []byte("gimp xcf "))
-	types.RegisterSignature(types.KindCanonRAWImage, types.TypeNone, 0, []byte{'I', 'I', 0x2a, 0x00, 0x10, 0x00, 0x00, 0x00, 'C', 'R'})
-	types.RegisterSignature(types.KindOlympusRAWImage, types.TypeNone, 0, []byte{'I', 'I', 'R', 'O', 0x08, 0x00})
-	types.RegisterSignature(types.KindOlympusRAWImage, types.TypeNone, 0, []byte{'M', 'M', 'O', 'R', 0x00, 0x00})
 	types.RegisterSignature(types.KindFujifilmRAWImage, types.TypeNone, 0, []byte("FUJIFILMCCD-RAW "))
 	types.RegisterSignature(types.KindFLIFImage, types.TypeNone, 0, []byte("FLIF"))
 }

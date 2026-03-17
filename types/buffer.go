@@ -1,5 +1,7 @@
 package types
 
+import "bytes"
+
 type Buffer []byte
 
 func (b Buffer) Len() int {
@@ -11,13 +13,7 @@ func (b Buffer) Has(offset int, magic []byte) bool {
 		return false
 	}
 
-	for i := range magic {
-		if b[offset+i] != magic[i] {
-			return false
-		}
-	}
-
-	return true
+	return bytes.Equal(b[offset:offset+len(magic)], magic)
 }
 
 func (b Buffer) HasMask(offset int, magic []byte, mask []byte) bool {
@@ -29,8 +25,16 @@ func (b Buffer) HasMask(offset int, magic []byte, mask []byte) bool {
 		return false
 	}
 
-	for i := range magic {
-		if b[offset+i]&mask[i] != magic[i]&mask[i] {
+	target := b[offset : offset+len(magic)]
+
+	// BCE pog
+	if len(magic) > 0 {
+		_ = target[len(magic)-1]
+		_ = mask[len(magic)-1]
+	}
+
+	for i, m := range magic {
+		if target[i]&mask[i] != m&mask[i] {
 			return false
 		}
 	}

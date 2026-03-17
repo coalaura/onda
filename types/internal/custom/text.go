@@ -55,8 +55,9 @@ func isLikelyASCIIText(b types.Buffer) bool {
 
 	var printable int
 
-	for i := range limit {
-		c := b[i]
+	target := b[:limit]
+
+	for _, c := range target {
 		if c == 0 {
 			return false
 		}
@@ -71,14 +72,18 @@ func isLikelyASCIIText(b types.Buffer) bool {
 
 func isLikelyTextUTF8(b types.Buffer) bool {
 	limit := min(b.Len(), 4096)
-	if limit == 0 || !utf8.Valid(b[:limit]) {
+	if limit == 0 {
+		return false
+	}
+
+	target := b[:limit]
+	if !utf8.Valid(target) {
 		return false
 	}
 
 	var printable int
 
-	for i := range limit {
-		c := b[i]
+	for _, c := range target {
 		if c == 0 {
 			return false
 		}
