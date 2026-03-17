@@ -3,6 +3,10 @@ package custom
 import "github.com/coalaura/onda/types"
 
 func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
+	if b.Len() < 12 {
+		return nil
+	}
+
 	boxSize32, ok := b.U32BE(0)
 	if !ok || !b.Has(4, []byte("ftyp")) {
 		return nil
