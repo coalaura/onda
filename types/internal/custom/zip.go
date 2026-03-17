@@ -121,6 +121,8 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
 		} else if bytes.HasSuffix(name, []byte(".nuspec")) && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
+		} else if bytes.EqualFold(name, []byte("Metadata/BuildVersionHistory.plist")) || bytes.HasPrefix(name, []byte("Index/Document.iwa")) {
+			return &types.Metadata{Kind: types.KindAppleiWorkDocument}
 		}
 
 		if len(name) >= 5 && bytes.EqualFold(name[:5], []byte("word/")) {

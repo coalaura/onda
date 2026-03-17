@@ -12,6 +12,8 @@ func init() {
 	types.RegisterSignature(types.KindGIFImage, types.TypeGIF87a, 0, []byte("GIF87a"))
 	types.RegisterSignature(types.KindGIFImage, types.TypeGIF89a, 0, []byte("GIF89a"))
 	types.RegisterSignature(types.KindGIMPXCFImage, types.TypeNone, 0, []byte("gimp xcf "))
+	types.RegisterSignature(types.KindGLTFBinary, types.TypeNone, 0, []byte("glTF"))
+	types.RegisterSignature(types.KindICCProfile, types.TypeNone, 36, []byte("acsp"))
 	types.RegisterSignature(types.KindICNSIcon, types.TypeNone, 0, []byte("icns"))
 	types.RegisterSignature(types.KindICOCURImage, types.TypeWindowsCursor, 0, []byte{0x00, 0x00, 0x02, 0x00})
 	types.RegisterSignature(types.KindICOCURImage, types.TypeWindowsIcon, 0, []byte{0x00, 0x00, 0x01, 0x00})

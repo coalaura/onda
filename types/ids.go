@@ -18,6 +18,7 @@ const (
 	KindAppImage
 	KindAppleBinaryPropertyList
 	KindAppleDouble
+	KindAppleiWorkDocument
 	KindAppleSingle
 	KindARArchive
 	KindASFContainer
@@ -60,10 +61,13 @@ const (
 	KindGIMPXCFImage
 	KindGitIndex
 	KindGitPack
+	KindGLTFBinary
 	KindGRIBData
 	KindGzipArchive
 	KindGzipData
 	KindHDF5Data
+	KindICalendar
+	KindICCProfile
 	KindICNSIcon
 	KindICOCURImage
 	KindIFFContainer
@@ -81,17 +85,21 @@ const (
 	KindJPEGXRImage
 	KindKeePassDatabase
 	KindKTXTexture
+	KindLHAArchive
 	KindLLVMBitcode
 	KindLuaBytecode
 	KindLZ4Frame
 	KindLZIPArchive
 	KindLZMAData
 	KindLZOPArchive
+	KindM3U8Playlist
 	KindMacBinary
 	KindMachOBinary
 	KindMachOUniversalBinary
 	KindMetafileImage
+	KindMicrosoftOutlookEmailFolder
 	KindMIDISequence
+	KindMOBIDocument
 	KindMonkeysAudio
 	KindMPEG2TransportStream
 	KindMPEGAudio
@@ -112,6 +120,8 @@ const (
 	KindPCAPNGCapture
 	KindPCXImage
 	KindPDFDocument
+	KindPEMCertificate
+	KindPEMPrivateKey
 	KindPGPMessage
 	KindPhotoshopDocument
 	KindPKCS12
@@ -129,6 +139,7 @@ const (
 	KindRPMPackage
 	KindRubyGemPackage
 	KindScreamTrackerModule
+	KindShebangScript
 	KindShockwaveFlash
 	KindSketchDocument
 	KindSnappyFramedData
@@ -136,6 +147,7 @@ const (
 	KindSquashFSFilesystem
 	KindStuffItArchive
 	KindSunRasterImage
+	KindSVGImage
 	KindTAKAudio
 	KindTARArchive
 	KindTextFile
@@ -146,6 +158,7 @@ const (
 	KindTTAAudio
 	KindUBootImage
 	KindUnixCompressArchive
+	KindVCard
 	KindVHDDiskImage
 	KindVHDXDiskImage
 	KindVirtualBoxDiskImage
@@ -160,8 +173,10 @@ const (
 	KindWindowsShortcut
 	KindWOFF2Font
 	KindWOFFFont
+	KindWTVVideo
 	KindXARArchive
 	KindXFSFilesystem
+	KindXMLDocument
 	KindXZArchive
 	KindZIPArchive
 	KindZlibData
@@ -198,6 +213,8 @@ const (
 	TypeBinaryBigEndian
 	TypeBinaryLittleEndian
 	TypeBlockDevice
+	TypeCanonRAW3CR3
+	TypeCDAAudio
 	TypeCharacterDevice
 	TypeCodestream
 	TypeCondaPackage
@@ -312,9 +329,11 @@ const (
 	TypePythonSourceDistributionSDist
 	TypePythonWheelWHL
 	TypeQCOW2
+	TypeQCPAudio
 	TypeQuickTimeMovie
 	TypeRAR4
 	TypeRAR5
+	TypeRSAPrivateKey
 	TypeSketchDocument
 	TypeSocket
 	TypeSonyRAWARW
@@ -505,6 +524,21 @@ var kindNames = [...]string{
 	KindZIPArchive:                  "ZIP Archive",
 	KindZlibData:                    "Zlib Data",
 	KindZstandardArchive:            "Zstandard Archive",
+	KindAppleiWorkDocument:          "Apple iWork Document",
+	KindGLTFBinary:                  "glTF Binary",
+	KindICalendar:                   "iCalendar",
+	KindICCProfile:                  "ICC Profile",
+	KindLHAArchive:                  "LHA Archive",
+	KindM3U8Playlist:                "M3U8 Playlist",
+	KindMicrosoftOutlookEmailFolder: "Microsoft Outlook Email Folder",
+	KindMOBIDocument:                "MOBI Document",
+	KindPEMCertificate:              "PEM Certificate",
+	KindPEMPrivateKey:               "PEM Private Key",
+	KindShebangScript:               "Shebang Script",
+	KindSVGImage:                    "SVG Image",
+	KindVCard:                       "vCard",
+	KindWTVVideo:                    "WTV Video",
+	KindXMLDocument:                 "XML Document",
 }
 
 var typeNames = [...]string{
@@ -679,6 +713,10 @@ var typeNames = [...]string{
 	TypeWindowsMetafileWMF:                              "Windows Metafile (WMF)",
 	TypeWrapper:                                         "Wrapper",
 	TypeZlibCompressed:                                  "Zlib Compressed",
+	TypeCanonRAW3CR3:                                    "Canon RAW 3 (CR3)",
+	TypeCDAAudio:                                        "CD Audio",
+	TypeQCPAudio:                                        "QCP Audio",
+	TypeRSAPrivateKey:                                   "RSA Private Key",
 }
 
 func (k KindID) String() string {

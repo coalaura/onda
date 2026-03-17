@@ -21,6 +21,7 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectPE))
 	types.Register(types.DetectFunc(custom.DetectPKCS12))
 	types.Register(types.DetectFunc(custom.DetectPYC))
+	types.Register(types.DetectFunc(custom.DetectSVG))
 	types.Register(types.DetectFunc(custom.DetectTar))
 	types.Register(types.DetectFunc(custom.DetectTIFFSubtypes))
 	types.Register(types.DetectFunc(custom.DetectTorrent))
