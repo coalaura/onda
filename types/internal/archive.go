@@ -6,7 +6,10 @@ import "github.com/coalaura/onda/types"
 
 func init() {
 	types.RegisterSignature(types.Kind7ZipArchive, types.TypeNone, 0, []byte{'7', 'z', 0xbc, 0xaf, 0x27, 0x1c})
+	types.RegisterSignature(types.KindACEArchive, types.TypeNone, 7, []byte("**ACE**"))
+	types.RegisterSignature(types.KindALZArchive, types.TypeNone, 0, []byte("ALZ\x01"))
 	types.RegisterSignature(types.KindARArchive, types.TypeNone, 0, []byte("!<arch>\n"))
+	types.RegisterSignature(types.KindARJArchive, types.TypeNone, 0, []byte{0x60, 0xea})
 	types.RegisterSignature(types.KindBzip2Archive, types.TypeNone, 0, []byte("BZh"))
 	types.RegisterSignature(types.KindCabinetArchive, types.TypeNone, 0, []byte("MSCF"))
 	types.RegisterSignature(types.KindCPIOArchive, types.TypeBinaryBigEndian, 0, []byte{0x71, 0xc7})
@@ -48,6 +51,7 @@ func init() {
 	types.RegisterSignature(types.KindXZArchive, types.TypeNone, 0, []byte{0xfd, '7', 'z', 'X', 'Z', 0x00})
 	types.RegisterSignature(types.KindZIPArchive, types.TypeEmpty, 0, []byte{'P', 'K', 5, 6})
 	types.RegisterSignature(types.KindZIPArchive, types.TypeSpanned, 0, []byte{'P', 'K', 7, 8})
+	types.RegisterSignature(types.KindZOOArchive, types.TypeNone, 0, []byte("ZOO "))
 	types.RegisterSignature(types.KindZPAQArchive, types.TypeNone, 0, []byte("7kSt"))
 	types.RegisterSignature(types.KindZstandardArchive, types.TypeNone, 0, []byte{0x28, 0xb5, 0x2f, 0xfd})
 	types.RegisterSignature(types.KindZstandardDictionary, types.TypeNone, 0, []byte{0x37, 0xa4, 0x30, 0xec})

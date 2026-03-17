@@ -7,7 +7,9 @@ const (
 	KindUnknown KindID = iota
 	Kind7ZipArchive
 	KindAACAudio
+	KindACEArchive
 	KindAdobeInDesignDocument
+	KindALZArchive
 	KindAMRAudio
 	KindAMRWBAudio
 	KindAndroidART
@@ -26,6 +28,7 @@ const (
 	KindAppleiWorkDocument
 	KindAppleSingle
 	KindARArchive
+	KindARJArchive
 	KindASFContainer
 	KindASTCTexture
 	KindAUAudio
@@ -188,6 +191,7 @@ const (
 	KindSketchUpModel
 	KindSmackerVideo
 	KindSnappyFramedData
+	KindSQLite3WriteAheadLog
 	KindSQLiteDatabase
 	KindSquashFSFilesystem
 	KindStuffItArchive
@@ -234,6 +238,7 @@ const (
 	KindXZArchive
 	KindZIPArchive
 	KindZlibData
+	KindZOOArchive
 	KindZPAQArchive
 	KindZstandardArchive
 	KindZstandardDictionary
@@ -289,6 +294,7 @@ const (
 	TypeDEX040
 	TypeDEX041
 	TypeDirectory
+	TypeDownloadableSounds
 	TypeEAC3
 	TypeELF
 	TypeELF32
@@ -403,6 +409,7 @@ const (
 	TypeSocket
 	TypeSonyRAWARW
 	TypeSonyRAWSR2
+	TypeSoundFont2
 	TypeSpanned
 	TypeSpecial
 	TypeSpeexAudio
@@ -430,7 +437,9 @@ var kindNames = [...]string{
 	KindUnknown:                     "Unknown",
 	Kind7ZipArchive:                 "7-Zip Archive",
 	KindAACAudio:                    "AAC Audio",
+	KindACEArchive:                  "ACE Archive",
 	KindAdobeInDesignDocument:       "Adobe InDesign Document",
+	KindALZArchive:                  "ALZ Archive",
 	KindAMRAudio:                    "AMR Audio",
 	KindAMRWBAudio:                  "AMR-WB Audio",
 	KindAndroidART:                  "Android ART",
@@ -449,6 +458,7 @@ var kindNames = [...]string{
 	KindAppleiWorkDocument:          "Apple iWork Document",
 	KindAppleSingle:                 "AppleSingle File",
 	KindARArchive:                   "AR Archive",
+	KindARJArchive:                  "ARJ Archive",
 	KindASFContainer:                "ASF Container",
 	KindASTCTexture:                 "ASTC Texture",
 	KindAUAudio:                     "AU Audio",
@@ -611,6 +621,7 @@ var kindNames = [...]string{
 	KindSketchUpModel:               "SketchUp Model",
 	KindSmackerVideo:                "Smacker Video",
 	KindSnappyFramedData:            "Snappy Framed Data",
+	KindSQLite3WriteAheadLog:        "SQLite Write-Ahead Log",
 	KindSQLiteDatabase:              "SQLite Database",
 	KindSquashFSFilesystem:          "SquashFS Filesystem",
 	KindStuffItArchive:              "StuffIt Archive",
@@ -657,6 +668,7 @@ var kindNames = [...]string{
 	KindXZArchive:                   "XZ Archive",
 	KindZIPArchive:                  "ZIP Archive",
 	KindZlibData:                    "Zlib Data",
+	KindZOOArchive:                  "ZOO Archive",
 	KindZPAQArchive:                 "ZPAQ Archive",
 	KindZstandardArchive:            "Zstandard Archive",
 	KindZstandardDictionary:         "Zstandard Dictionary",
@@ -712,6 +724,7 @@ var typeNames = [...]string{
 	TypeDEX040:                   "DEX 040",
 	TypeDEX041:                   "DEX 041",
 	TypeDirectory:                "Directory",
+	TypeDownloadableSounds:       "Downloadable Sounds",
 	TypeEAC3:                     "E-AC-3",
 	TypeELF:                      "ELF",
 	TypeELF32:                    "ELF32",
@@ -826,6 +839,7 @@ var typeNames = [...]string{
 	TypeSocket:                                          "Socket",
 	TypeSonyRAWARW:                                      "Sony RAW (ARW)",
 	TypeSonyRAWSR2:                                      "Sony RAW (SR2)",
+	TypeSoundFont2:                                      "SoundFont 2",
 	TypeSpanned:                                         "Spanned",
 	TypeSpecial:                                         "Special",
 	TypeSpeexAudio:                                      "Speex Audio",

@@ -41,6 +41,8 @@ func init() {
 	types.RegisterSignature(types.KindRichTextFormatDocument, types.TypeNone, 0, []byte("{\\rtf"))
 	types.RegisterSignature(types.KindSketchUpModel, types.TypeNone, 0, []byte("SketchUp Model"))
 	types.RegisterSignature(types.KindSketchUpModel, types.TypeNone, 0, []byte{0xff, 0xfe, 0xff, 0x0e})
+	types.RegisterSignature(types.KindSQLite3WriteAheadLog, types.TypeBigEndian, 0, []byte{0x51, 0x06, 0x7f, 0x37})
+	types.RegisterSignature(types.KindSQLite3WriteAheadLog, types.TypeLittleEndian, 0, []byte{0x37, 0x7f, 0x06, 0x51})
 	types.RegisterSignature(types.KindSQLiteDatabase, types.TypeNone, 0, []byte("SQLite format 3\x00"))
 	types.RegisterSignature(types.KindTimezoneData, types.TypeNone, 0, []byte("TZif"))
 	types.RegisterSignature(types.KindU3DModel, types.TypeNone, 0, []byte("U3D\x00"))

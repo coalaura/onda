@@ -119,7 +119,7 @@ func (s Signature) Detect(b Buffer) *Metadata {
 	if len(s.Mask) == 0 {
 		ok = b.Has(s.Offset, s.Magic)
 	} else {
-		ok = b.HasMask(s.Offset, s.Magic, s.Mask)
+		ok = b.HasMask(s.Offset, string(s.Magic), string(s.Mask))
 	}
 
 	if !ok {

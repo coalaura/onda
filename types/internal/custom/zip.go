@@ -7,7 +7,7 @@ import (
 )
 
 func DetectZIPContainer(b types.Buffer) *types.Metadata {
-	if !b.Has(0, []byte{'P', 'K', 3, 4}) {
+	if b.Len() < 4 || string(b[:4]) != "PK\x03\x04" {
 		return nil
 	}
 
@@ -26,9 +26,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	)
 
 	limit := b.Len() - 30
+	zipMagic := []byte{'P', 'K', 3, 4}
 
 	for i := 0; i <= limit; {
-		idx := bytes.Index(b[i:], []byte{'P', 'K', 3, 4})
+		idx := bytes.Index(b[i:], zipMagic)
 		if idx == -1 {
 			break
 		}
@@ -43,7 +44,8 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 		name := b[i+30 : i+30+int(nameLen)]
 
-		if firstFile && bytes.EqualFold(name, []byte("mimetype")) {
+		// Exact match using string cast (zero allocation)
+		if firstFile && string(name) == "mimetype" {
 			compression, _ := b.U16LE(i + 8)
 			extraLen, _ := b.U16LE(i + 28)
 			dataLen, _ := b.U32LE(i + 18)
@@ -51,25 +53,18 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			dataEnd := dataStart + int(dataLen)
 
 			if compression == 0 && dataStart >= 0 && dataEnd <= b.Len() {
-				data := b[dataStart:dataEnd]
+				data := string(b[dataStart:dataEnd])
 
-				if bytes.Equal(data, []byte("application/epub+zip")) {
+				switch data {
+				case "application/epub+zip":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeEPUBDocument}
-				}
-
-				if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.text")) {
+				case "application/vnd.oasis.opendocument.text":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentTextODT}
-				}
-
-				if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.spreadsheet")) {
+				case "application/vnd.oasis.opendocument.spreadsheet":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentSpreadsheetODS}
-				}
-
-				if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.presentation")) {
+				case "application/vnd.oasis.opendocument.presentation":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentPresentationODP}
-				}
-
-				if bytes.Equal(data, []byte("image/openraster")) {
+				case "image/openraster":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenRasterImageORA}
 				}
 			}
@@ -77,29 +72,30 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 		firstFile = false
 
-		if bytes.EqualFold(name, []byte("androidmanifest.xml")) {
+		// Fast, zero-allocation ASCII case-insensitive matching
+		if matchASCII(name, "androidmanifest.xml") {
 			hasManifest = true
-		} else if bytes.HasSuffix(name, []byte(".dex")) || bytes.EqualFold(name, []byte("classes.dex")) {
+		} else if hasSuffixASCII(name, ".dex") || matchASCII(name, "classes.dex") {
 			hasDex = true
-		} else if bytes.EqualFold(name, []byte("appxmanifest.xml")) {
+		} else if matchASCII(name, "appxmanifest.xml") {
 			hasAppxManifest = true
-		} else if bytes.EqualFold(name, []byte("appxsignature.p7x")) {
+		} else if matchASCII(name, "appxsignature.p7x") {
 			hasAppxSignature = true
-		} else if bytes.EqualFold(name, []byte("document.json")) {
+		} else if matchASCII(name, "document.json") {
 			hasSketchDoc = true
-		} else if bytes.EqualFold(name, []byte("meta.json")) {
+		} else if matchASCII(name, "meta.json") {
 			hasSketchMeta = true
-		} else if bytes.EqualFold(name, []byte("user.json")) {
+		} else if matchASCII(name, "user.json") {
 			hasSketchUser = true
-		} else if bytes.EqualFold(name, []byte("doc.kml")) {
+		} else if matchASCII(name, "doc.kml") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
-		} else if bytes.HasSuffix(name, []byte(".dist-info/wheel")) {
+		} else if hasSuffixASCII(name, ".dist-info/wheel") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePythonWheelWHL}
-		} else if bytes.EqualFold(name, []byte("manifest.json")) && bytes.Contains(b, []byte("xapk_version")) {
+		} else if matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("xapk_version")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
-		} else if bytes.EqualFold(name, []byte("install.rdf")) || (bytes.EqualFold(name, []byte("manifest.json")) && bytes.Contains(b, []byte("browser_specific_settings"))) {
+		} else if matchASCII(name, "install.rdf") || (matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("browser_specific_settings"))) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
-		} else if bytes.EqualFold(name, []byte("meta-inf/manifest.mf")) {
+		} else if matchASCII(name, "meta-inf/manifest.mf") {
 			if bytes.Contains(b, []byte("WEB-INF/web.xml")) {
 				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
 			}
@@ -109,31 +105,29 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			}
 
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
-		} else if bytes.HasPrefix(name, []byte("payload/")) || bytes.HasPrefix(name, []byte("Payload/")) {
+		} else if hasPrefixASCII(name, "payload/") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeIOSApplicationArchiveIPA}
-		} else if bytes.EqualFold(name, []byte("bundleconfig.pb")) {
+		} else if matchASCII(name, "bundleconfig.pb") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundleAAB}
-		} else if bytes.EqualFold(name, []byte("toc.pb")) {
+		} else if matchASCII(name, "toc.pb") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSplitAPKS}
 		} else if bytes.Contains(name, []byte("apex_manifest")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSystemPackageAPEX}
-		} else if bytes.EqualFold(name, []byte("extension.vsixmanifest")) {
+		} else if matchASCII(name, "extension.vsixmanifest") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
-		} else if bytes.EqualFold(name, []byte("extension.vsixmanifest")) {
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
-		} else if bytes.EqualFold(name, []byte("3D/3dmodel.model")) {
+		} else if matchASCII(name, "3d/3dmodel.model") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.Type3MFDocument}
-		} else if bytes.HasSuffix(name, []byte(".nuspec")) && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
+		} else if hasSuffixASCII(name, ".nuspec") && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
-		} else if bytes.EqualFold(name, []byte("Metadata/BuildVersionHistory.plist")) || bytes.HasPrefix(name, []byte("Index/Document.iwa")) {
+		} else if matchASCII(name, "metadata/buildversionhistory.plist") || hasPrefixASCII(name, "index/document.iwa") {
 			return &types.Metadata{Kind: types.KindAppleiWorkDocument}
 		}
 
-		if len(name) >= 5 && bytes.EqualFold(name[:5], []byte("word/")) {
+		if hasPrefixASCII(name, "word/") {
 			hasWord = true
-		} else if len(name) >= 3 && bytes.EqualFold(name[:3], []byte("xl/")) {
+		} else if hasPrefixASCII(name, "xl/") {
 			hasExcel = true
-		} else if len(name) >= 4 && bytes.EqualFold(name[:4], []byte("ppt/")) {
+		} else if hasPrefixASCII(name, "ppt/") {
 			hasPowerPoint = true
 		}
 
@@ -233,4 +227,40 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	}
 
 	return &types.Metadata{Kind: types.KindZIPArchive}
+}
+
+// matchASCII compares a byte slice to a lowercase string without allocating.
+func matchASCII(b []byte, lower string) bool {
+	if len(b) != len(lower) {
+		return false
+	}
+
+	for i := range b {
+		c := b[i]
+		if c >= 'A' && c <= 'Z' {
+			c += 32 // convert to lowercase
+		}
+
+		if c != lower[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+func hasSuffixASCII(b []byte, lowerSuffix string) bool {
+	if len(b) < len(lowerSuffix) {
+		return false
+	}
+
+	return matchASCII(b[len(b)-len(lowerSuffix):], lowerSuffix)
+}
+
+func hasPrefixASCII(b []byte, lowerPrefix string) bool {
+	if len(b) < len(lowerPrefix) {
+		return false
+	}
+
+	return matchASCII(b[:len(lowerPrefix)], lowerPrefix)
 }

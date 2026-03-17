@@ -196,8 +196,19 @@ func generateRadixNode(sigs []Sig, depth int, offset int, buf *bytes.Buffer, ind
 
 			sort.Ints(keys)
 
-			if len(keys) == 1 && len(byByte[byte(keys[0])]) == 1 {
-				emitIfHas(byByte[byte(keys[0])][0], buf, indent)
+			// Optimize single-branch paths into an `if` instead of a `switch`
+			if len(keys) == 1 {
+				bVal := byte(keys[0])
+				group := byByte[bVal]
+
+				if len(group) == 1 {
+					emitIfHas(group[0], buf, indent)
+				} else {
+					fmt.Fprintf(buf, "%sif b.Len() > %d && b[%d] == %#02x {\n", indent, offset+depth, offset+depth, bVal)
+					l := lcp(group, depth+1)
+					generateRadixNode(group, l, offset, buf, indent+"\t")
+					fmt.Fprintf(buf, "%s}\n", indent)
+				}
 			} else {
 				fmt.Fprintf(buf, "%sif b.Len() > %d {\n", indent, offset+depth)
 
@@ -270,9 +281,17 @@ func lcp(sigs []Sig, startDepth int) int {
 
 func emitIfHas(c Sig, buf *bytes.Buffer, indent string) {
 	if c.IsMask {
-		fmt.Fprintf(buf, "%sif b.HasMask(%d, %#v, %#v) {\n", indent, c.Offset, c.Magic, c.Mask)
+		// Pass strings to HasMask to avoid []byte stack allocations
+		fmt.Fprintf(buf, "%sif b.HasMask(%d, %q, %q) {\n", indent, c.Offset, string(c.Magic), string(c.Mask))
 	} else {
-		fmt.Fprintf(buf, "%sif b.Has(%d, %#v) {\n", indent, c.Offset, c.Magic)
+		// Generate direct slice-to-string comparisons.
+		end := c.Offset + len(c.Magic)
+
+		if c.Offset == 0 {
+			fmt.Fprintf(buf, "%sif b.Len() >= %d && string(b[:%d]) == %q {\n", indent, end, end, string(c.Magic))
+		} else {
+			fmt.Fprintf(buf, "%sif b.Len() >= %d && string(b[%d:%d]) == %q {\n", indent, end, c.Offset, end, string(c.Magic))
+		}
 	}
 
 	if c.Type == "TypeNone" || c.Type == "" {
