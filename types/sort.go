@@ -123,7 +123,7 @@ func main() {
 	// Generate the new ids.go file
 	var buf bytes.Buffer
 
-	buf.WriteString(`//go:generate go run sortids.go
+	buf.WriteString(`//go:generate go run sort.go
 
 package types
 

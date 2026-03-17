@@ -1,4 +1,4 @@
-//go:generate go run sortids.go
+//go:generate go run sort.go
 
 package types
 
