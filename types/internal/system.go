@@ -6,7 +6,9 @@ import "github.com/coalaura/onda/types"
 
 func init() {
 	types.RegisterSignature(types.KindAndroidART, types.TypeNone, 0, []byte("art\n"))
+	types.RegisterSignature(types.KindAndroidBinaryXML, types.TypeNone, 0, []byte{0x03, 0x00, 0x08, 0x00})
 	types.RegisterSignature(types.KindAndroidBootImage, types.TypeNone, 0, []byte("ANDROID!"))
+	types.RegisterSignature(types.KindAndroidCompiledResources, types.TypeNone, 0, []byte{0x02, 0x00, 0x0c, 0x00})
 	types.RegisterSignature(types.KindAndroidOAT, types.TypeNone, 0, []byte("oat\n"))
 	types.RegisterSignature(types.KindAndroidODEX, types.TypeNone, 0, []byte("dey\n"))
 	types.RegisterSignature(types.KindAndroidVDEX, types.TypeNone, 0, []byte("vdex"))

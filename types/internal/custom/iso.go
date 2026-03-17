@@ -44,7 +44,7 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 		boxEnd = b.Len()
 	}
 
-	if !hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx") {
+	if !hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw") {
 		return nil
 	}
 
@@ -90,6 +90,10 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 
 	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "crx ") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeCanonRAW3CR3}
+	}
+
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "braw") {
+		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeBlackmagicRAW}
 	}
 
 	return &types.Metadata{

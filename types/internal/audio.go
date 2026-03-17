@@ -26,6 +26,7 @@ func init() {
 	types.RegisterSignature(types.KindMusepackAudio, types.TypeStreamVersion7, 0, []byte("MP+"))
 	types.RegisterSignature(types.KindMusepackAudio, types.TypeStreamVersion8, 0, []byte("MPCK"))
 	types.RegisterSignature(types.KindOptimFROGAudio, types.TypeNone, 0, []byte("OFR "))
+	types.RegisterSignature(types.KindPlaylistFile, types.TypeNone, 0, []byte("[playlist]"))
 	types.RegisterSignature(types.KindRKAudio, types.TypeNone, 0, []byte("RKA "))
 	types.RegisterSignature(types.KindScreamTrackerModule, types.TypeNone, 44, []byte("SCRM"))
 	types.RegisterSignature(types.KindTAKAudio, types.TypeNone, 0, []byte("tBaK"))

@@ -52,7 +52,7 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			dataStart := i + 30 + int(nameLen) + int(extraLen)
 			dataEnd := dataStart + int(dataLen)
 
-			if compression == 0 && dataStart >= 0 && dataEnd <= b.Len() {
+			if compression == 0 && dataStart >= 0 && int(dataLen) >= 0 && dataEnd >= dataStart && dataEnd <= b.Len() {
 				switch string(b[dataStart:dataEnd]) {
 				case "application/epub+zip":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeEPUBDocument}
