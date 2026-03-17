@@ -7,6 +7,12 @@ func DetectELF(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
+	if b.Has(8, []byte{'A', 'I', 0x01}) || b.Has(8, []byte{'A', 'I', 0x02}) {
+		return &types.Metadata{
+			Kind: types.KindAppImage,
+		}
+	}
+
 	class := byte(0)
 	data := byte(0)
 

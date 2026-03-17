@@ -21,4 +21,5 @@ func init() {
 	types.RegisterSignature(types.KindImpulseTrackerModule, types.TypeNone, 0, []byte("IMPM"))
 	types.RegisterSignature(types.KindFastTrackerModule, types.TypeNone, 0, []byte("Extended Module: "))
 	types.RegisterSignature(types.KindScreamTrackerModule, types.TypeNone, 44, []byte("SCRM"))
+	types.RegisterSignature(types.KindTTAAudio, types.TypeNone, 0, []byte("TTA1"))
 }

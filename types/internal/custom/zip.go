@@ -36,6 +36,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			if bytes.Equal(data, []byte("application/vnd.oasis.opendocument.presentation")) {
 				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentPresentationODP}
 			}
+
+			if bytes.Equal(data, []byte("image/openraster")) {
+				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenRasterImageORA}
+			}
 		}
 	}
 
@@ -90,6 +94,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundleAAB}
 	}
 
+	if strings.Contains(lowerName, "apex_manifest") || bytes.Contains(b, []byte("apex_manifest.pb")) || bytes.Contains(b, []byte("apex_manifest.json")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSystemPackageAPEX}
+	}
+
 	if lowerName == "toc.pb" || bytes.Contains(b, []byte("toc.pb")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSplitAPKS}
 	}
@@ -108,6 +116,12 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAPPXPackage}
+	}
+
+	if bytes.Contains(b, []byte("document.json")) && (bytes.Contains(b, []byte("meta.json")) || bytes.Contains(b, []byte("user.json"))) {
+		if bytes.Contains(b, []byte("com.bohemiancoding.sketch")) || bytes.Contains(b, []byte("com.sketch3")) {
+			return &types.Metadata{Kind: types.KindSketchDocument, Type: types.TypeSketchDocument}
+		}
 	}
 
 	if lowerName == "doc.kml" {

@@ -5,181 +5,204 @@ type TypeID uint16
 
 const (
 	KindUnknown KindID = iota
-	KindFilesystemEntry
-	KindZIPArchive
-	KindUnixCompressArchive
 	Kind7ZipArchive
-	KindRARArchive
-	KindGzipArchive
-	KindBzip2Archive
-	KindXZArchive
-	KindZstandardArchive
-	KindLZ4Frame
-	KindLZIPArchive
-	KindLZOPArchive
-	KindSnappyFramedData
-	KindCabinetArchive
-	KindXARArchive
-	KindWindowsImagingFormat
-	KindARArchive
-	KindDebianPackage
-	KindSquashFSFilesystem
-	KindCPIOArchive
-	KindRPMPackage
-	KindFLACAudio
-	KindMIDISequence
-	KindAUAudio
+	KindAACAudio
 	KindAMRAudio
 	KindAMRWBAudio
-	KindAACAudio
-	KindCAFAudio
-	KindWavPackAudio
-	KindMonkeysAudio
-	KindDSFAudio
-	KindTAKAudio
-	KindVOCAudio
-	KindMusepackAudio
-	KindImpulseTrackerModule
-	KindFastTrackerModule
-	KindScreamTrackerModule
-	KindPDFDocument
-	KindPostScriptDocument
-	KindRichTextFormatDocument
-	KindSQLiteDatabase
-	KindHDF5Data
-	KindPGPMessage
-	KindApacheParquet
-	KindApacheArrowFile
-	KindFITSAstronomicalImage
-	KindDICOMMedicalImage
-	KindWindowsRegistryHive
-	KindAppleBinaryPropertyList
-	KindKeePassDatabase
-	KindAvroObjectContainer
-	KindORCColumnarData
-	KindQCOWDiskImage
-	KindVHDXDiskImage
-	KindVMwareDiskImage
-	KindAndroidSparseImage
-	KindVirtualBoxDiskImage
-	KindISO9660Image
-	KindTrueTypeFont
-	KindOpenTypeFont
-	KindWOFFFont
-	KindWOFF2Font
-	KindTrueTypeCollection
-	KindEOTFont
-	KindPNGImage
-	KindJPEGImage
-	KindGIFImage
-	KindBMPImage
-	KindTIFFImage
-	KindQOIImage
-	KindPhotoshopDocument
-	KindRadianceHDRImage
-	KindOpenEXRImage
-	KindDDSImage
-	KindJPEGXLImage
-	KindKTXTexture
-	KindICNSIcon
-	KindFarbfeldImage
-	KindJPEG2000Image
-	KindBPGImage
-	KindJNGImage
-	KindJPEGXRImage
-	KindSunRasterImage
-	KindCRXBrowserExtension
-	KindDalvikExecutable
+	KindAndroidBootImage
 	KindAndroidOAT
 	KindAndroidODEX
+	KindAndroidSparseImage
+	KindApacheArrowFile
+	KindApacheParquet
+	KindAppImage
+	KindAppleBinaryPropertyList
+	KindAppleDouble
+	KindAppleSingle
+	KindARArchive
+	KindASFContainer
+	KindAUAudio
+	KindAvroObjectContainer
+	KindBAMData
+	KindBlenderFile
+	KindBMPImage
+	KindBPGImage
+	KindBtrfsFilesystem
+	KindBzip2Archive
+	KindCabinetArchive
+	KindCAFAudio
+	KindCanonRAWImage
+	KindCHMDocument
+	KindCPIOArchive
+	KindCRAMData
+	KindCRXBrowserExtension
+	KindDalvikExecutable
+	KindDDSImage
+	KindDebianPackage
+	KindDICOMMedicalImage
+	KindDjVuDocument
+	KindDSFAudio
+	KindDTSAudio
+	KindEBMLContainer
+	KindEOTFont
+	KindExecutableAndLinkableFormat
+	KindExtFilesystem
+	KindFarbfeldImage
+	KindFastTrackerModule
+	KindFilesystemEntry
+	KindFITSAstronomicalImage
+	KindFLACAudio
+	KindFLIFImage
+	KindFLVVideo
+	KindFujifilmRAWImage
+	KindGIFImage
+	KindGIMPXCFImage
+	KindGitIndex
+	KindGitPack
+	KindGRIBData
+	KindGzipArchive
+	KindGzipData
+	KindHDF5Data
+	KindICNSIcon
+	KindICOCURImage
+	KindIFFContainer
+	KindImpulseTrackerModule
+	KindISO9660Image
+	KindISOBaseMedia
+	KindIVFVideo
 	KindJavaClass
 	KindJavaKeyStore
-	KindWebAssemblyModule
-	KindNESROM
-	KindPCAPCapture
-	KindPCAPNGCapture
-	KindShockwaveFlash
+	KindJavaModule
+	KindJNGImage
+	KindJPEG2000Image
+	KindJPEGImage
+	KindJPEGXLImage
+	KindJPEGXRImage
+	KindKeePassDatabase
+	KindKTXTexture
 	KindLLVMBitcode
-	KindWindowsShortcut
-	KindFLVVideo
-	KindIVFVideo
-	KindMPEGProgramStream
-	KindASFContainer
-	KindMPEGAudio
+	KindLuaBytecode
+	KindLZ4Frame
+	KindLZIPArchive
+	KindLZMAData
+	KindLZOPArchive
+	KindMacBinary
 	KindMachOBinary
 	KindMachOUniversalBinary
-	KindExecutableAndLinkableFormat
 	KindMetafileImage
-	KindIFFContainer
-	KindISOBaseMedia
-	KindRIFFContainer
-	KindOLECompoundDocument
-	KindEBMLContainer
-	KindPortableExecutable
-	KindNetpbmImage
-	KindTARArchive
-	KindMPEGTransportStream
-	KindICOCURImage
-	KindOggContainer
-	KindGIMPXCFImage
-	KindCanonRAWImage
-	KindOlympusRAWImage
-	KindFujifilmRAWImage
-	KindRealMedia
-	KindWindowsEventLog
-	KindAndroidBootImage
-	KindUBootImage
-	KindWARCFile
-	KindJavaModule
-	KindPKCS12
-	KindTorrentFile
-	KindNetCDFData
-	KindGRIBData
-	KindBAMData
-	KindCRAMData
-	KindGzipData
-	KindMPEGAudioFrame
-	KindDTSAudio
+	KindMIDISequence
+	KindMonkeysAudio
 	KindMPEG2TransportStream
-	KindVHDDiskImage
+	KindMPEGAudio
+	KindMPEGAudioFrame
+	KindMPEGProgramStream
+	KindMPEGTransportStream
+	KindMusepackAudio
+	KindNESROM
+	KindNetCDFData
+	KindNetpbmImage
+	KindOggContainer
+	KindOLECompoundDocument
+	KindOlympusRAWImage
+	KindOpenEXRImage
+	KindOpenTypeFont
+	KindORCColumnarData
+	KindPCAPCapture
+	KindPCAPNGCapture
+	KindPCXImage
+	KindPDFDocument
+	KindPGPMessage
+	KindPhotoshopDocument
+	KindPKCS12
+	KindPNGImage
+	KindPortableExecutable
+	KindPostScriptDocument
+	KindPythonBytecode
+	KindQCOWDiskImage
+	KindQOIImage
+	KindRadianceHDRImage
+	KindRARArchive
+	KindRealMedia
+	KindRichTextFormatDocument
+	KindRIFFContainer
+	KindRPMPackage
 	KindRubyGemPackage
+	KindScreamTrackerModule
+	KindShockwaveFlash
+	KindSketchDocument
+	KindSnappyFramedData
+	KindSQLiteDatabase
+	KindSquashFSFilesystem
+	KindStuffItArchive
+	KindSunRasterImage
+	KindTAKAudio
+	KindTARArchive
 	KindTextFile
+	KindTIFFImage
+	KindTorrentFile
+	KindTrueTypeCollection
+	KindTrueTypeFont
+	KindTTAAudio
+	KindUBootImage
+	KindUnixCompressArchive
+	KindVHDDiskImage
+	KindVHDXDiskImage
+	KindVirtualBoxDiskImage
+	KindVMwareDiskImage
+	KindVOCAudio
+	KindWARCFile
+	KindWavPackAudio
+	KindWebAssemblyModule
+	KindWindowsEventLog
+	KindWindowsImagingFormat
+	KindWindowsRegistryHive
+	KindWindowsShortcut
+	KindWOFF2Font
+	KindWOFFFont
+	KindXARArchive
+	KindXFSFilesystem
+	KindXZArchive
+	KindZIPArchive
+	KindZlibData
+	KindZstandardArchive
 )
 
 const (
 	TypeNone TypeID = iota
-	TypeSymbolicLink
-	TypeDirectory
-	TypeNamedPipe
-	TypeSocket
-	TypeCharacterDevice
-	TypeBlockDevice
-	TypeSpecial
-	TypeEmpty
-	TypeSpanned
-	TypeRAR4
-	TypeRAR5
-	TypeNewASCII
-	TypeNewASCIIWithCRC
-	TypeOldASCII
+	Type32BitBigEndian
+	Type32BitLittleEndian
+	Type3G2Media
+	Type3GPPMedia
+	Type64Bit
+	Type64BitBigEndian
+	Type64BitLittleEndian
+	TypeAC3
+	TypeAdobeDNGDNG
+	TypeADTS
+	TypeAIFCAudio
+	TypeAIFFAudio
+	TypeAndroidAppBundleAAB
+	TypeAndroidArchiveAAR
+	TypeAndroidPackageAPK
+	TypeAndroidPackageXAPK
+	TypeAndroidSplitAPKS
+	TypeAndroidSystemPackageAPEX
+	TypeAPPXPackage
+	TypeASCIIText
+	TypeAVIFImage
+	TypeAVIFImageSequence
+	TypeAVIVideo
+	TypeBGZF
+	TypeBigEndian
 	TypeBinaryBigEndian
 	TypeBinaryLittleEndian
-	TypeADTS
-	TypeStreamVersion7
-	TypeStreamVersion8
-	TypeKDBX
-	TypeQCOW2
-	TypeVMDK
-	TypeGIF87a
-	TypeGIF89a
-	TypeLittleEndian
-	TypeBigEndian
-	TypePSD
-	TypePSB
+	TypeBlockDevice
+	TypeCharacterDevice
 	TypeCodestream
+	TypeCondaPackage
 	TypeContainer
-	TypeKTX
-	TypeKTX2
+	TypeCRXVersion2
+	TypeCRXVersion3
 	TypeDEX035
 	TypeDEX036
 	TypeDEX037
@@ -187,442 +210,473 @@ const (
 	TypeDEX039
 	TypeDEX040
 	TypeDEX041
-	TypeNanosecondLittleEndian
-	TypeNanosecondBigEndian
-	TypeUncompressed
-	TypeZlibCompressed
-	TypeLZMACompressed
-	TypeWrapper
-	TypeMP3ID3Tagged
-	TypeMP3
-	Type32BitBigEndian
-	Type32BitLittleEndian
-	Type64BitBigEndian
-	Type64BitLittleEndian
-	Type64Bit
-	TypeEnhancedMetafileEMF
-	TypeWindowsMetafileWMF
-	TypeAIFFAudio
-	TypeAIFCAudio
-	TypeAVIFImage
-	TypeAVIFImageSequence
-	TypeHEIFImage
-	Type3GPPMedia
-	TypeMPEG4AudioM4AFamily
-	TypeQuickTimeMovie
-	TypeMP4Video
-	TypeWAVAudio
-	TypeAVIVideo
-	TypeWebPImage
-	TypeWebM
-	TypeMatroska
-	TypeEPUBDocument
-	TypeOpenDocumentTextODT
-	TypeOpenDocumentSpreadsheetODS
-	TypeOpenDocumentPresentationODP
-	TypeMicrosoftWordDocumentDOCX
-	TypeMicrosoftExcelSpreadsheetXLSX
-	TypeMicrosoftPowerPointPresentationPPTX
-	TypeAndroidPackageAPK
-	TypeJavaArchiveJAR
-	TypeIOSApplicationArchiveIPA
-	TypeOpusAudio
-	TypeVorbisAudio
-	TypeSpeexAudio
-	TypeTheoraVideo
-	TypeFLACAudio
-	TypePBMASCII
-	TypePGMASCII
-	TypePPMASCII
-	TypePBMBinary
-	TypePGMBinary
-	TypePPMBinary
-	TypePAM
-	TypeTS
-	TypeM2TS
-	TypeWindowsIcon
-	TypeWindowsCursor
+	TypeDirectory
+	TypeEAC3
 	TypeELF
 	TypeELF32
-	TypeELF64
-	TypeELF32LittleEndian
 	TypeELF32BigEndian
-	TypeELF64LittleEndian
+	TypeELF32LittleEndian
+	TypeELF64
 	TypeELF64BigEndian
-	TypePE32X86
-	TypePE32X8664
-	TypePE32ARM
-	TypePE32ARMv7
-	TypePE32ARM64
-	TypePE32Itanium
-	TypePE32Unknown
-	TypePE32PlusX8664
-	TypePE32PlusARM64
-	TypePE32PlusUnknown
-	TypeMicrosoftWordDocumentDOC
-	TypeMicrosoftExcelWorkbookXLS
-	TypeMicrosoftPowerPointPresentationPPT
-	TypeAndroidAppBundleAAB
-	TypeVisualStudioExtensionVSIX
-	TypeKMZArchive
+	TypeELF64LittleEndian
+	TypeEmpty
+	TypeEnhancedMetafileEMF
+	TypeEPUBDocument
+	TypeExt2
+	TypeExt3
+	TypeExt4
+	TypeF4VVideo
 	TypeFirefoxExtensionXPI
-	TypeMicrosoftWordTemplateDOTX
+	TypeFLACAudio
+	TypeGIF87a
+	TypeGIF89a
+	TypeHEIFImage
+	TypeIOSApplicationArchiveIPA
+	TypeJavaArchiveJAR
+	TypeJavaEnterpriseArchiveEAR
+	TypeJavaWebArchiveWAR
+	TypeJMOD
+	TypeKDBX
+	TypeKMZArchive
+	TypeKTX
+	TypeKTX2
+	TypeLittleEndian
+	TypeLZMACompressed
+	TypeM2TS
+	TypeM2TSBDAV
+	TypeM4VVideo
+	TypeMatroska
+	TypeMicrosoftExcelAddInXLAM
+	TypeMicrosoftExcelMacroEnabledTemplateXLTM
+	TypeMicrosoftExcelMacroEnabledWorkbookXLSM
+	TypeMicrosoftExcelSpreadsheetXLSX
+	TypeMicrosoftExcelTemplateXLTX
+	TypeMicrosoftExcelWorkbookXLS
+	TypeMicrosoftPowerPointAddInPPAM
+	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM
+	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM
+	TypeMicrosoftPowerPointMacroEnabledTemplatePOTM
+	TypeMicrosoftPowerPointPresentationPPT
+	TypeMicrosoftPowerPointPresentationPPTX
+	TypeMicrosoftPowerPointSlideshowPPSX
+	TypeMicrosoftPowerPointTemplatePOTX
+	TypeMicrosoftWordDocumentDOC
+	TypeMicrosoftWordDocumentDOCX
 	TypeMicrosoftWordMacroEnabledDocumentDOCM
 	TypeMicrosoftWordMacroEnabledTemplateDOTM
-	TypeMicrosoftExcelMacroEnabledWorkbookXLSM
-	TypeMicrosoftExcelTemplateXLTX
-	TypeMicrosoftExcelMacroEnabledTemplateXLTM
-	TypeMicrosoftExcelAddInXLAM
-	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM
-	TypeMicrosoftPowerPointTemplatePOTX
-	TypeMicrosoftPowerPointMacroEnabledTemplatePOTM
-	TypeMicrosoftPowerPointSlideshowPPSX
-	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM
-	TypeMicrosoftPowerPointAddInPPAM
-	TypeAndroidArchiveAAR
-	TypeJavaWebArchiveWAR
-	TypeJavaEnterpriseArchiveEAR
-	TypeNuGetPackageNUPKG
-	TypeJMOD
-	TypePythonWheelWHL
-	TypeAndroidSplitAPKS
-	TypeAndroidPackageXAPK
-	TypeMSIXPackage
-	TypeAPPXPackage
-	TypeCRXVersion2
-	TypeCRXVersion3
-	TypeM4VVideo
-	TypeF4VVideo
-	Type3G2Media
-	TypeM2TSBDAV
-	TypeBGZF
-	TypeAC3
-	TypeEAC3
+	TypeMicrosoftWordTemplateDOTX
+	TypeMP3
+	TypeMP3ID3Tagged
+	TypeMP4Video
+	TypeMPEG4AudioM4AFamily
 	TypeMPEGLayer2
 	TypeMPEGLayer3
+	TypeMSIXPackage
+	TypeNamedPipe
+	TypeNanosecondBigEndian
+	TypeNanosecondLittleEndian
+	TypeNewASCII
+	TypeNewASCIIWithCRC
 	TypeNikonRAWNEF
+	TypeNpmPackageTarball
+	TypeNuGetPackageNUPKG
+	TypeOCIImageLayoutTar
+	TypeOldASCII
+	TypeOpenDocumentPresentationODP
+	TypeOpenDocumentSpreadsheetODS
+	TypeOpenDocumentTextODT
+	TypeOpenRasterImageORA
+	TypeOpusAudio
+	TypePAM
+	TypePanasonicRAWRW2
+	TypePBMASCII
+	TypePBMBinary
+	TypePE32ARM
+	TypePE32ARM64
+	TypePE32ARMv7
+	TypePE32Itanium
+	TypePE32PlusARM64
+	TypePE32PlusUnknown
+	TypePE32PlusX8664
+	TypePE32Unknown
+	TypePE32X86
+	TypePE32X8664
 	TypePentaxRAWPEF
+	TypePGMASCII
+	TypePGMBinary
+	TypePPMASCII
+	TypePPMBinary
+	TypePSB
+	TypePSD
+	TypePythonSourceDistributionSDist
+	TypePythonWheelWHL
+	TypeQCOW2
+	TypeQuickTimeMovie
+	TypeRAR4
+	TypeRAR5
+	TypeSketchDocument
+	TypeSocket
 	TypeSonyRAWARW
 	TypeSonyRAWSR2
-	TypeAdobeDNGDNG
-	TypePanasonicRAWRW2
-	TypeOCIImageLayoutTar
-	TypeNpmPackageTarball
-	TypePythonSourceDistributionSDist
-	TypeCondaPackage
-	TypeASCIIText
+	TypeSpanned
+	TypeSpecial
+	TypeSpeexAudio
+	TypeStreamVersion7
+	TypeStreamVersion8
+	TypeSymbolicLink
+	TypeTheoraVideo
+	TypeTS
+	TypeUncompressed
 	TypeUTF8Text
+	TypeVisualStudioExtensionVSIX
+	TypeVMDK
+	TypeVorbisAudio
+	TypeWAVAudio
+	TypeWebM
+	TypeWebPImage
+	TypeWindowsCursor
+	TypeWindowsIcon
+	TypeWindowsMetafileWMF
+	TypeWrapper
+	TypeZlibCompressed
 )
 
 var kindNames = [...]string{
 	KindUnknown:                     "Unknown",
-	KindFilesystemEntry:             "Filesystem Entry",
-	KindZIPArchive:                  "ZIP Archive",
-	KindUnixCompressArchive:         "Unix Compress Archive",
 	Kind7ZipArchive:                 "7-Zip Archive",
-	KindRARArchive:                  "RAR Archive",
-	KindGzipArchive:                 "Gzip Archive",
-	KindBzip2Archive:                "Bzip2 Archive",
-	KindXZArchive:                   "XZ Archive",
-	KindZstandardArchive:            "Zstandard Archive",
-	KindLZ4Frame:                    "LZ4 Frame",
-	KindLZIPArchive:                 "LZIP Archive",
-	KindLZOPArchive:                 "LZOP Archive",
-	KindSnappyFramedData:            "Snappy Framed Data",
-	KindCabinetArchive:              "Cabinet Archive",
-	KindXARArchive:                  "XAR Archive",
-	KindWindowsImagingFormat:        "Windows Imaging Format",
-	KindARArchive:                   "AR Archive",
-	KindDebianPackage:               "Debian Package",
-	KindSquashFSFilesystem:          "SquashFS Filesystem",
-	KindCPIOArchive:                 "CPIO Archive",
-	KindRPMPackage:                  "RPM Package",
-	KindFLACAudio:                   "FLAC Audio",
-	KindMIDISequence:                "MIDI Sequence",
-	KindAUAudio:                     "AU Audio",
+	KindAACAudio:                    "AAC Audio",
 	KindAMRAudio:                    "AMR Audio",
 	KindAMRWBAudio:                  "AMR-WB Audio",
-	KindAACAudio:                    "AAC Audio",
-	KindCAFAudio:                    "CAF Audio",
-	KindWavPackAudio:                "WavPack Audio",
-	KindMonkeysAudio:                "Monkey's Audio",
-	KindDSFAudio:                    "DSF Audio",
-	KindTAKAudio:                    "TAK Audio",
-	KindVOCAudio:                    "VOC Audio",
-	KindMusepackAudio:               "Musepack Audio",
-	KindImpulseTrackerModule:        "Impulse Tracker Module",
-	KindFastTrackerModule:           "FastTracker Module",
-	KindScreamTrackerModule:         "Scream Tracker Module",
-	KindPDFDocument:                 "PDF Document",
-	KindPostScriptDocument:          "PostScript Document",
-	KindRichTextFormatDocument:      "Rich Text Format Document",
-	KindSQLiteDatabase:              "SQLite Database",
-	KindHDF5Data:                    "HDF5 Data",
-	KindPGPMessage:                  "PGP Message",
-	KindApacheParquet:               "Apache Parquet",
-	KindApacheArrowFile:             "Apache Arrow File",
-	KindFITSAstronomicalImage:       "FITS Astronomical Image",
-	KindDICOMMedicalImage:           "DICOM Medical Image",
-	KindWindowsRegistryHive:         "Windows Registry Hive",
-	KindAppleBinaryPropertyList:     "Apple Binary Property List",
-	KindKeePassDatabase:             "KeePass Database",
-	KindAvroObjectContainer:         "Avro Object Container",
-	KindORCColumnarData:             "ORC Columnar Data",
-	KindQCOWDiskImage:               "QCOW Disk Image",
-	KindVHDXDiskImage:               "VHDX Disk Image",
-	KindVMwareDiskImage:             "VMware Disk Image",
-	KindAndroidSparseImage:          "Android Sparse Image",
-	KindVirtualBoxDiskImage:         "VirtualBox Disk Image",
-	KindISO9660Image:                "ISO 9660 Image",
-	KindTrueTypeFont:                "TrueType Font",
-	KindOpenTypeFont:                "OpenType Font",
-	KindWOFFFont:                    "WOFF Font",
-	KindWOFF2Font:                   "WOFF2 Font",
-	KindTrueTypeCollection:          "TrueType Collection",
-	KindEOTFont:                     "EOT Font",
-	KindPNGImage:                    "PNG Image",
-	KindJPEGImage:                   "JPEG Image",
-	KindGIFImage:                    "GIF Image",
-	KindBMPImage:                    "BMP Image",
-	KindTIFFImage:                   "TIFF Image",
-	KindQOIImage:                    "QOI Image",
-	KindPhotoshopDocument:           "Photoshop Document",
-	KindRadianceHDRImage:            "Radiance HDR Image",
-	KindOpenEXRImage:                "OpenEXR Image",
-	KindDDSImage:                    "DDS Image",
-	KindJPEGXLImage:                 "JPEG XL Image",
-	KindKTXTexture:                  "KTX Texture",
-	KindICNSIcon:                    "ICNS Icon",
-	KindFarbfeldImage:               "Farbfeld Image",
-	KindJPEG2000Image:               "JPEG 2000 Image",
-	KindBPGImage:                    "BPG Image",
-	KindJNGImage:                    "JNG Image",
-	KindJPEGXRImage:                 "JPEG XR Image",
-	KindSunRasterImage:              "Sun Raster Image",
-	KindCRXBrowserExtension:         "CRX Browser Extension",
-	KindDalvikExecutable:            "Dalvik Executable",
+	KindAndroidBootImage:            "Android Boot Image",
 	KindAndroidOAT:                  "Android OAT",
 	KindAndroidODEX:                 "Android ODEX",
+	KindAndroidSparseImage:          "Android Sparse Image",
+	KindApacheArrowFile:             "Apache Arrow File",
+	KindApacheParquet:               "Apache Parquet",
+	KindAppImage:                    "AppImage",
+	KindAppleBinaryPropertyList:     "Apple Binary Property List",
+	KindAppleDouble:                 "AppleDouble File",
+	KindAppleSingle:                 "AppleSingle File",
+	KindARArchive:                   "AR Archive",
+	KindASFContainer:                "ASF Container",
+	KindAUAudio:                     "AU Audio",
+	KindAvroObjectContainer:         "Avro Object Container",
+	KindBAMData:                     "BAM Data",
+	KindBlenderFile:                 "Blender File",
+	KindBMPImage:                    "BMP Image",
+	KindBPGImage:                    "BPG Image",
+	KindBtrfsFilesystem:             "Btrfs Filesystem",
+	KindBzip2Archive:                "Bzip2 Archive",
+	KindCabinetArchive:              "Cabinet Archive",
+	KindCAFAudio:                    "CAF Audio",
+	KindCanonRAWImage:               "Canon RAW Image",
+	KindCHMDocument:                 "CHM Document",
+	KindCPIOArchive:                 "CPIO Archive",
+	KindCRAMData:                    "CRAM Data",
+	KindCRXBrowserExtension:         "CRX Browser Extension",
+	KindDalvikExecutable:            "Dalvik Executable",
+	KindDDSImage:                    "DDS Image",
+	KindDebianPackage:               "Debian Package",
+	KindDICOMMedicalImage:           "DICOM Medical Image",
+	KindDjVuDocument:                "DjVu Document",
+	KindDSFAudio:                    "DSF Audio",
+	KindDTSAudio:                    "DTS Audio",
+	KindEBMLContainer:               "EBML Container",
+	KindEOTFont:                     "EOT Font",
+	KindExecutableAndLinkableFormat: "Executable and Linkable Format",
+	KindExtFilesystem:               "ext Filesystem",
+	KindFarbfeldImage:               "Farbfeld Image",
+	KindFastTrackerModule:           "FastTracker Module",
+	KindFilesystemEntry:             "Filesystem Entry",
+	KindFITSAstronomicalImage:       "FITS Astronomical Image",
+	KindFLACAudio:                   "FLAC Audio",
+	KindFLIFImage:                   "FLIF Image",
+	KindFLVVideo:                    "FLV Video",
+	KindFujifilmRAWImage:            "Fujifilm RAW Image",
+	KindGIFImage:                    "GIF Image",
+	KindGIMPXCFImage:                "GIMP XCF Image",
+	KindGitIndex:                    "Git Index",
+	KindGitPack:                     "Git Pack",
+	KindGRIBData:                    "GRIB Data",
+	KindGzipArchive:                 "Gzip Archive",
+	KindGzipData:                    "Gzip Data",
+	KindHDF5Data:                    "HDF5 Data",
+	KindICNSIcon:                    "ICNS Icon",
+	KindICOCURImage:                 "ICO/CUR Image",
+	KindIFFContainer:                "IFF Container",
+	KindImpulseTrackerModule:        "Impulse Tracker Module",
+	KindISO9660Image:                "ISO 9660 Image",
+	KindISOBaseMedia:                "ISO Base Media",
+	KindIVFVideo:                    "IVF Video",
 	KindJavaClass:                   "Java Class",
 	KindJavaKeyStore:                "Java KeyStore",
-	KindWebAssemblyModule:           "WebAssembly Module",
-	KindNESROM:                      "NES ROM",
-	KindPCAPCapture:                 "PCAP Capture",
-	KindPCAPNGCapture:               "PCAPNG Capture",
-	KindShockwaveFlash:              "Shockwave Flash",
+	KindJavaModule:                  "Java Module",
+	KindJNGImage:                    "JNG Image",
+	KindJPEG2000Image:               "JPEG 2000 Image",
+	KindJPEGImage:                   "JPEG Image",
+	KindJPEGXLImage:                 "JPEG XL Image",
+	KindJPEGXRImage:                 "JPEG XR Image",
+	KindKeePassDatabase:             "KeePass Database",
+	KindKTXTexture:                  "KTX Texture",
 	KindLLVMBitcode:                 "LLVM Bitcode",
-	KindWindowsShortcut:             "Windows Shortcut",
-	KindFLVVideo:                    "FLV Video",
-	KindIVFVideo:                    "IVF Video",
-	KindMPEGProgramStream:           "MPEG Program Stream",
-	KindASFContainer:                "ASF Container",
-	KindMPEGAudio:                   "MPEG Audio",
+	KindLuaBytecode:                 "Lua Bytecode",
+	KindLZ4Frame:                    "LZ4 Frame",
+	KindLZIPArchive:                 "LZIP Archive",
+	KindLZMAData:                    "LZMA Data",
+	KindLZOPArchive:                 "LZOP Archive",
+	KindMacBinary:                   "MacBinary",
 	KindMachOBinary:                 "Mach-O Binary",
 	KindMachOUniversalBinary:        "Mach-O Universal Binary",
-	KindExecutableAndLinkableFormat: "Executable and Linkable Format",
 	KindMetafileImage:               "Metafile Image",
-	KindIFFContainer:                "IFF Container",
-	KindISOBaseMedia:                "ISO Base Media",
-	KindRIFFContainer:               "RIFF Container",
-	KindOLECompoundDocument:         "OLE Compound Document",
-	KindEBMLContainer:               "EBML Container",
-	KindPortableExecutable:          "Portable Executable",
-	KindNetpbmImage:                 "Netpbm Image",
-	KindTARArchive:                  "TAR Archive",
-	KindMPEGTransportStream:         "MPEG Transport Stream",
-	KindICOCURImage:                 "ICO/CUR Image",
-	KindOggContainer:                "Ogg Container",
-	KindGIMPXCFImage:                "GIMP XCF Image",
-	KindCanonRAWImage:               "Canon RAW Image",
-	KindOlympusRAWImage:             "Olympus RAW Image",
-	KindFujifilmRAWImage:            "Fujifilm RAW Image",
-	KindRealMedia:                   "RealMedia",
-	KindWindowsEventLog:             "Windows Event Log",
-	KindAndroidBootImage:            "Android Boot Image",
-	KindUBootImage:                  "U-Boot Image",
-	KindWARCFile:                    "WARC File",
-	KindJavaModule:                  "Java Module",
-	KindPKCS12:                      "PKCS#12",
-	KindTorrentFile:                 "Torrent File",
-	KindNetCDFData:                  "NetCDF Data",
-	KindGRIBData:                    "GRIB Data",
-	KindBAMData:                     "BAM Data",
-	KindCRAMData:                    "CRAM Data",
-	KindGzipData:                    "Gzip Data",
-	KindMPEGAudioFrame:              "MPEG Audio",
-	KindDTSAudio:                    "DTS Audio",
+	KindMIDISequence:                "MIDI Sequence",
+	KindMonkeysAudio:                "Monkey's Audio",
 	KindMPEG2TransportStream:        "MPEG Transport Stream",
-	KindVHDDiskImage:                "VHD Disk Image",
+	KindMPEGAudio:                   "MPEG Audio",
+	KindMPEGAudioFrame:              "MPEG Audio",
+	KindMPEGProgramStream:           "MPEG Program Stream",
+	KindMPEGTransportStream:         "MPEG Transport Stream",
+	KindMusepackAudio:               "Musepack Audio",
+	KindNESROM:                      "NES ROM",
+	KindNetCDFData:                  "NetCDF Data",
+	KindNetpbmImage:                 "Netpbm Image",
+	KindOggContainer:                "Ogg Container",
+	KindOLECompoundDocument:         "OLE Compound Document",
+	KindOlympusRAWImage:             "Olympus RAW Image",
+	KindOpenEXRImage:                "OpenEXR Image",
+	KindOpenTypeFont:                "OpenType Font",
+	KindORCColumnarData:             "ORC Columnar Data",
+	KindPCAPCapture:                 "PCAP Capture",
+	KindPCAPNGCapture:               "PCAPNG Capture",
+	KindPCXImage:                    "PCX Image",
+	KindPDFDocument:                 "PDF Document",
+	KindPGPMessage:                  "PGP Message",
+	KindPhotoshopDocument:           "Photoshop Document",
+	KindPKCS12:                      "PKCS#12",
+	KindPNGImage:                    "PNG Image",
+	KindPortableExecutable:          "Portable Executable",
+	KindPostScriptDocument:          "PostScript Document",
+	KindPythonBytecode:              "Python Bytecode",
+	KindQCOWDiskImage:               "QCOW Disk Image",
+	KindQOIImage:                    "QOI Image",
+	KindRadianceHDRImage:            "Radiance HDR Image",
+	KindRARArchive:                  "RAR Archive",
+	KindRealMedia:                   "RealMedia",
+	KindRichTextFormatDocument:      "Rich Text Format Document",
+	KindRIFFContainer:               "RIFF Container",
+	KindRPMPackage:                  "RPM Package",
 	KindRubyGemPackage:              "RubyGem Package",
+	KindScreamTrackerModule:         "Scream Tracker Module",
+	KindShockwaveFlash:              "Shockwave Flash",
+	KindSketchDocument:              "Sketch Document",
+	KindSnappyFramedData:            "Snappy Framed Data",
+	KindSQLiteDatabase:              "SQLite Database",
+	KindSquashFSFilesystem:          "SquashFS Filesystem",
+	KindStuffItArchive:              "StuffIt Archive",
+	KindSunRasterImage:              "Sun Raster Image",
+	KindTAKAudio:                    "TAK Audio",
+	KindTARArchive:                  "TAR Archive",
 	KindTextFile:                    "Text File",
+	KindTIFFImage:                   "TIFF Image",
+	KindTorrentFile:                 "Torrent File",
+	KindTrueTypeCollection:          "TrueType Collection",
+	KindTrueTypeFont:                "TrueType Font",
+	KindTTAAudio:                    "TTA Audio",
+	KindUBootImage:                  "U-Boot Image",
+	KindUnixCompressArchive:         "Unix Compress Archive",
+	KindVHDDiskImage:                "VHD Disk Image",
+	KindVHDXDiskImage:               "VHDX Disk Image",
+	KindVirtualBoxDiskImage:         "VirtualBox Disk Image",
+	KindVMwareDiskImage:             "VMware Disk Image",
+	KindVOCAudio:                    "VOC Audio",
+	KindWARCFile:                    "WARC File",
+	KindWavPackAudio:                "WavPack Audio",
+	KindWebAssemblyModule:           "WebAssembly Module",
+	KindWindowsEventLog:             "Windows Event Log",
+	KindWindowsImagingFormat:        "Windows Imaging Format",
+	KindWindowsRegistryHive:         "Windows Registry Hive",
+	KindWindowsShortcut:             "Windows Shortcut",
+	KindWOFF2Font:                   "WOFF2 Font",
+	KindWOFFFont:                    "WOFF Font",
+	KindXARArchive:                  "XAR Archive",
+	KindXFSFilesystem:               "XFS Filesystem",
+	KindXZArchive:                   "XZ Archive",
+	KindZIPArchive:                  "ZIP Archive",
+	KindZlibData:                    "Zlib Data",
+	KindZstandardArchive:            "Zstandard Archive",
 }
 
 var typeNames = [...]string{
-	TypeNone:                                "",
-	TypeSymbolicLink:                        "Symbolic Link",
-	TypeDirectory:                           "Directory",
-	TypeNamedPipe:                           "Named Pipe",
-	TypeSocket:                              "Socket",
-	TypeCharacterDevice:                     "Character Device",
-	TypeBlockDevice:                         "Block Device",
-	TypeSpecial:                             "Special",
-	TypeEmpty:                               "Empty",
-	TypeSpanned:                             "Spanned",
-	TypeRAR4:                                "RAR4",
-	TypeRAR5:                                "RAR5",
-	TypeNewASCII:                            "New ASCII",
-	TypeNewASCIIWithCRC:                     "New ASCII with CRC",
-	TypeOldASCII:                            "Old ASCII",
-	TypeBinaryBigEndian:                     "Binary Big-Endian",
-	TypeBinaryLittleEndian:                  "Binary Little-Endian",
-	TypeADTS:                                "ADTS",
-	TypeStreamVersion7:                      "Stream Version 7",
-	TypeStreamVersion8:                      "Stream Version 8",
-	TypeKDBX:                                "KDBX",
-	TypeQCOW2:                               "QCOW2",
-	TypeVMDK:                                "VMDK",
-	TypeGIF87a:                              "GIF87a",
-	TypeGIF89a:                              "GIF89a",
-	TypeLittleEndian:                        "Little-Endian",
-	TypeBigEndian:                           "Big-Endian",
-	TypePSD:                                 "PSD",
-	TypePSB:                                 "PSB",
-	TypeCodestream:                          "Codestream",
-	TypeContainer:                           "Container",
-	TypeKTX:                                 "KTX",
-	TypeKTX2:                                "KTX2",
-	TypeDEX035:                              "DEX 035",
-	TypeDEX036:                              "DEX 036",
-	TypeDEX037:                              "DEX 037",
-	TypeDEX038:                              "DEX 038",
-	TypeDEX039:                              "DEX 039",
-	TypeDEX040:                              "DEX 040",
-	TypeDEX041:                              "DEX 041",
-	TypeNanosecondLittleEndian:              "Nanosecond Little-Endian",
-	TypeNanosecondBigEndian:                 "Nanosecond Big-Endian",
-	TypeUncompressed:                        "Uncompressed",
-	TypeZlibCompressed:                      "Zlib Compressed",
-	TypeLZMACompressed:                      "LZMA Compressed",
-	TypeWrapper:                             "Wrapper",
-	TypeMP3ID3Tagged:                        "MP3 (ID3 Tagged)",
-	TypeMP3:                                 "MP3",
-	Type32BitBigEndian:                      "32-bit Big-Endian",
-	Type32BitLittleEndian:                   "32-bit Little-Endian",
-	Type64BitBigEndian:                      "64-bit Big-Endian",
-	Type64BitLittleEndian:                   "64-bit Little-Endian",
-	Type64Bit:                               "64-bit",
-	TypeEnhancedMetafileEMF:                 "Enhanced Metafile (EMF)",
-	TypeWindowsMetafileWMF:                  "Windows Metafile (WMF)",
-	TypeAIFFAudio:                           "AIFF Audio",
-	TypeAIFCAudio:                           "AIFC Audio",
-	TypeAVIFImage:                           "AVIF Image",
-	TypeAVIFImageSequence:                   "AVIF Image Sequence",
-	TypeHEIFImage:                           "HEIF Image",
-	Type3GPPMedia:                           "3GPP Media",
-	TypeMPEG4AudioM4AFamily:                 "MPEG-4 Audio (M4A Family)",
-	TypeQuickTimeMovie:                      "QuickTime Movie",
-	TypeMP4Video:                            "MP4 Video",
-	TypeWAVAudio:                            "WAV Audio",
-	TypeAVIVideo:                            "AVI Video",
-	TypeWebPImage:                           "WebP Image",
-	TypeWebM:                                "WebM",
-	TypeMatroska:                            "Matroska",
-	TypeEPUBDocument:                        "EPUB Document",
-	TypeOpenDocumentTextODT:                 "OpenDocument Text (ODT)",
-	TypeOpenDocumentSpreadsheetODS:          "OpenDocument Spreadsheet (ODS)",
-	TypeOpenDocumentPresentationODP:         "OpenDocument Presentation (ODP)",
-	TypeMicrosoftWordDocumentDOCX:           "Microsoft Word Document (DOCX)",
-	TypeMicrosoftExcelSpreadsheetXLSX:       "Microsoft Excel Spreadsheet (XLSX)",
-	TypeMicrosoftPowerPointPresentationPPTX: "Microsoft PowerPoint Presentation (PPTX)",
-	TypeAndroidPackageAPK:                   "Android Package (APK)",
-	TypeJavaArchiveJAR:                      "Java Archive (JAR)",
-	TypeIOSApplicationArchiveIPA:            "iOS Application Archive (IPA)",
-	TypeMicrosoftWordTemplateDOTX:           "Microsoft Word Template (DOTX)",
+	TypeNone:                     "",
+	Type32BitBigEndian:           "32-bit Big-Endian",
+	Type32BitLittleEndian:        "32-bit Little-Endian",
+	Type3G2Media:                 "3G2 Media",
+	Type3GPPMedia:                "3GPP Media",
+	Type64Bit:                    "64-bit",
+	Type64BitBigEndian:           "64-bit Big-Endian",
+	Type64BitLittleEndian:        "64-bit Little-Endian",
+	TypeAC3:                      "AC-3",
+	TypeAdobeDNGDNG:              "Adobe DNG (DNG)",
+	TypeADTS:                     "ADTS",
+	TypeAIFCAudio:                "AIFC Audio",
+	TypeAIFFAudio:                "AIFF Audio",
+	TypeAndroidAppBundleAAB:      "Android App Bundle (AAB)",
+	TypeAndroidArchiveAAR:        "Android Archive (AAR)",
+	TypeAndroidPackageAPK:        "Android Package (APK)",
+	TypeAndroidPackageXAPK:       "Android Package (XAPK)",
+	TypeAndroidSplitAPKS:         "Android Split APK Set (APKS)",
+	TypeAndroidSystemPackageAPEX: "Android System Package (APEX)",
+	TypeAPPXPackage:              "APPX Package",
+	TypeASCIIText:                "ASCII Text",
+	TypeAVIFImage:                "AVIF Image",
+	TypeAVIFImageSequence:        "AVIF Image Sequence",
+	TypeAVIVideo:                 "AVI Video",
+	TypeBGZF:                     "BGZF",
+	TypeBigEndian:                "Big-Endian",
+	TypeBinaryBigEndian:          "Binary Big-Endian",
+	TypeBinaryLittleEndian:       "Binary Little-Endian",
+	TypeBlockDevice:              "Block Device",
+	TypeCharacterDevice:          "Character Device",
+	TypeCodestream:               "Codestream",
+	TypeCondaPackage:             "Conda Package",
+	TypeContainer:                "Container",
+	TypeCRXVersion2:              "Version 2",
+	TypeCRXVersion3:              "Version 3",
+	TypeDEX035:                   "DEX 035",
+	TypeDEX036:                   "DEX 036",
+	TypeDEX037:                   "DEX 037",
+	TypeDEX038:                   "DEX 038",
+	TypeDEX039:                   "DEX 039",
+	TypeDEX040:                   "DEX 040",
+	TypeDEX041:                   "DEX 041",
+	TypeDirectory:                "Directory",
+	TypeEAC3:                     "E-AC-3",
+	TypeELF:                      "ELF",
+	TypeELF32:                    "ELF32",
+	TypeELF32BigEndian:           "ELF32 Big-Endian",
+	TypeELF32LittleEndian:        "ELF32 Little-Endian",
+	TypeELF64:                    "ELF64",
+	TypeELF64BigEndian:           "ELF64 Big-Endian",
+	TypeELF64LittleEndian:        "ELF64 Little-Endian",
+	TypeEmpty:                    "Empty",
+	TypeEnhancedMetafileEMF:      "Enhanced Metafile (EMF)",
+	TypeEPUBDocument:             "EPUB Document",
+	TypeExt2:                     "ext2",
+	TypeExt3:                     "ext3",
+	TypeExt4:                     "ext4",
+	TypeF4VVideo:                 "F4V Video",
+	TypeFirefoxExtensionXPI:      "Firefox Extension (XPI)",
+	TypeFLACAudio:                "FLAC Audio",
+	TypeGIF87a:                   "GIF87a",
+	TypeGIF89a:                   "GIF89a",
+	TypeHEIFImage:                "HEIF Image",
+	TypeIOSApplicationArchiveIPA: "iOS Application Archive (IPA)",
+	TypeJavaArchiveJAR:           "Java Archive (JAR)",
+	TypeJavaEnterpriseArchiveEAR: "Java Enterprise Archive (EAR)",
+	TypeJavaWebArchiveWAR:        "Java Web Archive (WAR)",
+	TypeJMOD:                     "JMOD",
+	TypeKDBX:                     "KDBX",
+	TypeKMZArchive:               "KMZ Archive",
+	TypeKTX:                      "KTX",
+	TypeKTX2:                     "KTX2",
+	TypeLittleEndian:             "Little-Endian",
+	TypeLZMACompressed:           "LZMA Compressed",
+	TypeM2TS:                     "M2TS",
+	TypeM2TSBDAV:                 "M2TS/BDAV",
+	TypeM4VVideo:                 "M4V Video",
+	TypeMatroska:                 "Matroska",
+	TypeMicrosoftExcelAddInXLAM:  "Microsoft Excel Add-In (XLAM)",
+	TypeMicrosoftExcelMacroEnabledTemplateXLTM:          "Microsoft Excel Macro-Enabled Template (XLTM)",
+	TypeMicrosoftExcelMacroEnabledWorkbookXLSM:          "Microsoft Excel Macro-Enabled Workbook (XLSM)",
+	TypeMicrosoftExcelSpreadsheetXLSX:                   "Microsoft Excel Spreadsheet (XLSX)",
+	TypeMicrosoftExcelTemplateXLTX:                      "Microsoft Excel Template (XLTX)",
+	TypeMicrosoftExcelWorkbookXLS:                       "Microsoft Excel Workbook (XLS)",
+	TypeMicrosoftPowerPointAddInPPAM:                    "Microsoft PowerPoint Add-In (PPAM)",
+	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM: "Microsoft PowerPoint Macro-Enabled Presentation (PPTM)",
+	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM:    "Microsoft PowerPoint Macro-Enabled Slideshow (PPSM)",
+	TypeMicrosoftPowerPointMacroEnabledTemplatePOTM:     "Microsoft PowerPoint Macro-Enabled Template (POTM)",
+	TypeMicrosoftPowerPointPresentationPPT:              "Microsoft PowerPoint Presentation (PPT)",
+	TypeMicrosoftPowerPointPresentationPPTX:             "Microsoft PowerPoint Presentation (PPTX)",
+	TypeMicrosoftPowerPointSlideshowPPSX:                "Microsoft PowerPoint Slideshow (PPSX)",
+	TypeMicrosoftPowerPointTemplatePOTX:                 "Microsoft PowerPoint Template (POTX)",
+	TypeMicrosoftWordDocumentDOC:                        "Microsoft Word Document (DOC)",
+	TypeMicrosoftWordDocumentDOCX:                       "Microsoft Word Document (DOCX)",
 	TypeMicrosoftWordMacroEnabledDocumentDOCM:           "Microsoft Word Macro-Enabled Document (DOCM)",
 	TypeMicrosoftWordMacroEnabledTemplateDOTM:           "Microsoft Word Macro-Enabled Template (DOTM)",
-	TypeMicrosoftExcelMacroEnabledWorkbookXLSM:          "Microsoft Excel Macro-Enabled Workbook (XLSM)",
-	TypeMicrosoftExcelTemplateXLTX:                      "Microsoft Excel Template (XLTX)",
-	TypeMicrosoftExcelMacroEnabledTemplateXLTM:          "Microsoft Excel Macro-Enabled Template (XLTM)",
-	TypeMicrosoftExcelAddInXLAM:                         "Microsoft Excel Add-In (XLAM)",
-	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM: "Microsoft PowerPoint Macro-Enabled Presentation (PPTM)",
-	TypeMicrosoftPowerPointTemplatePOTX:                 "Microsoft PowerPoint Template (POTX)",
-	TypeMicrosoftPowerPointMacroEnabledTemplatePOTM:     "Microsoft PowerPoint Macro-Enabled Template (POTM)",
-	TypeMicrosoftPowerPointSlideshowPPSX:                "Microsoft PowerPoint Slideshow (PPSX)",
-	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM:    "Microsoft PowerPoint Macro-Enabled Slideshow (PPSM)",
-	TypeMicrosoftPowerPointAddInPPAM:                    "Microsoft PowerPoint Add-In (PPAM)",
-	TypeAndroidArchiveAAR:                               "Android Archive (AAR)",
-	TypeJavaWebArchiveWAR:                               "Java Web Archive (WAR)",
-	TypeJavaEnterpriseArchiveEAR:                        "Java Enterprise Archive (EAR)",
-	TypeNuGetPackageNUPKG:                               "NuGet Package (NUPKG)",
-	TypeJMOD:                                            "JMOD",
-	TypePythonWheelWHL:                                  "Python Wheel (WHL)",
-	TypeAndroidSplitAPKS:                                "Android Split APK Set (APKS)",
-	TypeAndroidPackageXAPK:                              "Android Package (XAPK)",
-	TypeMSIXPackage:                                     "MSIX Package",
-	TypeAPPXPackage:                                     "APPX Package",
-	TypeCRXVersion2:                                     "Version 2",
-	TypeCRXVersion3:                                     "Version 3",
-	TypeM4VVideo:                                        "M4V Video",
-	TypeF4VVideo:                                        "F4V Video",
-	Type3G2Media:                                        "3G2 Media",
-	TypeM2TSBDAV:                                        "M2TS/BDAV",
-	TypeBGZF:                                            "BGZF",
-	TypeAC3:                                             "AC-3",
-	TypeEAC3:                                            "E-AC-3",
+	TypeMicrosoftWordTemplateDOTX:                       "Microsoft Word Template (DOTX)",
+	TypeMP3:                                             "MP3",
+	TypeMP3ID3Tagged:                                    "MP3 (ID3 Tagged)",
+	TypeMP4Video:                                        "MP4 Video",
+	TypeMPEG4AudioM4AFamily:                             "MPEG-4 Audio (M4A Family)",
 	TypeMPEGLayer2:                                      "MPEG Layer II",
 	TypeMPEGLayer3:                                      "MPEG Layer III",
+	TypeMSIXPackage:                                     "MSIX Package",
+	TypeNamedPipe:                                       "Named Pipe",
+	TypeNanosecondBigEndian:                             "Nanosecond Big-Endian",
+	TypeNanosecondLittleEndian:                          "Nanosecond Little-Endian",
+	TypeNewASCII:                                        "New ASCII",
+	TypeNewASCIIWithCRC:                                 "New ASCII with CRC",
 	TypeNikonRAWNEF:                                     "Nikon RAW (NEF)",
-	TypePentaxRAWPEF:                                    "Pentax RAW (PEF)",
-	TypeSonyRAWARW:                                      "Sony RAW (ARW)",
-	TypeSonyRAWSR2:                                      "Sony RAW (SR2)",
-	TypeAdobeDNGDNG:                                     "Adobe DNG (DNG)",
-	TypePanasonicRAWRW2:                                 "Panasonic RAW (RW2)",
-	TypeOCIImageLayoutTar:                               "OCI Image Layout (TAR)",
 	TypeNpmPackageTarball:                               "npm Package Tarball",
-	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
-	TypeCondaPackage:                                    "Conda Package",
-	TypeASCIIText:                                       "ASCII Text",
-	TypeUTF8Text:                                        "UTF-8 Text",
+	TypeNuGetPackageNUPKG:                               "NuGet Package (NUPKG)",
+	TypeOCIImageLayoutTar:                               "OCI Image Layout (TAR)",
+	TypeOldASCII:                                        "Old ASCII",
+	TypeOpenDocumentPresentationODP:                     "OpenDocument Presentation (ODP)",
+	TypeOpenDocumentSpreadsheetODS:                      "OpenDocument Spreadsheet (ODS)",
+	TypeOpenDocumentTextODT:                             "OpenDocument Text (ODT)",
+	TypeOpenRasterImageORA:                              "OpenRaster Image (ORA)",
 	TypeOpusAudio:                                       "Opus Audio",
-	TypeVorbisAudio:                                     "Vorbis Audio",
-	TypeSpeexAudio:                                      "Speex Audio",
-	TypeTheoraVideo:                                     "Theora Video",
-	TypeFLACAudio:                                       "FLAC Audio",
-	TypePBMASCII:                                        "PBM ASCII",
-	TypePGMASCII:                                        "PGM ASCII",
-	TypePPMASCII:                                        "PPM ASCII",
-	TypePBMBinary:                                       "PBM binary",
-	TypePGMBinary:                                       "PGM binary",
-	TypePPMBinary:                                       "PPM binary",
 	TypePAM:                                             "PAM",
-	TypeTS:                                              "TS",
-	TypeM2TS:                                            "M2TS",
-	TypeWindowsIcon:                                     "Windows Icon",
-	TypeWindowsCursor:                                   "Windows Cursor",
-	TypeELF:                                             "ELF",
-	TypeELF32:                                           "ELF32",
-	TypeELF64:                                           "ELF64",
-	TypeELF32LittleEndian:                               "ELF32 Little-Endian",
-	TypeELF32BigEndian:                                  "ELF32 Big-Endian",
-	TypeELF64LittleEndian:                               "ELF64 Little-Endian",
-	TypeELF64BigEndian:                                  "ELF64 Big-Endian",
-	TypePE32X86:                                         "PE32 x86",
-	TypePE32X8664:                                       "PE32 x86-64",
+	TypePanasonicRAWRW2:                                 "Panasonic RAW (RW2)",
+	TypePBMASCII:                                        "PBM ASCII",
+	TypePBMBinary:                                       "PBM binary",
 	TypePE32ARM:                                         "PE32 ARM",
-	TypePE32ARMv7:                                       "PE32 ARMv7",
 	TypePE32ARM64:                                       "PE32 ARM64",
+	TypePE32ARMv7:                                       "PE32 ARMv7",
 	TypePE32Itanium:                                     "PE32 Itanium",
-	TypePE32Unknown:                                     "PE32 Unknown",
-	TypePE32PlusX8664:                                   "PE32+ x86-64",
 	TypePE32PlusARM64:                                   "PE32+ ARM64",
 	TypePE32PlusUnknown:                                 "PE32+ Unknown",
-	TypeMicrosoftWordDocumentDOC:                        "Microsoft Word Document (DOC)",
-	TypeMicrosoftExcelWorkbookXLS:                       "Microsoft Excel Workbook (XLS)",
-	TypeMicrosoftPowerPointPresentationPPT:              "Microsoft PowerPoint Presentation (PPT)",
-	TypeAndroidAppBundleAAB:                             "Android App Bundle (AAB)",
+	TypePE32PlusX8664:                                   "PE32+ x86-64",
+	TypePE32Unknown:                                     "PE32 Unknown",
+	TypePE32X86:                                         "PE32 x86",
+	TypePE32X8664:                                       "PE32 x86-64",
+	TypePentaxRAWPEF:                                    "Pentax RAW (PEF)",
+	TypePGMASCII:                                        "PGM ASCII",
+	TypePGMBinary:                                       "PGM binary",
+	TypePPMASCII:                                        "PPM ASCII",
+	TypePPMBinary:                                       "PPM binary",
+	TypePSB:                                             "PSB",
+	TypePSD:                                             "PSD",
+	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
+	TypePythonWheelWHL:                                  "Python Wheel (WHL)",
+	TypeQCOW2:                                           "QCOW2",
+	TypeQuickTimeMovie:                                  "QuickTime Movie",
+	TypeRAR4:                                            "RAR4",
+	TypeRAR5:                                            "RAR5",
+	TypeSketchDocument:                                  "Sketch Document",
+	TypeSocket:                                          "Socket",
+	TypeSonyRAWARW:                                      "Sony RAW (ARW)",
+	TypeSonyRAWSR2:                                      "Sony RAW (SR2)",
+	TypeSpanned:                                         "Spanned",
+	TypeSpecial:                                         "Special",
+	TypeSpeexAudio:                                      "Speex Audio",
+	TypeStreamVersion7:                                  "Stream Version 7",
+	TypeStreamVersion8:                                  "Stream Version 8",
+	TypeSymbolicLink:                                    "Symbolic Link",
+	TypeTheoraVideo:                                     "Theora Video",
+	TypeTS:                                              "TS",
+	TypeUncompressed:                                    "Uncompressed",
+	TypeUTF8Text:                                        "UTF-8 Text",
 	TypeVisualStudioExtensionVSIX:                       "Visual Studio Extension (VSIX)",
-	TypeKMZArchive:                                      "KMZ Archive",
-	TypeFirefoxExtensionXPI:                             "Firefox Extension (XPI)",
+	TypeVMDK:                                            "VMDK",
+	TypeVorbisAudio:                                     "Vorbis Audio",
+	TypeWAVAudio:                                        "WAV Audio",
+	TypeWebM:                                            "WebM",
+	TypeWebPImage:                                       "WebP Image",
+	TypeWindowsCursor:                                   "Windows Cursor",
+	TypeWindowsIcon:                                     "Windows Icon",
+	TypeWindowsMetafileWMF:                              "Windows Metafile (WMF)",
+	TypeWrapper:                                         "Wrapper",
+	TypeZlibCompressed:                                  "Zlib Compressed",
 }
 
 func (k KindID) String() string {

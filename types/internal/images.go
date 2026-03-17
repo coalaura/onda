@@ -71,4 +71,5 @@ func init() {
 	types.RegisterSignature(types.KindOlympusRAWImage, types.TypeNone, 0, []byte{'I', 'I', 'R', 'O', 0x08, 0x00})
 	types.RegisterSignature(types.KindOlympusRAWImage, types.TypeNone, 0, []byte{'M', 'M', 'O', 'R', 0x00, 0x00})
 	types.RegisterSignature(types.KindFujifilmRAWImage, types.TypeNone, 0, []byte("FUJIFILMCCD-RAW "))
+	types.RegisterSignature(types.KindFLIFImage, types.TypeNone, 0, []byte("FLIF"))
 }

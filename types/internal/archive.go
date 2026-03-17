@@ -62,4 +62,6 @@ func init() {
 	})
 
 	types.RegisterSignature(types.KindRubyGemPackage, types.TypeNone, 0, []byte("RubyGems"))
+	types.RegisterSignature(types.KindStuffItArchive, types.TypeNone, 0, []byte("SIT!"))
+	types.RegisterSignature(types.KindStuffItArchive, types.TypeNone, 0, []byte("SITD"))
 }

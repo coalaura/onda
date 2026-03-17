@@ -28,4 +28,5 @@ func init() {
 	types.RegisterSignature(types.KindGRIBData, types.TypeNone, 0, []byte("GRIB"))
 	types.RegisterSignature(types.KindBAMData, types.TypeNone, 0, []byte{'B', 'A', 'M', 0x01})
 	types.RegisterSignature(types.KindCRAMData, types.TypeNone, 0, []byte("CRAM"))
+	types.RegisterSignature(types.KindCHMDocument, types.TypeNone, 0, []byte("ITSF"))
 }

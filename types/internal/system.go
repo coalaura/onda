@@ -69,4 +69,16 @@ func init() {
 	types.RegisterSignature(types.KindWindowsEventLog, types.TypeNone, 0, []byte("ElfFile\x00"))
 	types.RegisterSignature(types.KindAndroidBootImage, types.TypeNone, 0, []byte("ANDROID!"))
 	types.RegisterSignature(types.KindUBootImage, types.TypeNone, 0, []byte{0x27, 0x05, 0x19, 0x56})
+	types.RegisterSignature(types.KindXFSFilesystem, types.TypeNone, 0, []byte("XFSB"))
+
+	types.RegisterSignature(types.KindLuaBytecode, types.TypeNone, 0, []byte{
+		0x1b, 'L', 'u', 'a',
+	})
+
+	types.RegisterSignature(types.KindGitPack, types.TypeNone, 0, []byte("PACK"))
+	types.RegisterSignature(types.KindGitIndex, types.TypeNone, 0, []byte("DIRC"))
+	types.RegisterSignature(types.KindBlenderFile, types.TypeNone, 0, []byte("BLENDER"))
+	types.RegisterSignature(types.KindAppleDouble, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x07})
+	types.RegisterSignature(types.KindAppleSingle, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x00})
+	types.RegisterSignature(types.KindMacBinary, types.TypeNone, 102, []byte("mBIN"))
 }

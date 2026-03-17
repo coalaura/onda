@@ -28,4 +28,11 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectMetafile))
 	types.Register(types.DetectFunc(custom.DetectMP3))
 	types.Register(types.DetectFunc(custom.DetectNetpbm))
+	types.Register(types.DetectFunc(custom.DetectZlib))
+	types.Register(types.DetectFunc(custom.DetectLZMA))
+	types.Register(types.DetectFunc(custom.DetectExt))
+	types.Register(types.DetectFunc(custom.DetectBtrfs))
+	types.Register(types.DetectFunc(custom.DetectPYC))
+	types.Register(types.DetectFunc(custom.DetectDjVu))
+	types.Register(types.DetectFunc(custom.DetectPCX))
 }
