@@ -49,6 +49,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-${{ matrix.goos }}-${{ matrix.goarch }}-
 
+      - name: Generate
+        run: go generate ./...
+
       - name: Build
         shell: bash
         env:
@@ -65,8 +68,6 @@ jobs:
           fi
 
           OUT="build/onda_${{ github.ref_name }}_${GOOS}_${GOARCH}${EXT}"
-
-          go generate ./...
 
           go build \
             -trimpath \
