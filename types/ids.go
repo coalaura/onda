@@ -7,17 +7,21 @@ const (
 	KindUnknown KindID = iota
 	Kind7ZipArchive
 	KindAACAudio
+	KindAdobeInDesignDocument
 	KindAMRAudio
 	KindAMRWBAudio
+	KindAndroidART
 	KindAndroidBootImage
 	KindAndroidOAT
 	KindAndroidODEX
 	KindAndroidSparseImage
+	KindAndroidVDEX
 	KindApacheArrowFile
 	KindApacheParquet
 	KindAPFSFilesystem
 	KindAppImage
 	KindAppleBinaryPropertyList
+	KindAppleDesktopServicesStore
 	KindAppleDouble
 	KindAppleiWorkDocument
 	KindAppleSingle
@@ -25,6 +29,7 @@ const (
 	KindASFContainer
 	KindASTCTexture
 	KindAUAudio
+	KindAutoCADDrawing
 	KindAvroObjectContainer
 	KindBAMData
 	KindBinkVideo
@@ -41,6 +46,7 @@ const (
 	KindCineonImage
 	KindCPIOArchive
 	KindCRAMData
+	KindCramFS
 	KindCRXBrowserExtension
 	KindDalvikExecutable
 	KindDDSImage
@@ -53,6 +59,7 @@ const (
 	KindDTSAudio
 	KindEBMLContainer
 	KindEOTFont
+	KindESRIShapefile
 	KindExecutableAndLinkableFormat
 	KindExFATFilesystem
 	KindExtFilesystem
@@ -67,6 +74,7 @@ const (
 	KindFujifilmRAWImage
 	KindGameBoyAdvanceROM
 	KindGameBoyROM
+	KindGameCubeROM
 	KindGIFImage
 	KindGIMPXCFImage
 	KindGitIndex
@@ -110,7 +118,10 @@ const (
 	KindMacBinary
 	KindMachOBinary
 	KindMachOUniversalBinary
+	KindMayaASCII
+	KindMayaBinary
 	KindMetafileImage
+	KindMicrosoftAccessDatabase
 	KindMicrosoftOutlookEmailFolder
 	KindMIDISequence
 	KindMNGImage
@@ -161,16 +172,20 @@ const (
 	KindRadianceHDRImage
 	KindRARArchive
 	KindRealMedia
+	KindRedisDatabase
 	KindRichTextFormatDocument
 	KindRIFFContainer
 	KindRKAudio
+	KindROMFS
 	KindRPMPackage
 	KindRubyGemPackage
 	KindScreamTrackerModule
+	KindSegaMegaDriveROM
 	KindSGIImage
 	KindShebangScript
 	KindShockwaveFlash
 	KindSketchDocument
+	KindSketchUpModel
 	KindSmackerVideo
 	KindSnappyFramedData
 	KindSQLiteDatabase
@@ -178,10 +193,12 @@ const (
 	KindStuffItArchive
 	KindSunRasterImage
 	KindSVGImage
+	KindSymbianInstallationFormat
 	KindTAKAudio
 	KindTARArchive
 	KindTextFile
 	KindTIFFImage
+	KindTimezoneData
 	KindTorrentFile
 	KindTrueTypeCollection
 	KindTrueTypeFont
@@ -200,6 +217,8 @@ const (
 	KindWavPackAudio
 	KindWebAssemblyModule
 	KindWebVTT
+	KindWiiBackupFileSystem
+	KindWiiROM
 	KindWindowsEventLog
 	KindWindowsImagingFormat
 	KindWindowsRegistryHive
@@ -208,6 +227,7 @@ const (
 	KindWOFFFont
 	KindWTVVideo
 	KindXARArchive
+	KindXboxISO
 	KindXFSFilesystem
 	KindXMLDocument
 	KindXPMImage
@@ -217,6 +237,7 @@ const (
 	KindZPAQArchive
 	KindZstandardArchive
 	KindZstandardDictionary
+	KindZXTape
 )
 
 const (
@@ -257,6 +278,7 @@ const (
 	TypeCodestream
 	TypeCondaPackage
 	TypeContainer
+	TypeCorelDRAWDocumentCDR
 	TypeCRXVersion2
 	TypeCRXVersion3
 	TypeDEX035
@@ -310,6 +332,7 @@ const (
 	TypeMicrosoftExcelTemplateXLTX
 	TypeMicrosoftExcelWorkbookXLS
 	TypeMicrosoftInstallerMSI
+	TypeMicrosoftOutlookMessageMSG
 	TypeMicrosoftPowerPointAddInPPAM
 	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM
 	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM
@@ -407,17 +430,21 @@ var kindNames = [...]string{
 	KindUnknown:                     "Unknown",
 	Kind7ZipArchive:                 "7-Zip Archive",
 	KindAACAudio:                    "AAC Audio",
+	KindAdobeInDesignDocument:       "Adobe InDesign Document",
 	KindAMRAudio:                    "AMR Audio",
 	KindAMRWBAudio:                  "AMR-WB Audio",
+	KindAndroidART:                  "Android ART",
 	KindAndroidBootImage:            "Android Boot Image",
 	KindAndroidOAT:                  "Android OAT",
 	KindAndroidODEX:                 "Android ODEX",
 	KindAndroidSparseImage:          "Android Sparse Image",
+	KindAndroidVDEX:                 "Android VDEX",
 	KindApacheArrowFile:             "Apache Arrow File",
 	KindApacheParquet:               "Apache Parquet",
 	KindAPFSFilesystem:              "APFS Filesystem",
 	KindAppImage:                    "AppImage",
 	KindAppleBinaryPropertyList:     "Apple Binary Property List",
+	KindAppleDesktopServicesStore:   "Apple Desktop Services Store",
 	KindAppleDouble:                 "AppleDouble File",
 	KindAppleiWorkDocument:          "Apple iWork Document",
 	KindAppleSingle:                 "AppleSingle File",
@@ -425,6 +452,7 @@ var kindNames = [...]string{
 	KindASFContainer:                "ASF Container",
 	KindASTCTexture:                 "ASTC Texture",
 	KindAUAudio:                     "AU Audio",
+	KindAutoCADDrawing:              "AutoCAD Drawing",
 	KindAvroObjectContainer:         "Avro Object Container",
 	KindBAMData:                     "BAM Data",
 	KindBinkVideo:                   "Bink Video",
@@ -441,6 +469,7 @@ var kindNames = [...]string{
 	KindCineonImage:                 "Cineon Image",
 	KindCPIOArchive:                 "CPIO Archive",
 	KindCRAMData:                    "CRAM Data",
+	KindCramFS:                      "CramFS",
 	KindCRXBrowserExtension:         "CRX Browser Extension",
 	KindDalvikExecutable:            "Dalvik Executable",
 	KindDDSImage:                    "DDS Image",
@@ -453,6 +482,7 @@ var kindNames = [...]string{
 	KindDTSAudio:                    "DTS Audio",
 	KindEBMLContainer:               "EBML Container",
 	KindEOTFont:                     "EOT Font",
+	KindESRIShapefile:               "ESRI Shapefile",
 	KindExecutableAndLinkableFormat: "Executable and Linkable Format",
 	KindExFATFilesystem:             "exFAT Filesystem",
 	KindExtFilesystem:               "ext Filesystem",
@@ -467,6 +497,7 @@ var kindNames = [...]string{
 	KindFujifilmRAWImage:            "Fujifilm RAW Image",
 	KindGameBoyAdvanceROM:           "Game Boy Advance ROM",
 	KindGameBoyROM:                  "Game Boy ROM",
+	KindGameCubeROM:                 "GameCube ROM",
 	KindGIFImage:                    "GIF Image",
 	KindGIMPXCFImage:                "GIMP XCF Image",
 	KindGitIndex:                    "Git Index",
@@ -510,7 +541,10 @@ var kindNames = [...]string{
 	KindMacBinary:                   "MacBinary",
 	KindMachOBinary:                 "Mach-O Binary",
 	KindMachOUniversalBinary:        "Mach-O Universal Binary",
+	KindMayaASCII:                   "Maya ASCII",
+	KindMayaBinary:                  "Maya Binary",
 	KindMetafileImage:               "Metafile Image",
+	KindMicrosoftAccessDatabase:     "Microsoft Access Database",
 	KindMicrosoftOutlookEmailFolder: "Microsoft Outlook Email Folder",
 	KindMIDISequence:                "MIDI Sequence",
 	KindMNGImage:                    "MNG Image",
@@ -561,16 +595,20 @@ var kindNames = [...]string{
 	KindRadianceHDRImage:            "Radiance HDR Image",
 	KindRARArchive:                  "RAR Archive",
 	KindRealMedia:                   "RealMedia",
+	KindRedisDatabase:               "Redis Database",
 	KindRichTextFormatDocument:      "Rich Text Format Document",
 	KindRIFFContainer:               "RIFF Container",
 	KindRKAudio:                     "RKAudio",
+	KindROMFS:                       "ROMFS",
 	KindRPMPackage:                  "RPM Package",
 	KindRubyGemPackage:              "RubyGem Package",
 	KindScreamTrackerModule:         "Scream Tracker Module",
+	KindSegaMegaDriveROM:            "Sega Mega Drive ROM",
 	KindSGIImage:                    "SGI Image",
 	KindShebangScript:               "Shebang Script",
 	KindShockwaveFlash:              "Shockwave Flash",
 	KindSketchDocument:              "Sketch Document",
+	KindSketchUpModel:               "SketchUp Model",
 	KindSmackerVideo:                "Smacker Video",
 	KindSnappyFramedData:            "Snappy Framed Data",
 	KindSQLiteDatabase:              "SQLite Database",
@@ -578,10 +616,12 @@ var kindNames = [...]string{
 	KindStuffItArchive:              "StuffIt Archive",
 	KindSunRasterImage:              "Sun Raster Image",
 	KindSVGImage:                    "SVG Image",
+	KindSymbianInstallationFormat:   "Symbian Installation Format",
 	KindTAKAudio:                    "TAK Audio",
 	KindTARArchive:                  "TAR Archive",
 	KindTextFile:                    "Text File",
 	KindTIFFImage:                   "TIFF Image",
+	KindTimezoneData:                "Timezone Data",
 	KindTorrentFile:                 "Torrent File",
 	KindTrueTypeCollection:          "TrueType Collection",
 	KindTrueTypeFont:                "TrueType Font",
@@ -600,6 +640,8 @@ var kindNames = [...]string{
 	KindWavPackAudio:                "WavPack Audio",
 	KindWebAssemblyModule:           "WebAssembly Module",
 	KindWebVTT:                      "WebVTT",
+	KindWiiBackupFileSystem:         "Wii Backup File System",
+	KindWiiROM:                      "Wii ROM",
 	KindWindowsEventLog:             "Windows Event Log",
 	KindWindowsImagingFormat:        "Windows Imaging Format",
 	KindWindowsRegistryHive:         "Windows Registry Hive",
@@ -608,6 +650,7 @@ var kindNames = [...]string{
 	KindWOFFFont:                    "WOFF Font",
 	KindWTVVideo:                    "WTV Video",
 	KindXARArchive:                  "XAR Archive",
+	KindXboxISO:                     "Xbox ISO",
 	KindXFSFilesystem:               "XFS Filesystem",
 	KindXMLDocument:                 "XML Document",
 	KindXPMImage:                    "XPM Image",
@@ -617,6 +660,7 @@ var kindNames = [...]string{
 	KindZPAQArchive:                 "ZPAQ Archive",
 	KindZstandardArchive:            "Zstandard Archive",
 	KindZstandardDictionary:         "Zstandard Dictionary",
+	KindZXTape:                      "ZX Spectrum Tape",
 }
 
 var typeNames = [...]string{
@@ -657,6 +701,7 @@ var typeNames = [...]string{
 	TypeCodestream:               "Codestream",
 	TypeCondaPackage:             "Conda Package",
 	TypeContainer:                "Container",
+	TypeCorelDRAWDocumentCDR:     "CorelDRAW Document (CDR)",
 	TypeCRXVersion2:              "Version 2",
 	TypeCRXVersion3:              "Version 3",
 	TypeDEX035:                   "DEX 035",
@@ -710,6 +755,7 @@ var typeNames = [...]string{
 	TypeMicrosoftExcelTemplateXLTX:                      "Microsoft Excel Template (XLTX)",
 	TypeMicrosoftExcelWorkbookXLS:                       "Microsoft Excel Workbook (XLS)",
 	TypeMicrosoftInstallerMSI:                           "Microsoft Installer (MSI)",
+	TypeMicrosoftOutlookMessageMSG:                      "Microsoft Outlook Message (MSG)",
 	TypeMicrosoftPowerPointAddInPPAM:                    "Microsoft PowerPoint Add-In (PPAM)",
 	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM: "Microsoft PowerPoint Macro-Enabled Presentation (PPTM)",
 	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM:    "Microsoft PowerPoint Macro-Enabled Slideshow (PPSM)",
