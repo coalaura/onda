@@ -34,6 +34,7 @@ func init() {
 	types.RegisterSignature(types.KindLLVMBitcode, types.TypeWrapper, 0, []byte{0xde, 0xc0, 0x17, 0x0b})
 	types.RegisterSignature(types.KindLuaBytecode, types.TypeNone, 0, []byte{0x1b, 'L', 'u', 'a'})
 	types.RegisterSignature(types.KindMacBinary, types.TypeNone, 102, []byte("mBIN"))
+	types.RegisterSignature(types.KindMacOSAlias, types.TypeNone, 0, []byte{0x62, 0x6f, 0x6f, 0x6b, 0x00, 0x00, 0x00, 0x00, 0x6d, 0x61, 0x72, 0x6b, 0x00, 0x00, 0x00, 0x00})
 	types.RegisterSignature(types.KindNESROM, types.TypeNone, 0, []byte{'N', 'E', 'S', 0x1a})
 	types.RegisterSignature(types.KindNintendo3DSROM, types.TypeNone, 0x100, []byte("NCSD"))
 	types.RegisterSignature(types.KindNintendo64ROM, types.TypeBigEndian, 0, []byte{0x80, 0x37, 0x12, 0x40})

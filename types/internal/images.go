@@ -45,6 +45,7 @@ func init() {
 	types.RegisterSignature(types.KindRadianceHDRImage, types.TypeNone, 0, []byte("#?RGBE"))
 	types.RegisterSignature(types.KindSGIImage, types.TypeNone, 0, []byte{0x01, 0xda})
 	types.RegisterSignature(types.KindSunRasterImage, types.TypeNone, 0, []byte{0x59, 0xa6, 0x6a, 0x95})
+	types.RegisterSignature(types.KindValveTextureFormat, types.TypeNone, 0, []byte("VTF\x00"))
 	types.RegisterSignature(types.KindXPMImage, types.TypeNone, 0, []byte("/* XPM */"))
 
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("AT&TFORM\x00\x00\x00\x00DJVI"), []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})

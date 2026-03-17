@@ -94,6 +94,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if b.Len() >= 4 && string(b[:4]) == "\x00asm" {
 						return &Metadata{Kind: KindWebAssemblyModule}
 					}
+				case 0xba:
+					if b.Len() >= 4 && string(b[:4]) == "\x00\xba\xb1\f" {
+						return &Metadata{Kind: KindZFSFilesystem}
+					}
 				}
 			}
 		case 0x01:
@@ -119,12 +123,26 @@ func detectOptimized(b Buffer) *Metadata {
 				return &Metadata{Kind: KindLZ4Frame}
 			}
 		case 0x06:
-			if b.Len() >= 16 && string(b[:16]) == "\x06\x06\xed\xf5\xd8\x1dF\xe5\xbd1\xef\xe7\xfet\xb7\x1d" {
-				return &Metadata{Kind: KindAdobeInDesignDocument}
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x06:
+					if b.Len() >= 16 && string(b[:16]) == "\x06\x06\xed\xf5\xd8\x1dF\xe5\xbd1\xef\xe7\xfet\xb7\x1d" {
+						return &Metadata{Kind: KindAdobeInDesignDocument}
+					}
+				case 0x0e:
+					if b.Len() >= 14 && string(b[:14]) == "\x06\x0e+4\x02\x05\x01\x01\r\x01\x02\x01\x01\x02" {
+						return &Metadata{Kind: KindMaterialExchangeFormat}
+					}
+				}
 			}
 		case 0x0a:
 			if b.Len() >= 4 && string(b[:4]) == "\n\r\r\n" {
 				return &Metadata{Kind: KindPCAPNGCapture}
+			}
+		case 0x0c:
+			if b.Len() >= 4 && string(b[:4]) == "\f\xb1\xba\x00" {
+				return &Metadata{Kind: KindZFSFilesystem}
 			}
 		case 0x13:
 			if b.Len() >= 4 && string(b[:4]) == "\x13\xab\xa1\\" {
@@ -219,6 +237,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x21:
 					if b.Len() >= 11 && string(b[:11]) == "%!PS-Adobe-" {
 						return &Metadata{Kind: KindPostScriptDocument}
+					}
+				case 0x46:
+					if b.Len() >= 5 && string(b[:5]) == "%FDF-" {
+						return &Metadata{Kind: KindAcrobatFormsDataFormat}
 					}
 				case 0x50:
 					if b.Len() >= 5 && string(b[:5]) == "%PDF-" {
@@ -1027,6 +1049,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() >= 4 && string(b[:4]) == "U3D\x00" {
 				return &Metadata{Kind: KindU3DModel}
 			}
+		case 0x56:
+			if b.Len() >= 4 && string(b[:4]) == "VTF\x00" {
+				return &Metadata{Kind: KindValveTextureFormat}
+			}
 		case 0x57:
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
@@ -1097,6 +1123,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
 				switch b[1] {
+				case 0x6f:
+					if b.Len() >= 16 && string(b[:16]) == "book\x00\x00\x00\x00mark\x00\x00\x00\x00" {
+						return &Metadata{Kind: KindMacOSAlias}
+					}
 				case 0x70:
 					if b.Len() >= 8 && string(b[:8]) == "bplist00" {
 						return &Metadata{Kind: KindAppleBinaryPropertyList}
@@ -1387,6 +1417,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() >= 2 && string(b[:2]) == "\xc7q" {
 				return &Metadata{Kind: KindCPIOArchive, Type: TypeBinaryLittleEndian}
 			}
+		case 0xcf:
+			if b.Len() >= 4 && string(b[:4]) == "ϭ\x12\xfe" {
+				return &Metadata{Kind: KindOutlookExpressDatabase}
+			}
 		case 0xd4:
 			if b.Len() >= 4 && string(b[:4]) == "\xd4ò\xa1" {
 				return &Metadata{Kind: KindPCAPCapture, Type: TypeLittleEndian}
@@ -1642,8 +1676,28 @@ func detectOptimized(b Buffer) *Metadata {
 		}
 	}
 
-	if b.Len() >= 32774 && string(b[32769:32774]) == "CD001" {
-		return &Metadata{Kind: KindISO9660Image}
+	if b.Len() > 32769 {
+		_ = b[32769] // BCE hint
+		switch b[32769] {
+		case 0x43:
+			if b.Len() >= 32774 && string(b[32769:32774]) == "CD001" {
+				return &Metadata{Kind: KindISO9660Image}
+			}
+		case 0x4e:
+			if b.Len() > 32773 {
+				_ = b[32773] // BCE hint
+				switch b[32773] {
+				case 0x32:
+					if b.Len() >= 32774 && string(b[32769:32774]) == "NSR02" {
+						return &Metadata{Kind: KindUniversalDiskFormat}
+					}
+				case 0x33:
+					if b.Len() >= 32774 && string(b[32769:32774]) == "NSR03" {
+						return &Metadata{Kind: KindUniversalDiskFormat}
+					}
+				}
+			}
+		}
 	}
 
 	if b.Len() >= 65608 && string(b[65600:65608]) == "_BHRfS_M" {

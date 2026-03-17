@@ -9,23 +9,23 @@ func DetectPE(b types.Buffer) *types.Metadata {
 
 	peOff, ok := b.U32LE(0x3c)
 	if !ok {
-		return nil
+		return &types.Metadata{Kind: types.KindDOSExecutable}
 	}
 
 	off := int(peOff)
 
 	if !b.Has(off, []byte{'P', 'E', 0, 0}) {
-		return nil
+		return &types.Metadata{Kind: types.KindDOSExecutable}
 	}
 
 	machine, ok := b.U16LE(off + 4)
 	if !ok {
-		return nil
+		return &types.Metadata{Kind: types.KindDOSExecutable}
 	}
 
 	magic, ok := b.U16LE(off + 24)
 	if !ok {
-		return nil
+		return &types.Metadata{Kind: types.KindDOSExecutable}
 	}
 
 	var typ types.TypeID
@@ -36,7 +36,7 @@ func DetectPE(b types.Buffer) *types.Metadata {
 	case 0x20b:
 		typ = pe32PlusMachineType(machine)
 	default:
-		return nil
+		return &types.Metadata{Kind: types.KindDOSExecutable}
 	}
 
 	return &types.Metadata{

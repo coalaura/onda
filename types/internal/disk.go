@@ -17,8 +17,12 @@ func init() {
 	types.RegisterSignature(types.KindNTFSFilesystem, types.TypeNone, 3, []byte("NTFS    "))
 	types.RegisterSignature(types.KindQCOWDiskImage, types.TypeQCOW2, 0, []byte("QFI\xfb"))
 	types.RegisterSignature(types.KindROMFS, types.TypeNone, 0, []byte("-rom1fs-"))
+	types.RegisterSignature(types.KindUniversalDiskFormat, types.TypeNone, 32769, []byte("NSR02"))
+	types.RegisterSignature(types.KindUniversalDiskFormat, types.TypeNone, 32769, []byte("NSR03"))
 	types.RegisterSignature(types.KindVHDDiskImage, types.TypeNone, 0, []byte("cxsparse"))
 	types.RegisterSignature(types.KindVHDXDiskImage, types.TypeNone, 0, []byte("vhdxfile"))
 	types.RegisterSignature(types.KindVirtualBoxDiskImage, types.TypeNone, 0x40, []byte("<<< Oracle VM VirtualBox Disk Image >>>\n"))
 	types.RegisterSignature(types.KindVMwareDiskImage, types.TypeVMDK, 0, []byte("KDMV"))
+	types.RegisterSignature(types.KindZFSFilesystem, types.TypeNone, 0, []byte{0x00, 0xba, 0xb1, 0x0c})
+	types.RegisterSignature(types.KindZFSFilesystem, types.TypeNone, 0, []byte{0x0c, 0xb1, 0xba, 0x00})
 }

@@ -8,6 +8,7 @@ const (
 	Kind7ZipArchive
 	KindAACAudio
 	KindACEArchive
+	KindAcrobatFormsDataFormat
 	KindAdobeInDesignDocument
 	KindALZArchive
 	KindAMRAudio
@@ -56,6 +57,7 @@ const (
 	KindDebianPackage
 	KindDICOMMedicalImage
 	KindDjVuDocument
+	KindDOSExecutable
 	KindDPXImage
 	KindDSDIFFAudio
 	KindDSFAudio
@@ -121,6 +123,8 @@ const (
 	KindMacBinary
 	KindMachOBinary
 	KindMachOUniversalBinary
+	KindMacOSAlias
+	KindMaterialExchangeFormat
 	KindMayaASCII
 	KindMayaBinary
 	KindMetafileImage
@@ -153,6 +157,7 @@ const (
 	KindOpenTypeFont
 	KindOptimFROGAudio
 	KindORCColumnarData
+	KindOutlookExpressDatabase
 	KindPCAPCapture
 	KindPCAPNGCapture
 	KindPCXImage
@@ -209,7 +214,9 @@ const (
 	KindTTAAudio
 	KindU3DModel
 	KindUBootImage
+	KindUniversalDiskFormat
 	KindUnixCompressArchive
+	KindValveTextureFormat
 	KindVCard
 	KindVHDDiskImage
 	KindVHDXDiskImage
@@ -236,6 +243,7 @@ const (
 	KindXMLDocument
 	KindXPMImage
 	KindXZArchive
+	KindZFSFilesystem
 	KindZIPArchive
 	KindZlibData
 	KindZOOArchive
@@ -438,6 +446,7 @@ var kindNames = [...]string{
 	Kind7ZipArchive:                 "7-Zip Archive",
 	KindAACAudio:                    "AAC Audio",
 	KindACEArchive:                  "ACE Archive",
+	KindAcrobatFormsDataFormat:      "Acrobat Forms Data Format",
 	KindAdobeInDesignDocument:       "Adobe InDesign Document",
 	KindALZArchive:                  "ALZ Archive",
 	KindAMRAudio:                    "AMR Audio",
@@ -486,6 +495,7 @@ var kindNames = [...]string{
 	KindDebianPackage:               "Debian Package",
 	KindDICOMMedicalImage:           "DICOM Medical Image",
 	KindDjVuDocument:                "DjVu Document",
+	KindDOSExecutable:               "DOS Executable",
 	KindDPXImage:                    "DPX Image",
 	KindDSDIFFAudio:                 "DSDIFF Audio",
 	KindDSFAudio:                    "DSF Audio",
@@ -551,6 +561,8 @@ var kindNames = [...]string{
 	KindMacBinary:                   "MacBinary",
 	KindMachOBinary:                 "Mach-O Binary",
 	KindMachOUniversalBinary:        "Mach-O Universal Binary",
+	KindMacOSAlias:                  "macOS Alias",
+	KindMaterialExchangeFormat:      "Material Exchange Format",
 	KindMayaASCII:                   "Maya ASCII",
 	KindMayaBinary:                  "Maya Binary",
 	KindMetafileImage:               "Metafile Image",
@@ -583,6 +595,7 @@ var kindNames = [...]string{
 	KindOpenTypeFont:                "OpenType Font",
 	KindOptimFROGAudio:              "OptimFROG Audio",
 	KindORCColumnarData:             "ORC Columnar Data",
+	KindOutlookExpressDatabase:      "Outlook Express Database",
 	KindPCAPCapture:                 "PCAP Capture",
 	KindPCAPNGCapture:               "PCAPNG Capture",
 	KindPCXImage:                    "PCX Image",
@@ -639,7 +652,9 @@ var kindNames = [...]string{
 	KindTTAAudio:                    "TTA Audio",
 	KindU3DModel:                    "U3D Model",
 	KindUBootImage:                  "U-Boot Image",
+	KindUniversalDiskFormat:         "Universal Disk Format",
 	KindUnixCompressArchive:         "Unix Compress Archive",
+	KindValveTextureFormat:          "Valve Texture Format",
 	KindVCard:                       "vCard",
 	KindVHDDiskImage:                "VHD Disk Image",
 	KindVHDXDiskImage:               "VHDX Disk Image",
@@ -666,6 +681,7 @@ var kindNames = [...]string{
 	KindXMLDocument:                 "XML Document",
 	KindXPMImage:                    "XPM Image",
 	KindXZArchive:                   "XZ Archive",
+	KindZFSFilesystem:               "ZFS Filesystem",
 	KindZIPArchive:                  "ZIP Archive",
 	KindZlibData:                    "Zlib Data",
 	KindZOOArchive:                  "ZOO Archive",

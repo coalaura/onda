@@ -5,6 +5,7 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
+	types.RegisterSignature(types.KindAcrobatFormsDataFormat, types.TypeNone, 0, []byte("%FDF-"))
 	types.RegisterSignature(types.KindAdobeInDesignDocument, types.TypeNone, 0, []byte{0x06, 0x06, 0xed, 0xf5, 0xd8, 0x1d, 0x46, 0xe5, 0xbd, 0x31, 0xef, 0xe7, 0xfe, 0x74, 0xb7, 0x1d})
 	types.RegisterSignature(types.KindApacheArrowFile, types.TypeNone, 0, []byte("ARROW1"))
 	types.RegisterSignature(types.KindApacheParquet, types.TypeNone, 0, []byte("PAR1"))
@@ -32,6 +33,7 @@ func init() {
 	types.RegisterSignature(types.KindNetCDFData, types.TypeNone, 0, []byte{'C', 'D', 'F', 0x01})
 	types.RegisterSignature(types.KindNetCDFData, types.TypeNone, 0, []byte{'C', 'D', 'F', 0x02})
 	types.RegisterSignature(types.KindORCColumnarData, types.TypeNone, 0, []byte("ORC"))
+	types.RegisterSignature(types.KindOutlookExpressDatabase, types.TypeNone, 0, []byte{0xcf, 0xad, 0x12, 0xfe})
 	types.RegisterSignature(types.KindPDFDocument, types.TypeNone, 0, []byte("%PDF-"))
 	types.RegisterSignature(types.KindPGPMessage, types.TypeNone, 0, []byte("-----BEGIN PGP"))
 	types.RegisterSignature(types.KindPLYModel, types.TypeNone, 0, []byte("ply\n"))
