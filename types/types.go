@@ -1,3 +1,5 @@
+//go:generate go run ../gen/sorter
+
 package types
 
 import (
