@@ -41,6 +41,7 @@ const (
 	KindDebianPackage
 	KindDICOMMedicalImage
 	KindDjVuDocument
+	KindDSDIFFAudio
 	KindDSFAudio
 	KindDTSAudio
 	KindEBMLContainer
@@ -379,6 +380,7 @@ var kindNames = [...]string{
 	KindDebianPackage:               "Debian Package",
 	KindDICOMMedicalImage:           "DICOM Medical Image",
 	KindDjVuDocument:                "DjVu Document",
+	KindDSDIFFAudio:                 "DSDIFF Audio",
 	KindDSFAudio:                    "DSF Audio",
 	KindDTSAudio:                    "DTS Audio",
 	KindEBMLContainer:               "EBML Container",

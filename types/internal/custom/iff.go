@@ -7,6 +7,12 @@ func DetectIFF(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
+	if b.Has(8, []byte("FRM8")) {
+		return &types.Metadata{
+			Kind: types.KindDSDIFFAudio,
+		}
+	}
+
 	if b.Has(8, []byte("AIFF")) {
 		return &types.Metadata{
 			Kind: types.KindIFFContainer,
