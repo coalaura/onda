@@ -10,19 +10,48 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 )
 
 func main() {
 	log.Println("Sorting ids.go...")
-	sortIDs("./ids.go")
+	count := sortIDs("./ids.go")
 
 	log.Println("Sorting format registrations...")
 	sortRegistrations("./internal")
+
+	log.Println("Updating README.md...")
+	updateReadme(count)
 }
 
-func sortIDs(path string) {
+func updateReadme(count int) {
+	path := "../README.md"
+
+	content, err := os.ReadFile(path)
+	if err != nil {
+		log.Printf("failed to read README.md: %v", err)
+		return
+	}
+
+	rounded := (count / 10) * 10
+
+	re := regexp.MustCompile(`over \*\*\d+\+ file formats\*\*`)
+	newText := fmt.Sprintf("over **%d+ file formats**", rounded)
+
+	updated := re.ReplaceAll(content, []byte(newText))
+
+	if !bytes.Equal(content, updated) {
+		if err := os.WriteFile(path, updated, 0644); err != nil {
+			log.Printf("failed to write README.md: %v", err)
+		} else {
+			log.Printf("Updated README.md format count to %d+", rounded)
+		}
+	}
+}
+
+func sortIDs(path string) int {
 	fset := token.NewFileSet()
 
 	node, err := parser.ParseFile(fset, path, nil, parser.ParseComments)
@@ -196,6 +225,40 @@ func (t TypeID) String() string {
 	if err := os.WriteFile(path, formatted, 0644); err != nil {
 		log.Fatalf("write error for ids.go: %v", err)
 	}
+
+	ignoredTypes := map[string]bool{
+		"TypeNone":                   true,
+		"TypeEmpty":                  true,
+		"TypeContainer":              true,
+		"TypeWrapper":                true,
+		"TypeSpanned":                true,
+		"TypeLittleEndian":           true,
+		"TypeBigEndian":              true,
+		"Type32BitBigEndian":         true,
+		"Type32BitLittleEndian":      true,
+		"Type64Bit":                  true,
+		"Type64BitBigEndian":         true,
+		"Type64BitLittleEndian":      true,
+		"TypeBinaryBigEndian":        true,
+		"TypeBinaryLittleEndian":     true,
+		"TypeNanosecondBigEndian":    true,
+		"TypeNanosecondLittleEndian": true,
+		"TypeByteSwapped":            true,
+		"TypeCodestream":             true,
+		"TypeStreamVersion7":         true,
+		"TypeStreamVersion8":         true,
+	}
+
+	var validTypes int
+
+	for _, t := range typesList {
+		if !ignoredTypes[t] {
+			validTypes++
+		}
+	}
+
+	// len(kinds) includes KindUnknown, so we subtract 1
+	return (len(kinds) - 1) + validTypes
 }
 
 func sortRegistrations(dir string) {
