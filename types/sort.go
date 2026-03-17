@@ -18,7 +18,7 @@ import (
 func main() {
 	fset := token.NewFileSet()
 
-	node, err := parser.ParseFile(fset, "./types/ids.go", nil, parser.ParseComments)
+	node, err := parser.ParseFile(fset, "ids.go", nil, parser.ParseComments)
 	if err != nil {
 		log.Fatalf("failed to parse ids.go: %v", err)
 	}
@@ -192,7 +192,7 @@ func (t TypeID) String() string {
 	}
 
 	// Overwrite ids.go
-	if err := os.WriteFile("./types/ids.go", formatted, 0644); err != nil {
+	if err := os.WriteFile("ids.go", formatted, 0644); err != nil {
 		log.Fatalf("write error: %v", err)
 	}
 }
