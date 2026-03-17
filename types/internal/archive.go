@@ -1,3 +1,5 @@
+//go:build ignore
+
 package internal
 
 import "github.com/coalaura/onda/types"
