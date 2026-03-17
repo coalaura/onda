@@ -19,10 +19,6 @@ func init() {
 		'R', 'a', 'r', '!', 0x1a, 0x07, 0x01, 0x00,
 	})
 
-	types.RegisterSignature(types.KindGzipArchive, types.TypeNone, 0, []byte{
-		0x1f, 0x8b,
-	})
-
 	types.RegisterSignature(types.KindBzip2Archive, types.TypeNone, 0, []byte("BZh"))
 
 	types.RegisterSignature(types.KindXZArchive, types.TypeNone, 0, []byte{

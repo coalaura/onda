@@ -11,5 +11,5 @@ func DetectGzipData(b types.Buffer) *types.Metadata {
 		return &types.Metadata{Kind: types.KindGzipData, Type: types.TypeBGZF}
 	}
 
-	return nil
+	return &types.Metadata{Kind: types.KindGzipArchive}
 }

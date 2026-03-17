@@ -48,6 +48,16 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 	}
 
 	if b.Has(0, []byte{0xca, 0xfe, 0xba, 0xbe}) {
+		// java classes start the same way
+		if b.Len() >= 8 {
+			major, ok := b.U16BE(4)
+			if ok && major >= 0x2c && major <= 0x3d {
+				return &types.Metadata{
+					Kind: types.KindJavaClass,
+				}
+			}
+		}
+
 		nfatArch, ok := b.U32BE(4)
 		if !ok {
 			return nil

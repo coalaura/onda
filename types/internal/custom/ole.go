@@ -32,17 +32,13 @@ func DetectOLE(b types.Buffer) *types.Metadata {
 }
 
 func hasBytes(b types.Buffer, needle []byte) bool {
-	if len(needle) == 0 {
+	if len(needle) == 0 || len(needle) > b.Len() {
 		return false
 	}
 
-	if len(needle) > b.Len() {
-		return false
-	}
+	limit := min(b.Len(), 4096) - len(needle)
 
-	limit := b.Len() - len(needle)
-
-	for i := 0; i <= limit; i++ {
+	for i := 0; i <= limit; i += 8 {
 		if b.Has(i, needle) {
 			return true
 		}

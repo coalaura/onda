@@ -47,26 +47,35 @@ func RegisterMaskedSignature(kind KindID, typ TypeID, offset int, magic []byte, 
 func Detect(name string, data []byte) (*Metadata, error) {
 	buf := Buffer(data)
 
-	for i := len(detectors) - 1; i >= 0; i-- {
-		meta := detectors[i].Detect(buf)
-		if meta == nil {
-			continue
+	// signatures (fast)
+	for _, d := range detectors {
+		if sig, ok := d.(Signature); ok {
+			if meta := sig.Detect(buf); meta != nil {
+				meta.File = name
+
+				return meta, nil
+			}
 		}
-
-		meta.File = name
-
-		return meta, nil
 	}
 
-	for i := len(fallbackDetectors) - 1; i >= 0; i-- {
-		meta := fallbackDetectors[i].Detect(buf)
-		if meta == nil {
-			continue
+	// custom detectors (slower)
+	for _, d := range detectors {
+		if _, ok := d.(Signature); !ok {
+			if meta := d.Detect(buf); meta != nil {
+				meta.File = name
+
+				return meta, nil
+			}
 		}
+	}
 
-		meta.File = name
+	// fallback last
+	for _, d := range fallbackDetectors {
+		if meta := d.Detect(buf); meta != nil {
+			meta.File = name
 
-		return meta, nil
+			return meta, nil
+		}
 	}
 
 	return nil, ErrUnknownFormat
