@@ -15,6 +15,7 @@ const (
 	KindAndroidSparseImage
 	KindApacheArrowFile
 	KindApacheParquet
+	KindAPFSFilesystem
 	KindAppImage
 	KindAppleBinaryPropertyList
 	KindAppleDouble
@@ -22,9 +23,11 @@ const (
 	KindAppleSingle
 	KindARArchive
 	KindASFContainer
+	KindASTCTexture
 	KindAUAudio
 	KindAvroObjectContainer
 	KindBAMData
+	KindBinkVideo
 	KindBlenderFile
 	KindBMPImage
 	KindBPGImage
@@ -33,7 +36,9 @@ const (
 	KindCabinetArchive
 	KindCAFAudio
 	KindCanonRAWImage
+	KindCBORData
 	KindCHMDocument
+	KindCineonImage
 	KindCPIOArchive
 	KindCRAMData
 	KindCRXBrowserExtension
@@ -42,12 +47,14 @@ const (
 	KindDebianPackage
 	KindDICOMMedicalImage
 	KindDjVuDocument
+	KindDPXImage
 	KindDSDIFFAudio
 	KindDSFAudio
 	KindDTSAudio
 	KindEBMLContainer
 	KindEOTFont
 	KindExecutableAndLinkableFormat
+	KindExFATFilesystem
 	KindExtFilesystem
 	KindFarbfeldImage
 	KindFastTrackerModule
@@ -66,6 +73,7 @@ const (
 	KindGzipArchive
 	KindGzipData
 	KindHDF5Data
+	KindHFSPlusFilesystem
 	KindICalendar
 	KindICCProfile
 	KindICNSIcon
@@ -88,7 +96,9 @@ const (
 	KindLHAArchive
 	KindLLVMBitcode
 	KindLuaBytecode
+	KindLUKSDiskEncryption
 	KindLZ4Frame
+	KindLZFSEData
 	KindLZIPArchive
 	KindLZMAData
 	KindLZOPArchive
@@ -110,11 +120,13 @@ const (
 	KindNESROM
 	KindNetCDFData
 	KindNetpbmImage
+	KindNTFSFilesystem
 	KindOggContainer
 	KindOLECompoundDocument
 	KindOlympusRAWImage
 	KindOpenEXRImage
 	KindOpenTypeFont
+	KindOptimFROGAudio
 	KindORCColumnarData
 	KindPCAPCapture
 	KindPCAPNGCapture
@@ -128,6 +140,7 @@ const (
 	KindPNGImage
 	KindPortableExecutable
 	KindPostScriptDocument
+	KindPVRTexture
 	KindPythonBytecode
 	KindQCOWDiskImage
 	KindQOIImage
@@ -136,12 +149,14 @@ const (
 	KindRealMedia
 	KindRichTextFormatDocument
 	KindRIFFContainer
+	KindRKAudio
 	KindRPMPackage
 	KindRubyGemPackage
 	KindScreamTrackerModule
 	KindShebangScript
 	KindShockwaveFlash
 	KindSketchDocument
+	KindSmackerVideo
 	KindSnappyFramedData
 	KindSQLiteDatabase
 	KindSquashFSFilesystem
@@ -164,6 +179,7 @@ const (
 	KindVirtualBoxDiskImage
 	KindVMwareDiskImage
 	KindVOCAudio
+	KindWADArchive
 	KindWARCFile
 	KindWavPackAudio
 	KindWebAssemblyModule
@@ -180,7 +196,9 @@ const (
 	KindXZArchive
 	KindZIPArchive
 	KindZlibData
+	KindZPAQArchive
 	KindZstandardArchive
+	KindZstandardDictionary
 )
 
 const (
@@ -250,6 +268,7 @@ const (
 	TypeGIF89a
 	TypeHEIFImage
 	TypeIOSApplicationArchiveIPA
+	TypeIWAD
 	TypeJavaArchiveJAR
 	TypeJavaEnterpriseArchiveEAR
 	TypeJavaWebArchiveWAR
@@ -270,6 +289,7 @@ const (
 	TypeMicrosoftExcelSpreadsheetXLSX
 	TypeMicrosoftExcelTemplateXLTX
 	TypeMicrosoftExcelWorkbookXLS
+	TypeMicrosoftInstallerMSI
 	TypeMicrosoftPowerPointAddInPPAM
 	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM
 	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM
@@ -326,6 +346,7 @@ const (
 	TypePPMBinary
 	TypePSB
 	TypePSD
+	TypePWAD
 	TypePythonSourceDistributionSDist
 	TypePythonWheelWHL
 	TypeQCOW2
@@ -373,6 +394,7 @@ var kindNames = [...]string{
 	KindAndroidSparseImage:          "Android Sparse Image",
 	KindApacheArrowFile:             "Apache Arrow File",
 	KindApacheParquet:               "Apache Parquet",
+	KindAPFSFilesystem:              "APFS Filesystem",
 	KindAppImage:                    "AppImage",
 	KindAppleBinaryPropertyList:     "Apple Binary Property List",
 	KindAppleDouble:                 "AppleDouble File",
@@ -380,9 +402,11 @@ var kindNames = [...]string{
 	KindAppleSingle:                 "AppleSingle File",
 	KindARArchive:                   "AR Archive",
 	KindASFContainer:                "ASF Container",
+	KindASTCTexture:                 "ASTC Texture",
 	KindAUAudio:                     "AU Audio",
 	KindAvroObjectContainer:         "Avro Object Container",
 	KindBAMData:                     "BAM Data",
+	KindBinkVideo:                   "Bink Video",
 	KindBlenderFile:                 "Blender File",
 	KindBMPImage:                    "BMP Image",
 	KindBPGImage:                    "BPG Image",
@@ -391,7 +415,9 @@ var kindNames = [...]string{
 	KindCabinetArchive:              "Cabinet Archive",
 	KindCAFAudio:                    "CAF Audio",
 	KindCanonRAWImage:               "Canon RAW Image",
+	KindCBORData:                    "CBOR Data",
 	KindCHMDocument:                 "CHM Document",
+	KindCineonImage:                 "Cineon Image",
 	KindCPIOArchive:                 "CPIO Archive",
 	KindCRAMData:                    "CRAM Data",
 	KindCRXBrowserExtension:         "CRX Browser Extension",
@@ -400,12 +426,14 @@ var kindNames = [...]string{
 	KindDebianPackage:               "Debian Package",
 	KindDICOMMedicalImage:           "DICOM Medical Image",
 	KindDjVuDocument:                "DjVu Document",
+	KindDPXImage:                    "DPX Image",
 	KindDSDIFFAudio:                 "DSDIFF Audio",
 	KindDSFAudio:                    "DSF Audio",
 	KindDTSAudio:                    "DTS Audio",
 	KindEBMLContainer:               "EBML Container",
 	KindEOTFont:                     "EOT Font",
 	KindExecutableAndLinkableFormat: "Executable and Linkable Format",
+	KindExFATFilesystem:             "exFAT Filesystem",
 	KindExtFilesystem:               "ext Filesystem",
 	KindFarbfeldImage:               "Farbfeld Image",
 	KindFastTrackerModule:           "FastTracker Module",
@@ -424,6 +452,7 @@ var kindNames = [...]string{
 	KindGzipArchive:                 "Gzip Archive",
 	KindGzipData:                    "Gzip Data",
 	KindHDF5Data:                    "HDF5 Data",
+	KindHFSPlusFilesystem:           "HFS+ Filesystem",
 	KindICalendar:                   "iCalendar",
 	KindICCProfile:                  "ICC Profile",
 	KindICNSIcon:                    "ICNS Icon",
@@ -446,7 +475,9 @@ var kindNames = [...]string{
 	KindLHAArchive:                  "LHA Archive",
 	KindLLVMBitcode:                 "LLVM Bitcode",
 	KindLuaBytecode:                 "Lua Bytecode",
+	KindLUKSDiskEncryption:          "LUKS Disk Encryption",
 	KindLZ4Frame:                    "LZ4 Frame",
+	KindLZFSEData:                   "LZFSE Data",
 	KindLZIPArchive:                 "LZIP Archive",
 	KindLZMAData:                    "LZMA Data",
 	KindLZOPArchive:                 "LZOP Archive",
@@ -468,11 +499,13 @@ var kindNames = [...]string{
 	KindNESROM:                      "NES ROM",
 	KindNetCDFData:                  "NetCDF Data",
 	KindNetpbmImage:                 "Netpbm Image",
+	KindNTFSFilesystem:              "NTFS Filesystem",
 	KindOggContainer:                "Ogg Container",
 	KindOLECompoundDocument:         "OLE Compound Document",
 	KindOlympusRAWImage:             "Olympus RAW Image",
 	KindOpenEXRImage:                "OpenEXR Image",
 	KindOpenTypeFont:                "OpenType Font",
+	KindOptimFROGAudio:              "OptimFROG Audio",
 	KindORCColumnarData:             "ORC Columnar Data",
 	KindPCAPCapture:                 "PCAP Capture",
 	KindPCAPNGCapture:               "PCAPNG Capture",
@@ -486,6 +519,7 @@ var kindNames = [...]string{
 	KindPNGImage:                    "PNG Image",
 	KindPortableExecutable:          "Portable Executable",
 	KindPostScriptDocument:          "PostScript Document",
+	KindPVRTexture:                  "PVR Texture",
 	KindPythonBytecode:              "Python Bytecode",
 	KindQCOWDiskImage:               "QCOW Disk Image",
 	KindQOIImage:                    "QOI Image",
@@ -494,12 +528,14 @@ var kindNames = [...]string{
 	KindRealMedia:                   "RealMedia",
 	KindRichTextFormatDocument:      "Rich Text Format Document",
 	KindRIFFContainer:               "RIFF Container",
+	KindRKAudio:                     "RKAudio",
 	KindRPMPackage:                  "RPM Package",
 	KindRubyGemPackage:              "RubyGem Package",
 	KindScreamTrackerModule:         "Scream Tracker Module",
 	KindShebangScript:               "Shebang Script",
 	KindShockwaveFlash:              "Shockwave Flash",
 	KindSketchDocument:              "Sketch Document",
+	KindSmackerVideo:                "Smacker Video",
 	KindSnappyFramedData:            "Snappy Framed Data",
 	KindSQLiteDatabase:              "SQLite Database",
 	KindSquashFSFilesystem:          "SquashFS Filesystem",
@@ -522,6 +558,7 @@ var kindNames = [...]string{
 	KindVirtualBoxDiskImage:         "VirtualBox Disk Image",
 	KindVMwareDiskImage:             "VMware Disk Image",
 	KindVOCAudio:                    "VOC Audio",
+	KindWADArchive:                  "WAD Archive",
 	KindWARCFile:                    "WARC File",
 	KindWavPackAudio:                "WavPack Audio",
 	KindWebAssemblyModule:           "WebAssembly Module",
@@ -538,7 +575,9 @@ var kindNames = [...]string{
 	KindXZArchive:                   "XZ Archive",
 	KindZIPArchive:                  "ZIP Archive",
 	KindZlibData:                    "Zlib Data",
+	KindZPAQArchive:                 "ZPAQ Archive",
 	KindZstandardArchive:            "Zstandard Archive",
+	KindZstandardDictionary:         "Zstandard Dictionary",
 }
 
 var typeNames = [...]string{
@@ -608,6 +647,7 @@ var typeNames = [...]string{
 	TypeGIF89a:                   "GIF89a",
 	TypeHEIFImage:                "HEIF Image",
 	TypeIOSApplicationArchiveIPA: "iOS Application Archive (IPA)",
+	TypeIWAD:                     "IWAD",
 	TypeJavaArchiveJAR:           "Java Archive (JAR)",
 	TypeJavaEnterpriseArchiveEAR: "Java Enterprise Archive (EAR)",
 	TypeJavaWebArchiveWAR:        "Java Web Archive (WAR)",
@@ -628,6 +668,7 @@ var typeNames = [...]string{
 	TypeMicrosoftExcelSpreadsheetXLSX:                   "Microsoft Excel Spreadsheet (XLSX)",
 	TypeMicrosoftExcelTemplateXLTX:                      "Microsoft Excel Template (XLTX)",
 	TypeMicrosoftExcelWorkbookXLS:                       "Microsoft Excel Workbook (XLS)",
+	TypeMicrosoftInstallerMSI:                           "Microsoft Installer (MSI)",
 	TypeMicrosoftPowerPointAddInPPAM:                    "Microsoft PowerPoint Add-In (PPAM)",
 	TypeMicrosoftPowerPointMacroEnabledPresentationPPTM: "Microsoft PowerPoint Macro-Enabled Presentation (PPTM)",
 	TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM:    "Microsoft PowerPoint Macro-Enabled Slideshow (PPSM)",
@@ -684,6 +725,7 @@ var typeNames = [...]string{
 	TypePPMBinary:                                       "PPM binary",
 	TypePSB:                                             "PSB",
 	TypePSD:                                             "PSD",
+	TypePWAD:                                            "PWAD",
 	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
 	TypePythonWheelWHL:                                  "Python Wheel (WHL)",
 	TypeQCOW2:                                           "QCOW2",

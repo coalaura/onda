@@ -5,9 +5,13 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
+	types.RegisterSignature(types.KindASTCTexture, types.TypeNone, 0, []byte{0x13, 0xab, 0xa1, 0x5c})
 	types.RegisterSignature(types.KindBMPImage, types.TypeNone, 0, []byte("BM"))
 	types.RegisterSignature(types.KindBPGImage, types.TypeNone, 0, []byte{'B', 'P', 'G', 0xfb})
+	types.RegisterSignature(types.KindCineonImage, types.TypeNone, 0, []byte{0x80, 0x2a, 0x5f, 0xd7})
 	types.RegisterSignature(types.KindDDSImage, types.TypeNone, 0, []byte("DDS "))
+	types.RegisterSignature(types.KindDPXImage, types.TypeBigEndian, 0, []byte("SDPX"))
+	types.RegisterSignature(types.KindDPXImage, types.TypeLittleEndian, 0, []byte("XPDS"))
 	types.RegisterSignature(types.KindFarbfeldImage, types.TypeNone, 0, []byte("farbfeld"))
 	types.RegisterSignature(types.KindFLIFImage, types.TypeNone, 0, []byte("FLIF"))
 	types.RegisterSignature(types.KindFujifilmRAWImage, types.TypeNone, 0, []byte("FUJIFILMCCD-RAW "))
@@ -32,6 +36,7 @@ func init() {
 	types.RegisterSignature(types.KindPhotoshopDocument, types.TypePSB, 0, []byte("8BPB"))
 	types.RegisterSignature(types.KindPhotoshopDocument, types.TypePSD, 0, []byte("8BPS"))
 	types.RegisterSignature(types.KindPNGImage, types.TypeNone, 0, []byte{137, 'P', 'N', 'G', 13, 10, 26, 10})
+	types.RegisterSignature(types.KindPVRTexture, types.TypeNone, 0, []byte("PVR\x03"))
 	types.RegisterSignature(types.KindQOIImage, types.TypeNone, 0, []byte("qoif"))
 	types.RegisterSignature(types.KindRadianceHDRImage, types.TypeNone, 0, []byte("#?RADIANCE"))
 	types.RegisterSignature(types.KindRadianceHDRImage, types.TypeNone, 0, []byte("#?RGBE"))

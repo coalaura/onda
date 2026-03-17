@@ -10,6 +10,7 @@ func init() {
 	types.RegisterSignature(types.KindAppleBinaryPropertyList, types.TypeNone, 0, []byte("bplist00"))
 	types.RegisterSignature(types.KindAvroObjectContainer, types.TypeNone, 0, []byte{'O', 'b', 'j', 0x01})
 	types.RegisterSignature(types.KindBAMData, types.TypeNone, 0, []byte{'B', 'A', 'M', 0x01})
+	types.RegisterSignature(types.KindCBORData, types.TypeNone, 0, []byte{0xd9, 0xd9, 0xf7})
 	types.RegisterSignature(types.KindCHMDocument, types.TypeNone, 0, []byte("ITSF"))
 	types.RegisterSignature(types.KindCRAMData, types.TypeNone, 0, []byte("CRAM"))
 	types.RegisterSignature(types.KindDICOMMedicalImage, types.TypeNone, 128, []byte("DICM"))

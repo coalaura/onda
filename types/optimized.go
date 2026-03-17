@@ -87,6 +87,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Has(0, []byte{0xa, 0xd, 0xd, 0xa}) {
 				return &Metadata{Kind: KindPCAPNGCapture}
 			}
+		case 0x13:
+			if b.Has(0, []byte{0x13, 0xab, 0xa1, 0x5c}) {
+				return &Metadata{Kind: KindASTCTexture}
+			}
 		case 0x1b:
 			if b.Has(0, []byte{0x1b, 0x4c, 0x75, 0x61}) {
 				return &Metadata{Kind: KindLuaBytecode}
@@ -270,8 +274,22 @@ func detectOptimized(b Buffer) *Metadata {
 				}
 			}
 		case 0x37:
-			if b.Has(0, []byte{0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c}) {
-				return &Metadata{Kind: Kind7ZipArchive}
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x6b:
+					if b.Has(0, []byte{0x37, 0x6b, 0x53, 0x74}) {
+						return &Metadata{Kind: KindZPAQArchive}
+					}
+				case 0x7a:
+					if b.Has(0, []byte{0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c}) {
+						return &Metadata{Kind: Kind7ZipArchive}
+					}
+				case 0xa4:
+					if b.Has(0, []byte{0x37, 0xa4, 0x30, 0xec}) {
+						return &Metadata{Kind: KindZstandardDictionary}
+					}
+				}
 			}
 		case 0x38:
 			if b.Len() > 3 {
@@ -345,6 +363,32 @@ func detectOptimized(b Buffer) *Metadata {
 						case 0x52:
 							if b.Has(0, []byte{0x42, 0x45, 0x47, 0x49, 0x4e, 0x3a, 0x56, 0x43, 0x41, 0x52, 0x44}) {
 								return &Metadata{Kind: KindVCard}
+							}
+						}
+					}
+				case 0x49:
+					if b.Len() > 3 {
+						_ = b[3] // BCE hint
+						switch b[3] {
+						case 0x62:
+							if b.Has(0, []byte{0x42, 0x49, 0x4b, 0x62}) {
+								return &Metadata{Kind: KindBinkVideo}
+							}
+						case 0x66:
+							if b.Has(0, []byte{0x42, 0x49, 0x4b, 0x66}) {
+								return &Metadata{Kind: KindBinkVideo}
+							}
+						case 0x67:
+							if b.Has(0, []byte{0x42, 0x49, 0x4b, 0x67}) {
+								return &Metadata{Kind: KindBinkVideo}
+							}
+						case 0x68:
+							if b.Has(0, []byte{0x42, 0x49, 0x4b, 0x68}) {
+								return &Metadata{Kind: KindBinkVideo}
+							}
+						case 0x69:
+							if b.Has(0, []byte{0x42, 0x49, 0x4b, 0x69}) {
+								return &Metadata{Kind: KindBinkVideo}
 							}
 						}
 					}
@@ -554,6 +598,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if b.Has(0, []byte{0x49, 0x54, 0x53, 0x46}) {
 						return &Metadata{Kind: KindCHMDocument}
 					}
+				case 0x57:
+					if b.Has(0, []byte{0x49, 0x57, 0x41, 0x44}) {
+						return &Metadata{Kind: KindWADArchive, Type: TypeIWAD}
+					}
 				}
 			}
 		case 0x4a:
@@ -571,6 +619,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x00:
 					if b.Has(0, []byte{0x4c, 0x0, 0x0, 0x0, 0x1, 0x14, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0xc0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x46}) {
 						return &Metadata{Kind: KindWindowsShortcut}
+					}
+				case 0x55:
+					if b.Has(0, []byte{0x4c, 0x55, 0x4b, 0x53, 0xba, 0xbe}) {
+						return &Metadata{Kind: KindLUKSDiskEncryption}
 					}
 				case 0x5a:
 					if b.Has(0, []byte{0x4c, 0x5a, 0x49, 0x50}) {
@@ -636,6 +688,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
 				switch b[1] {
+				case 0x46:
+					if b.Has(0, []byte{0x4f, 0x46, 0x52, 0x20}) {
+						return &Metadata{Kind: KindOptimFROGAudio}
+					}
 				case 0x52:
 					if b.Has(0, []byte{0x4f, 0x52, 0x43}) {
 						return &Metadata{Kind: KindORCColumnarData}
@@ -682,6 +738,14 @@ func detectOptimized(b Buffer) *Metadata {
 							}
 						}
 					}
+				case 0x56:
+					if b.Has(0, []byte{0x50, 0x56, 0x52, 0x3}) {
+						return &Metadata{Kind: KindPVRTexture}
+					}
+				case 0x57:
+					if b.Has(0, []byte{0x50, 0x57, 0x41, 0x44}) {
+						return &Metadata{Kind: KindWADArchive, Type: TypePWAD}
+					}
 				}
 			}
 		case 0x51:
@@ -711,6 +775,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if b.Has(0, []byte{0x52, 0x49, 0x46, 0x46}) {
 						return &Metadata{Kind: KindRIFFContainer}
 					}
+				case 0x4b:
+					if b.Has(0, []byte{0x52, 0x4b, 0x41, 0x20}) {
+						return &Metadata{Kind: KindRKAudio}
+					}
 				case 0x61:
 					if b.Len() > 6 {
 						_ = b[6] // BCE hint
@@ -735,6 +803,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
 				switch b[1] {
+				case 0x44:
+					if b.Has(0, []byte{0x53, 0x44, 0x50, 0x58}) {
+						return &Metadata{Kind: KindDPXImage, Type: TypeBigEndian}
+					}
 				case 0x49:
 					if b.Len() > 2 {
 						_ = b[2] // BCE hint
@@ -759,6 +831,20 @@ func detectOptimized(b Buffer) *Metadata {
 							}
 						}
 					}
+				case 0x4d:
+					if b.Len() > 3 {
+						_ = b[3] // BCE hint
+						switch b[3] {
+						case 0x32:
+							if b.Has(0, []byte{0x53, 0x4d, 0x4b, 0x32}) {
+								return &Metadata{Kind: KindSmackerVideo}
+							}
+						case 0x34:
+							if b.Has(0, []byte{0x53, 0x4d, 0x4b, 0x34}) {
+								return &Metadata{Kind: KindSmackerVideo}
+							}
+						}
+					}
 				case 0x51:
 					if b.Has(0, []byte{0x53, 0x51, 0x4c, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6f, 0x72, 0x6d, 0x61, 0x74, 0x20, 0x33, 0x0}) {
 						return &Metadata{Kind: KindSQLiteDatabase}
@@ -774,8 +860,18 @@ func detectOptimized(b Buffer) *Metadata {
 				return &Metadata{Kind: KindWARCFile}
 			}
 		case 0x58:
-			if b.Has(0, []byte{0x58, 0x46, 0x53, 0x42}) {
-				return &Metadata{Kind: KindXFSFilesystem}
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x46:
+					if b.Has(0, []byte{0x58, 0x46, 0x53, 0x42}) {
+						return &Metadata{Kind: KindXFSFilesystem}
+					}
+				case 0x50:
+					if b.Has(0, []byte{0x58, 0x50, 0x44, 0x53}) {
+						return &Metadata{Kind: KindDPXImage, Type: TypeLittleEndian}
+					}
+				}
 			}
 		case 0x59:
 			if b.Has(0, []byte{0x59, 0xa6, 0x6a, 0x95}) {
@@ -786,8 +882,18 @@ func detectOptimized(b Buffer) *Metadata {
 				return &Metadata{Kind: KindShockwaveFlash, Type: TypeLZMACompressed}
 			}
 		case 0x62:
-			if b.Has(0, []byte{0x62, 0x70, 0x6c, 0x69, 0x73, 0x74, 0x30, 0x30}) {
-				return &Metadata{Kind: KindAppleBinaryPropertyList}
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x70:
+					if b.Has(0, []byte{0x62, 0x70, 0x6c, 0x69, 0x73, 0x74, 0x30, 0x30}) {
+						return &Metadata{Kind: KindAppleBinaryPropertyList}
+					}
+				case 0x76:
+					if b.Has(0, []byte{0x62, 0x76, 0x78, 0x32}) {
+						return &Metadata{Kind: KindLZFSEData}
+					}
+				}
 			}
 		case 0x63:
 			if b.Len() > 1 {
@@ -981,6 +1087,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Has(0, []byte{0x7f, 0xfe, 0x80, 0x1}) {
 				return &Metadata{Kind: KindDTSAudio}
 			}
+		case 0x80:
+			if b.Has(0, []byte{0x80, 0x2a, 0x5f, 0xd7}) {
+				return &Metadata{Kind: KindCineonImage}
+			}
 		case 0x89:
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
@@ -1042,6 +1152,10 @@ func detectOptimized(b Buffer) *Metadata {
 		case 0xd4:
 			if b.Has(0, []byte{0xd4, 0xc3, 0xb2, 0xa1}) {
 				return &Metadata{Kind: KindPCAPCapture, Type: TypeLittleEndian}
+			}
+		case 0xd9:
+			if b.Has(0, []byte{0xd9, 0xd9, 0xf7}) {
+				return &Metadata{Kind: KindCBORData}
 			}
 		case 0xde:
 			if b.Has(0, []byte{0xde, 0xc0, 0x17, 0xb}) {
@@ -1174,8 +1288,26 @@ func detectOptimized(b Buffer) *Metadata {
 		}
 	}
 
+	if b.Len() > 3 {
+		_ = b[3] // BCE hint
+		switch b[3] {
+		case 0x45:
+			if b.Has(3, []byte{0x45, 0x58, 0x46, 0x41, 0x54, 0x20, 0x20, 0x20}) {
+				return &Metadata{Kind: KindExFATFilesystem}
+			}
+		case 0x4e:
+			if b.Has(3, []byte{0x4e, 0x54, 0x46, 0x53, 0x20, 0x20, 0x20, 0x20}) {
+				return &Metadata{Kind: KindNTFSFilesystem}
+			}
+		}
+	}
+
 	if b.Has(8, []byte{0x64, 0x65, 0x62, 0x69, 0x61, 0x6e, 0x2d, 0x62, 0x69, 0x6e, 0x61, 0x72, 0x79}) {
 		return &Metadata{Kind: KindDebianPackage}
+	}
+
+	if b.Has(32, []byte{0x4e, 0x58, 0x53, 0x42}) {
+		return &Metadata{Kind: KindAPFSFilesystem}
 	}
 
 	if b.Has(34, []byte{0x4c, 0x50}) {
@@ -1204,6 +1336,26 @@ func detectOptimized(b Buffer) *Metadata {
 
 	if b.Has(128, []byte{0x44, 0x49, 0x43, 0x4d}) {
 		return &Metadata{Kind: KindDICOMMedicalImage}
+	}
+
+	if b.Len() > 1024 {
+		_ = b[1024] // BCE hint
+		switch b[1024] {
+		case 0x48:
+			if b.Len() > 1025 {
+				_ = b[1025] // BCE hint
+				switch b[1025] {
+				case 0x2b:
+					if b.Has(1024, []byte{0x48, 0x2b}) {
+						return &Metadata{Kind: KindHFSPlusFilesystem}
+					}
+				case 0x58:
+					if b.Has(1024, []byte{0x48, 0x58}) {
+						return &Metadata{Kind: KindHFSPlusFilesystem}
+					}
+				}
+			}
+		}
 	}
 
 	if b.Has(32769, []byte{0x43, 0x44, 0x30, 0x30, 0x31}) {

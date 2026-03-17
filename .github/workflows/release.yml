@@ -66,6 +66,8 @@ jobs:
 
           OUT="build/onda_${{ github.ref_name }}_${GOOS}_${GOARCH}${EXT}"
 
+          go generate ./...
+
           go build \
             -trimpath \
             -buildvcs=false \
