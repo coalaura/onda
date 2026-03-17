@@ -13,6 +13,8 @@ func init() {
 	types.RegisterSignature(types.KindGIFImage, types.TypeGIF89a, 0, []byte("GIF89a"))
 	types.RegisterSignature(types.KindGIMPXCFImage, types.TypeNone, 0, []byte("gimp xcf "))
 	types.RegisterSignature(types.KindICNSIcon, types.TypeNone, 0, []byte("icns"))
+	types.RegisterSignature(types.KindICOCURImage, types.TypeWindowsCursor, 0, []byte{0x00, 0x00, 0x02, 0x00})
+	types.RegisterSignature(types.KindICOCURImage, types.TypeWindowsIcon, 0, []byte{0x00, 0x00, 0x01, 0x00})
 	types.RegisterSignature(types.KindJNGImage, types.TypeNone, 0, []byte{0x8b, 'J', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
 	types.RegisterSignature(types.KindJPEG2000Image, types.TypeNone, 0, []byte{0x00, 0x00, 0x00, 0x0c, 'j', 'P', ' ', ' ', 0x0d, 0x0a, 0x87, 0x0a})
 	types.RegisterSignature(types.KindJPEGImage, types.TypeNone, 0, []byte{0xff, 0xd8, 0xff})
@@ -39,4 +41,5 @@ func init() {
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00DJVM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00DJVU"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00THUM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
+	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeWebPImage, 0, []byte("RIFF\x00\x00\x00\x00WEBP"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

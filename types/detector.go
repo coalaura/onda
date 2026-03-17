@@ -62,7 +62,13 @@ func RegisterSignature(kind KindID, typ TypeID, offset int, magic []byte) {
 }
 
 func RegisterMaskedSignature(kind KindID, typ TypeID, offset int, magic []byte, mask []byte) {
-	sig := Signature{Kind: kind, Type: typ, Offset: offset, Magic: magic, Mask: mask}
+	maskedMagic := make([]byte, len(magic))
+
+	for i := range magic {
+		maskedMagic[i] = magic[i] & mask[i]
+	}
+
+	sig := Signature{Kind: kind, Type: typ, Offset: offset, Magic: maskedMagic, Mask: mask}
 
 	detectors = append(detectors, registered{d: sig, class: classSignature, len: len(magic)})
 }

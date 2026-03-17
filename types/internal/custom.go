@@ -6,11 +6,9 @@ import (
 )
 
 func init() {
-	types.Register(types.DetectFunc(custom.DetectBtrfs))
 	types.Register(types.DetectFunc(custom.DetectEBML))
 	types.Register(types.DetectFunc(custom.DetectELF))
 	types.Register(types.DetectFunc(custom.DetectExt))
-	types.Register(types.DetectFunc(custom.DetectICO))
 	types.Register(types.DetectFunc(custom.DetectISOBaseMedia))
 	types.Register(types.DetectFunc(custom.DetectMachO))
 	types.Register(types.DetectFunc(custom.DetectMetafile))
@@ -23,7 +21,6 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectPE))
 	types.Register(types.DetectFunc(custom.DetectPKCS12))
 	types.Register(types.DetectFunc(custom.DetectPYC))
-	types.Register(types.DetectFunc(custom.DetectRIFF))
 	types.Register(types.DetectFunc(custom.DetectTar))
 	types.Register(types.DetectFunc(custom.DetectTIFFSubtypes))
 	types.Register(types.DetectFunc(custom.DetectTorrent))

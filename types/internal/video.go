@@ -8,4 +8,7 @@ func init() {
 	types.RegisterSignature(types.KindIVFVideo, types.TypeNone, 0, []byte("DKIF"))
 	types.RegisterSignature(types.KindMPEGProgramStream, types.TypeNone, 0, []byte{0x00, 0x00, 0x01, 0xba})
 	types.RegisterSignature(types.KindRealMedia, types.TypeNone, 0, []byte{'.', 'R', 'M', 'F'})
+	types.RegisterSignature(types.KindRIFFContainer, types.TypeNone, 0, []byte("RIFF"))
+
+	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeAVIVideo, 0, []byte("RIFF\x00\x00\x00\x00AVI "), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

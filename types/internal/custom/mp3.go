@@ -3,13 +3,6 @@ package custom
 import "github.com/coalaura/onda/types"
 
 func DetectMP3(b types.Buffer) *types.Metadata {
-	if b.Has(0, []byte("ID3")) {
-		return &types.Metadata{
-			Kind: types.KindMPEGAudio,
-			Type: types.TypeMP3ID3Tagged,
-		}
-	}
-
 	if b.Len() < 4 {
 		return nil
 	}
@@ -27,8 +20,13 @@ func DetectMP3(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
-	return &types.Metadata{
-		Kind: types.KindMPEGAudio,
-		Type: types.TypeMP3,
+	if layer == 2 {
+		return &types.Metadata{Kind: types.KindMPEGAudio, Type: types.TypeMPEGLayer2}
 	}
+
+	if layer == 1 {
+		return &types.Metadata{Kind: types.KindMPEGAudio, Type: types.TypeMP3}
+	}
+
+	return nil
 }

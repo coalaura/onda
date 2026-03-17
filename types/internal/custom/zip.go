@@ -134,16 +134,19 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		i += 30 + int(nameLen)
 	}
 
+	limitSearch := min(b.Len(), 32768)
+	searchArea := b[:limitSearch]
+
 	// Word
-	if bytes.Contains(b, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-word.document.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordMacroEnabledDocumentDOCM}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordTemplateDOTX}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.ms-word.template.macroEnabledTemplate.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-word.template.macroEnabledTemplate.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftWordMacroEnabledTemplateDOTM}
 	}
 
@@ -152,19 +155,19 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	}
 
 	// Excel
-	if bytes.Contains(b, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-excel.sheet.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelMacroEnabledWorkbookXLSM}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelTemplateXLTX}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.ms-excel.template.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-excel.template.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelMacroEnabledTemplateXLTM}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.ms-excel.addin.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-excel.addin.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftExcelAddInXLAM}
 	}
 
@@ -173,27 +176,27 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	}
 
 	// PowerPoint
-	if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledPresentationPPTM}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointTemplatePOTX}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.template.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-powerpoint.template.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledTemplatePOTM}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointSlideshowPPSX}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointMacroEnabledSlideshowPPSM}
 	}
 
-	if bytes.Contains(b, []byte("application/vnd.ms-powerpoint.addin.macroEnabled.main+xml")) {
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-powerpoint.addin.macroEnabled.main+xml")) {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointAddInPPAM}
 	}
 
@@ -218,7 +221,7 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	}
 
 	if hasSketchDoc && (hasSketchMeta || hasSketchUser) {
-		if bytes.Contains(b, []byte("com.bohemiancoding.sketch")) || bytes.Contains(b, []byte("com.sketch3")) {
+		if bytes.Contains(searchArea, []byte("com.bohemiancoding.sketch")) || bytes.Contains(searchArea, []byte("com.sketch3")) {
 			return &types.Metadata{Kind: types.KindSketchDocument, Type: types.TypeSketchDocument}
 		}
 	}

@@ -31,10 +31,11 @@ func (b Buffer) HasMask(offset int, magic []byte, mask []byte) bool {
 	if len(magic) > 0 {
 		_ = target[len(magic)-1]
 		_ = mask[len(magic)-1]
+		_ = magic[len(magic)-1]
 	}
 
 	for i, m := range magic {
-		if target[i]&mask[i] != m&mask[i] {
+		if target[i]&mask[i] != m {
 			return false
 		}
 	}
