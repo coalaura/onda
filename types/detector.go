@@ -1,3 +1,5 @@
+//go:generate go run ../gen/optimizer
+
 package types
 
 import (
@@ -89,6 +91,12 @@ func Detect(name string, data []byte) (*Metadata, error) {
 	})
 
 	buf := Buffer(data)
+
+	if meta := detectOptimized(buf); meta != nil {
+		meta.File = name
+
+		return meta, nil
+	}
 
 	for _, reg := range detectors {
 		if meta := reg.d.Detect(buf); meta != nil {

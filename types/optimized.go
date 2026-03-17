@@ -1,0 +1,1218 @@
+// code generated, don't edit
+package types
+
+func detectOptimized(b Buffer) *Metadata {
+	if b.Len() == 0 {
+		return nil
+	}
+
+	if b.Len() > 0 {
+		_ = b[0] // BCE hint
+		switch b[0] {
+		case 0x00:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x00:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x00:
+							if b.Len() > 4 {
+								_ = b[4] // BCE hint
+								switch b[4] {
+								case 0x4a:
+									if b.Has(0, []byte{0x0, 0x0, 0x0, 0xc, 0x4a, 0x58, 0x4c, 0x20, 0xd, 0xa, 0x87, 0xa}) {
+										return &Metadata{Kind: KindJPEGXLImage, Type: TypeContainer}
+									}
+								case 0x6a:
+									if b.Has(0, []byte{0x0, 0x0, 0x0, 0xc, 0x6a, 0x50, 0x20, 0x20, 0xd, 0xa, 0x87, 0xa}) {
+										return &Metadata{Kind: KindJPEG2000Image}
+									}
+								}
+							}
+						case 0x01:
+							if b.Len() > 3 {
+								_ = b[3] // BCE hint
+								switch b[3] {
+								case 0x00:
+									if b.Has(0, []byte{0x0, 0x0, 0x1, 0x0}) {
+										return &Metadata{Kind: KindICOCURImage, Type: TypeWindowsIcon}
+									}
+								case 0xba:
+									if b.Has(0, []byte{0x0, 0x0, 0x1, 0xba}) {
+										return &Metadata{Kind: KindMPEGProgramStream}
+									}
+								}
+							}
+						case 0x02:
+							if b.Has(0, []byte{0x0, 0x0, 0x2, 0x0}) {
+								return &Metadata{Kind: KindICOCURImage, Type: TypeWindowsCursor}
+							}
+						}
+					}
+				case 0x01:
+					if b.Has(0, []byte{0x0, 0x1, 0x0, 0x0}) {
+						return &Metadata{Kind: KindTrueTypeFont}
+					}
+				case 0x05:
+					if b.Len() > 3 {
+						_ = b[3] // BCE hint
+						switch b[3] {
+						case 0x00:
+							if b.Has(0, []byte{0x0, 0x5, 0x16, 0x0}) {
+								return &Metadata{Kind: KindAppleSingle}
+							}
+						case 0x07:
+							if b.Has(0, []byte{0x0, 0x5, 0x16, 0x7}) {
+								return &Metadata{Kind: KindAppleDouble}
+							}
+						}
+					}
+				case 0x61:
+					if b.Has(0, []byte{0x0, 0x61, 0x73, 0x6d}) {
+						return &Metadata{Kind: KindWebAssemblyModule}
+					}
+				}
+			}
+		case 0x03:
+			if b.Has(0, []byte{0x3, 0xd9, 0xa2, 0x9a, 0x67, 0xfb, 0x4b, 0xb5}) {
+				return &Metadata{Kind: KindKeePassDatabase, Type: TypeKDBX}
+			}
+		case 0x04:
+			if b.Has(0, []byte{0x4, 0x22, 0x4d, 0x18}) {
+				return &Metadata{Kind: KindLZ4Frame}
+			}
+		case 0x0a:
+			if b.Has(0, []byte{0xa, 0xd, 0xd, 0xa}) {
+				return &Metadata{Kind: KindPCAPNGCapture}
+			}
+		case 0x1b:
+			if b.Has(0, []byte{0x1b, 0x4c, 0x75, 0x61}) {
+				return &Metadata{Kind: KindLuaBytecode}
+			}
+		case 0x1f:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x8b:
+					if b.HasMask(0, []byte{0x1f, 0x8b, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x42, 0x43, 0x2, 0x0}, []byte{0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindGzipData, Type: TypeBGZF}
+					}
+					if b.Has(0, []byte{0x1f, 0x8b}) {
+						return &Metadata{Kind: KindGzipArchive}
+					}
+				case 0x9d:
+					if b.Has(0, []byte{0x1f, 0x9d}) {
+						return &Metadata{Kind: KindUnixCompressArchive}
+					}
+				case 0xff:
+					if b.Has(0, []byte{0x1f, 0xff, 0xe8, 0x0}) {
+						return &Metadata{Kind: KindDTSAudio}
+					}
+				}
+			}
+		case 0x21:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x3c:
+					if b.Has(0, []byte{0x21, 0x3c, 0x61, 0x72, 0x63, 0x68, 0x3e, 0xa}) {
+						return &Metadata{Kind: KindARArchive}
+					}
+				case 0x42:
+					if b.Has(0, []byte{0x21, 0x42, 0x44, 0x4e}) {
+						return &Metadata{Kind: KindMicrosoftOutlookEmailFolder}
+					}
+				}
+			}
+		case 0x23:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x21:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x41:
+							if b.Len() > 5 {
+								_ = b[5] // BCE hint
+								switch b[5] {
+								case 0x0a:
+									if b.Has(0, []byte{0x23, 0x21, 0x41, 0x4d, 0x52, 0xa}) {
+										return &Metadata{Kind: KindAMRAudio}
+									}
+								case 0x2d:
+									if b.Has(0, []byte{0x23, 0x21, 0x41, 0x4d, 0x52, 0x2d, 0x57, 0x42, 0xa}) {
+										return &Metadata{Kind: KindAMRWBAudio}
+									}
+								}
+							}
+						}
+					}
+					if b.Has(0, []byte{0x23, 0x21}) {
+						return &Metadata{Kind: KindShebangScript}
+					}
+				case 0x3f:
+					if b.Len() > 3 {
+						_ = b[3] // BCE hint
+						switch b[3] {
+						case 0x41:
+							if b.Has(0, []byte{0x23, 0x3f, 0x52, 0x41, 0x44, 0x49, 0x41, 0x4e, 0x43, 0x45}) {
+								return &Metadata{Kind: KindRadianceHDRImage}
+							}
+						case 0x47:
+							if b.Has(0, []byte{0x23, 0x3f, 0x52, 0x47, 0x42, 0x45}) {
+								return &Metadata{Kind: KindRadianceHDRImage}
+							}
+						}
+					}
+				case 0x45:
+					if b.Has(0, []byte{0x23, 0x45, 0x58, 0x54, 0x4d, 0x33, 0x55}) {
+						return &Metadata{Kind: KindM3U8Playlist}
+					}
+				}
+			}
+		case 0x25:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x21:
+					if b.Has(0, []byte{0x25, 0x21, 0x50, 0x53, 0x2d, 0x41, 0x64, 0x6f, 0x62, 0x65, 0x2d}) {
+						return &Metadata{Kind: KindPostScriptDocument}
+					}
+				case 0x50:
+					if b.Has(0, []byte{0x25, 0x50, 0x44, 0x46, 0x2d}) {
+						return &Metadata{Kind: KindPDFDocument}
+					}
+				}
+			}
+		case 0x27:
+			if b.Has(0, []byte{0x27, 0x5, 0x19, 0x56}) {
+				return &Metadata{Kind: KindUBootImage}
+			}
+		case 0x28:
+			if b.Has(0, []byte{0x28, 0xb5, 0x2f, 0xfd}) {
+				return &Metadata{Kind: KindZstandardArchive}
+			}
+		case 0x2d:
+			if b.Len() > 11 {
+				_ = b[11] // BCE hint
+				switch b[11] {
+				case 0x43:
+					if b.Has(0, []byte{0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x20, 0x43, 0x45, 0x52, 0x54, 0x49, 0x46, 0x49, 0x43, 0x41, 0x54, 0x45, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d}) {
+						return &Metadata{Kind: KindPEMCertificate}
+					}
+				case 0x4f:
+					if b.Has(0, []byte{0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x20, 0x4f, 0x50, 0x45, 0x4e, 0x53, 0x53, 0x48, 0x20, 0x50, 0x52, 0x49, 0x56, 0x41, 0x54, 0x45, 0x20, 0x4b, 0x45, 0x59, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d}) {
+						return &Metadata{Kind: KindPEMPrivateKey}
+					}
+				case 0x50:
+					if b.Len() > 12 {
+						_ = b[12] // BCE hint
+						switch b[12] {
+						case 0x47:
+							if b.Has(0, []byte{0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x20, 0x50, 0x47, 0x50}) {
+								return &Metadata{Kind: KindPGPMessage}
+							}
+						case 0x52:
+							if b.Has(0, []byte{0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x20, 0x50, 0x52, 0x49, 0x56, 0x41, 0x54, 0x45, 0x20, 0x4b, 0x45, 0x59, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d}) {
+								return &Metadata{Kind: KindPEMPrivateKey}
+							}
+						}
+					}
+				case 0x52:
+					if b.Has(0, []byte{0x2d, 0x2d, 0x2d, 0x2d, 0x2d, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x20, 0x52, 0x53, 0x41, 0x20, 0x50, 0x52, 0x49, 0x56, 0x41, 0x54, 0x45, 0x20, 0x4b, 0x45, 0x59, 0x2d, 0x2d, 0x2d, 0x2d, 0x2d}) {
+						return &Metadata{Kind: KindPEMPrivateKey, Type: TypeRSAPrivateKey}
+					}
+				}
+			}
+		case 0x2e:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x52:
+					if b.Has(0, []byte{0x2e, 0x52, 0x4d, 0x46}) {
+						return &Metadata{Kind: KindRealMedia}
+					}
+				case 0x73:
+					if b.Has(0, []byte{0x2e, 0x73, 0x6e, 0x64}) {
+						return &Metadata{Kind: KindAUAudio}
+					}
+				}
+			}
+		case 0x30:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x26:
+					if b.Has(0, []byte{0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11, 0xa6, 0xd9, 0x0, 0xaa, 0x0, 0x62, 0xce, 0x6c}) {
+						return &Metadata{Kind: KindASFContainer}
+					}
+				case 0x37:
+					if b.Len() > 5 {
+						_ = b[5] // BCE hint
+						switch b[5] {
+						case 0x31:
+							if b.Has(0, []byte{0x30, 0x37, 0x30, 0x37, 0x30, 0x31}) {
+								return &Metadata{Kind: KindCPIOArchive, Type: TypeNewASCII}
+							}
+						case 0x32:
+							if b.Has(0, []byte{0x30, 0x37, 0x30, 0x37, 0x30, 0x32}) {
+								return &Metadata{Kind: KindCPIOArchive, Type: TypeNewASCIIWithCRC}
+							}
+						case 0x37:
+							if b.Has(0, []byte{0x30, 0x37, 0x30, 0x37, 0x30, 0x37}) {
+								return &Metadata{Kind: KindCPIOArchive, Type: TypeOldASCII}
+							}
+						}
+					}
+				}
+			}
+		case 0x37:
+			if b.Has(0, []byte{0x37, 0x7a, 0xbc, 0xaf, 0x27, 0x1c}) {
+				return &Metadata{Kind: Kind7ZipArchive}
+			}
+		case 0x38:
+			if b.Len() > 3 {
+				_ = b[3] // BCE hint
+				switch b[3] {
+				case 0x42:
+					if b.Has(0, []byte{0x38, 0x42, 0x50, 0x42}) {
+						return &Metadata{Kind: KindPhotoshopDocument, Type: TypePSB}
+					}
+				case 0x53:
+					if b.Has(0, []byte{0x38, 0x42, 0x50, 0x53}) {
+						return &Metadata{Kind: KindPhotoshopDocument, Type: TypePSD}
+					}
+				}
+			}
+		case 0x3a:
+			if b.Has(0, []byte{0x3a, 0xff, 0x26, 0xed}) {
+				return &Metadata{Kind: KindAndroidSparseImage}
+			}
+		case 0x3c:
+			if b.Has(0, []byte{0x3c, 0x3f, 0x78, 0x6d, 0x6c}) {
+				return &Metadata{Kind: KindXMLDocument}
+			}
+		case 0x41:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x4e:
+					if b.Has(0, []byte{0x41, 0x4e, 0x44, 0x52, 0x4f, 0x49, 0x44, 0x21}) {
+						return &Metadata{Kind: KindAndroidBootImage}
+					}
+				case 0x52:
+					if b.Has(0, []byte{0x41, 0x52, 0x52, 0x4f, 0x57, 0x31}) {
+						return &Metadata{Kind: KindApacheArrowFile}
+					}
+				case 0x54:
+					if b.HasMask(0, []byte{0x41, 0x54, 0x26, 0x54, 0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x44, 0x4a, 0x56, 0x49}, []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.HasMask(0, []byte{0x41, 0x54, 0x26, 0x54, 0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x44, 0x4a, 0x56, 0x4d}, []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.HasMask(0, []byte{0x41, 0x54, 0x26, 0x54, 0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x44, 0x4a, 0x56, 0x55}, []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.HasMask(0, []byte{0x41, 0x54, 0x26, 0x54, 0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x54, 0x48, 0x55, 0x4d}, []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+				}
+			}
+		case 0x42:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x41:
+					if b.Has(0, []byte{0x42, 0x41, 0x4d, 0x1}) {
+						return &Metadata{Kind: KindBAMData}
+					}
+				case 0x43:
+					if b.Has(0, []byte{0x42, 0x43, 0xc0, 0xde}) {
+						return &Metadata{Kind: KindLLVMBitcode}
+					}
+				case 0x45:
+					if b.Len() > 9 {
+						_ = b[9] // BCE hint
+						switch b[9] {
+						case 0x4c:
+							if b.Has(0, []byte{0x42, 0x45, 0x47, 0x49, 0x4e, 0x3a, 0x56, 0x43, 0x41, 0x4c, 0x45, 0x4e, 0x44, 0x41, 0x52}) {
+								return &Metadata{Kind: KindICalendar}
+							}
+						case 0x52:
+							if b.Has(0, []byte{0x42, 0x45, 0x47, 0x49, 0x4e, 0x3a, 0x56, 0x43, 0x41, 0x52, 0x44}) {
+								return &Metadata{Kind: KindVCard}
+							}
+						}
+					}
+				case 0x4c:
+					if b.Has(0, []byte{0x42, 0x4c, 0x45, 0x4e, 0x44, 0x45, 0x52}) {
+						return &Metadata{Kind: KindBlenderFile}
+					}
+				case 0x4d:
+					if b.Has(0, []byte{0x42, 0x4d}) {
+						return &Metadata{Kind: KindBMPImage}
+					}
+				case 0x50:
+					if b.Has(0, []byte{0x42, 0x50, 0x47, 0xfb}) {
+						return &Metadata{Kind: KindBPGImage}
+					}
+				case 0x5a:
+					if b.Has(0, []byte{0x42, 0x5a, 0x68}) {
+						return &Metadata{Kind: KindBzip2Archive}
+					}
+				}
+			}
+		case 0x43:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x44:
+					if b.Len() > 3 {
+						_ = b[3] // BCE hint
+						switch b[3] {
+						case 0x01:
+							if b.Has(0, []byte{0x43, 0x44, 0x46, 0x1}) {
+								return &Metadata{Kind: KindNetCDFData}
+							}
+						case 0x02:
+							if b.Has(0, []byte{0x43, 0x44, 0x46, 0x2}) {
+								return &Metadata{Kind: KindNetCDFData}
+							}
+						}
+					}
+				case 0x52:
+					if b.Has(0, []byte{0x43, 0x52, 0x41, 0x4d}) {
+						return &Metadata{Kind: KindCRAMData}
+					}
+				case 0x57:
+					if b.Has(0, []byte{0x43, 0x57, 0x53}) {
+						return &Metadata{Kind: KindShockwaveFlash, Type: TypeZlibCompressed}
+					}
+				case 0x72:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x32:
+							if b.Len() > 4 {
+								_ = b[4] // BCE hint
+								switch b[4] {
+								case 0x02:
+									if b.Has(0, []byte{0x43, 0x72, 0x32, 0x34, 0x2, 0x0, 0x0, 0x0}) {
+										return &Metadata{Kind: KindCRXBrowserExtension, Type: TypeCRXVersion2}
+									}
+								case 0x03:
+									if b.Has(0, []byte{0x43, 0x72, 0x32, 0x34, 0x3, 0x0, 0x0, 0x0}) {
+										return &Metadata{Kind: KindCRXBrowserExtension, Type: TypeCRXVersion3}
+									}
+								}
+							}
+							if b.Has(0, []byte{0x43, 0x72, 0x32, 0x34}) {
+								return &Metadata{Kind: KindCRXBrowserExtension}
+							}
+						case 0x65:
+							if b.Has(0, []byte{0x43, 0x72, 0x65, 0x61, 0x74, 0x69, 0x76, 0x65, 0x20, 0x56, 0x6f, 0x69, 0x63, 0x65, 0x20, 0x46, 0x69, 0x6c, 0x65, 0x1a}) {
+								return &Metadata{Kind: KindVOCAudio}
+							}
+						}
+					}
+				}
+			}
+		case 0x44:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x44:
+					if b.Has(0, []byte{0x44, 0x44, 0x53, 0x20}) {
+						return &Metadata{Kind: KindDDSImage}
+					}
+				case 0x49:
+					if b.Has(0, []byte{0x44, 0x49, 0x52, 0x43}) {
+						return &Metadata{Kind: KindGitIndex}
+					}
+				case 0x4b:
+					if b.Has(0, []byte{0x44, 0x4b, 0x49, 0x46}) {
+						return &Metadata{Kind: KindIVFVideo}
+					}
+				case 0x53:
+					if b.Has(0, []byte{0x44, 0x53, 0x44, 0x20}) {
+						return &Metadata{Kind: KindDSFAudio}
+					}
+				}
+			}
+		case 0x45:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x6c:
+					if b.Has(0, []byte{0x45, 0x6c, 0x66, 0x46, 0x69, 0x6c, 0x65, 0x0}) {
+						return &Metadata{Kind: KindWindowsEventLog}
+					}
+				case 0x78:
+					if b.Has(0, []byte{0x45, 0x78, 0x74, 0x65, 0x6e, 0x64, 0x65, 0x64, 0x20, 0x4d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x3a, 0x20}) {
+						return &Metadata{Kind: KindFastTrackerModule}
+					}
+				}
+			}
+		case 0x46:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x4c:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x49:
+							if b.Has(0, []byte{0x46, 0x4c, 0x49, 0x46}) {
+								return &Metadata{Kind: KindFLIFImage}
+							}
+						case 0x56:
+							if b.Has(0, []byte{0x46, 0x4c, 0x56}) {
+								return &Metadata{Kind: KindFLVVideo}
+							}
+						}
+					}
+				case 0x4f:
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x46, 0x52, 0x4d, 0x38}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDSDIFFAudio}
+					}
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x41, 0x49, 0x46, 0x43}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindIFFContainer, Type: TypeAIFCAudio}
+					}
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x41, 0x49, 0x46, 0x46}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindIFFContainer, Type: TypeAIFFAudio}
+					}
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x44, 0x4a, 0x56, 0x49}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x44, 0x4a, 0x56, 0x4d}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x44, 0x4a, 0x56, 0x55}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.HasMask(0, []byte{0x46, 0x4f, 0x52, 0x4d, 0x0, 0x0, 0x0, 0x0, 0x54, 0x48, 0x55, 0x4d}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindDjVuDocument}
+					}
+					if b.Has(0, []byte{0x46, 0x4f, 0x52, 0x4d}) {
+						return &Metadata{Kind: KindIFFContainer}
+					}
+				case 0x55:
+					if b.Has(0, []byte{0x46, 0x55, 0x4a, 0x49, 0x46, 0x49, 0x4c, 0x4d, 0x43, 0x43, 0x44, 0x2d, 0x52, 0x41, 0x57, 0x20}) {
+						return &Metadata{Kind: KindFujifilmRAWImage}
+					}
+				case 0x57:
+					if b.Has(0, []byte{0x46, 0x57, 0x53}) {
+						return &Metadata{Kind: KindShockwaveFlash, Type: TypeUncompressed}
+					}
+				}
+			}
+		case 0x47:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x49:
+					if b.Len() > 4 {
+						_ = b[4] // BCE hint
+						switch b[4] {
+						case 0x37:
+							if b.Has(0, []byte{0x47, 0x49, 0x46, 0x38, 0x37, 0x61}) {
+								return &Metadata{Kind: KindGIFImage, Type: TypeGIF87a}
+							}
+						case 0x39:
+							if b.Has(0, []byte{0x47, 0x49, 0x46, 0x38, 0x39, 0x61}) {
+								return &Metadata{Kind: KindGIFImage, Type: TypeGIF89a}
+							}
+						}
+					}
+				case 0x52:
+					if b.Has(0, []byte{0x47, 0x52, 0x49, 0x42}) {
+						return &Metadata{Kind: KindGRIBData}
+					}
+				}
+			}
+		case 0x49:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x44:
+					if b.Has(0, []byte{0x49, 0x44, 0x33}) {
+						return &Metadata{Kind: KindMPEGAudio, Type: TypeMP3ID3Tagged}
+					}
+				case 0x49:
+					if b.Has(0, []byte{0x49, 0x49, 0xbc, 0x1}) {
+						return &Metadata{Kind: KindJPEGXRImage, Type: TypeLittleEndian}
+					}
+				case 0x4d:
+					if b.Has(0, []byte{0x49, 0x4d, 0x50, 0x4d}) {
+						return &Metadata{Kind: KindImpulseTrackerModule}
+					}
+				case 0x54:
+					if b.Has(0, []byte{0x49, 0x54, 0x53, 0x46}) {
+						return &Metadata{Kind: KindCHMDocument}
+					}
+				}
+			}
+		case 0x4a:
+			if b.Has(0, []byte{0x4a, 0x4d, 0x4f, 0x44}) {
+				return &Metadata{Kind: KindJavaModule, Type: TypeJMOD}
+			}
+		case 0x4b:
+			if b.Has(0, []byte{0x4b, 0x44, 0x4d, 0x56}) {
+				return &Metadata{Kind: KindVMwareDiskImage, Type: TypeVMDK}
+			}
+		case 0x4c:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x00:
+					if b.Has(0, []byte{0x4c, 0x0, 0x0, 0x0, 0x1, 0x14, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0xc0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x46}) {
+						return &Metadata{Kind: KindWindowsShortcut}
+					}
+				case 0x5a:
+					if b.Has(0, []byte{0x4c, 0x5a, 0x49, 0x50}) {
+						return &Metadata{Kind: KindLZIPArchive}
+					}
+				}
+			}
+		case 0x4d:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x3c:
+					if b.Has(0, []byte{0x4d, 0x3c, 0xb2, 0xa1}) {
+						return &Metadata{Kind: KindPCAPCapture, Type: TypeNanosecondLittleEndian}
+					}
+				case 0x41:
+					if b.Has(0, []byte{0x4d, 0x41, 0x43, 0x20}) {
+						return &Metadata{Kind: KindMonkeysAudio}
+					}
+				case 0x4d:
+					if b.Has(0, []byte{0x4d, 0x4d, 0x1, 0xbc}) {
+						return &Metadata{Kind: KindJPEGXRImage, Type: TypeBigEndian}
+					}
+				case 0x50:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x2b:
+							if b.Has(0, []byte{0x4d, 0x50, 0x2b}) {
+								return &Metadata{Kind: KindMusepackAudio, Type: TypeStreamVersion7}
+							}
+						case 0x43:
+							if b.Has(0, []byte{0x4d, 0x50, 0x43, 0x4b}) {
+								return &Metadata{Kind: KindMusepackAudio, Type: TypeStreamVersion8}
+							}
+						}
+					}
+				case 0x53:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x43:
+							if b.Has(0, []byte{0x4d, 0x53, 0x43, 0x46}) {
+								return &Metadata{Kind: KindCabinetArchive}
+							}
+						case 0x57:
+							if b.Has(0, []byte{0x4d, 0x53, 0x57, 0x49, 0x4d, 0x0, 0x0, 0x0}) {
+								return &Metadata{Kind: KindWindowsImagingFormat}
+							}
+						}
+					}
+				case 0x54:
+					if b.Has(0, []byte{0x4d, 0x54, 0x68, 0x64}) {
+						return &Metadata{Kind: KindMIDISequence}
+					}
+				}
+			}
+		case 0x4e:
+			if b.Has(0, []byte{0x4e, 0x45, 0x53, 0x1a}) {
+				return &Metadata{Kind: KindNESROM}
+			}
+		case 0x4f:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x52:
+					if b.Has(0, []byte{0x4f, 0x52, 0x43}) {
+						return &Metadata{Kind: KindORCColumnarData}
+					}
+				case 0x54:
+					if b.Has(0, []byte{0x4f, 0x54, 0x54, 0x4f}) {
+						return &Metadata{Kind: KindOpenTypeFont}
+					}
+				case 0x62:
+					if b.Has(0, []byte{0x4f, 0x62, 0x6a, 0x1}) {
+						return &Metadata{Kind: KindAvroObjectContainer}
+					}
+				}
+			}
+		case 0x50:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x41:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x43:
+							if b.Has(0, []byte{0x50, 0x41, 0x43, 0x4b}) {
+								return &Metadata{Kind: KindGitPack}
+							}
+						case 0x52:
+							if b.Has(0, []byte{0x50, 0x41, 0x52, 0x31}) {
+								return &Metadata{Kind: KindApacheParquet}
+							}
+						}
+					}
+				case 0x4b:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x05:
+							if b.Has(0, []byte{0x50, 0x4b, 0x5, 0x6}) {
+								return &Metadata{Kind: KindZIPArchive, Type: TypeEmpty}
+							}
+						case 0x07:
+							if b.Has(0, []byte{0x50, 0x4b, 0x7, 0x8}) {
+								return &Metadata{Kind: KindZIPArchive, Type: TypeSpanned}
+							}
+						}
+					}
+				}
+			}
+		case 0x51:
+			if b.Has(0, []byte{0x51, 0x46, 0x49, 0xfb}) {
+				return &Metadata{Kind: KindQCOWDiskImage, Type: TypeQCOW2}
+			}
+		case 0x52:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x49:
+					if b.HasMask(0, []byte{0x52, 0x49, 0x46, 0x46, 0x0, 0x0, 0x0, 0x0, 0x43, 0x44, 0x44, 0x41}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindRIFFContainer, Type: TypeCDAAudio}
+					}
+					if b.HasMask(0, []byte{0x52, 0x49, 0x46, 0x46, 0x0, 0x0, 0x0, 0x0, 0x51, 0x4c, 0x43, 0x4d}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindRIFFContainer, Type: TypeQCPAudio}
+					}
+					if b.HasMask(0, []byte{0x52, 0x49, 0x46, 0x46, 0x0, 0x0, 0x0, 0x0, 0x57, 0x41, 0x56, 0x45}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindRIFFContainer, Type: TypeWAVAudio}
+					}
+					if b.HasMask(0, []byte{0x52, 0x49, 0x46, 0x46, 0x0, 0x0, 0x0, 0x0, 0x57, 0x45, 0x42, 0x50}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindRIFFContainer, Type: TypeWebPImage}
+					}
+					if b.HasMask(0, []byte{0x52, 0x49, 0x46, 0x46, 0x0, 0x0, 0x0, 0x0, 0x41, 0x56, 0x49, 0x20}, []byte{0xff, 0xff, 0xff, 0xff, 0x0, 0x0, 0x0, 0x0, 0xff, 0xff, 0xff, 0xff}) {
+						return &Metadata{Kind: KindRIFFContainer, Type: TypeAVIVideo}
+					}
+					if b.Has(0, []byte{0x52, 0x49, 0x46, 0x46}) {
+						return &Metadata{Kind: KindRIFFContainer}
+					}
+				case 0x61:
+					if b.Len() > 6 {
+						_ = b[6] // BCE hint
+						switch b[6] {
+						case 0x00:
+							if b.Has(0, []byte{0x52, 0x61, 0x72, 0x21, 0x1a, 0x7, 0x0}) {
+								return &Metadata{Kind: KindRARArchive, Type: TypeRAR4}
+							}
+						case 0x01:
+							if b.Has(0, []byte{0x52, 0x61, 0x72, 0x21, 0x1a, 0x7, 0x1, 0x0}) {
+								return &Metadata{Kind: KindRARArchive, Type: TypeRAR5}
+							}
+						}
+					}
+				case 0x75:
+					if b.Has(0, []byte{0x52, 0x75, 0x62, 0x79, 0x47, 0x65, 0x6d, 0x73}) {
+						return &Metadata{Kind: KindRubyGemPackage}
+					}
+				}
+			}
+		case 0x53:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x49:
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x4d:
+							if b.Has(0, []byte{0x53, 0x49, 0x4d, 0x50, 0x4c, 0x45, 0x20, 0x20, 0x3d}) {
+								return &Metadata{Kind: KindFITSAstronomicalImage}
+							}
+						case 0x54:
+							if b.Len() > 3 {
+								_ = b[3] // BCE hint
+								switch b[3] {
+								case 0x21:
+									if b.Has(0, []byte{0x53, 0x49, 0x54, 0x21}) {
+										return &Metadata{Kind: KindStuffItArchive}
+									}
+								case 0x44:
+									if b.Has(0, []byte{0x53, 0x49, 0x54, 0x44}) {
+										return &Metadata{Kind: KindStuffItArchive}
+									}
+								}
+							}
+						}
+					}
+				case 0x51:
+					if b.Has(0, []byte{0x53, 0x51, 0x4c, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6f, 0x72, 0x6d, 0x61, 0x74, 0x20, 0x33, 0x0}) {
+						return &Metadata{Kind: KindSQLiteDatabase}
+					}
+				}
+			}
+		case 0x54:
+			if b.Has(0, []byte{0x54, 0x54, 0x41, 0x31}) {
+				return &Metadata{Kind: KindTTAAudio}
+			}
+		case 0x57:
+			if b.Has(0, []byte{0x57, 0x41, 0x52, 0x43, 0x2f}) {
+				return &Metadata{Kind: KindWARCFile}
+			}
+		case 0x58:
+			if b.Has(0, []byte{0x58, 0x46, 0x53, 0x42}) {
+				return &Metadata{Kind: KindXFSFilesystem}
+			}
+		case 0x59:
+			if b.Has(0, []byte{0x59, 0xa6, 0x6a, 0x95}) {
+				return &Metadata{Kind: KindSunRasterImage}
+			}
+		case 0x5a:
+			if b.Has(0, []byte{0x5a, 0x57, 0x53}) {
+				return &Metadata{Kind: KindShockwaveFlash, Type: TypeLZMACompressed}
+			}
+		case 0x62:
+			if b.Has(0, []byte{0x62, 0x70, 0x6c, 0x69, 0x73, 0x74, 0x30, 0x30}) {
+				return &Metadata{Kind: KindAppleBinaryPropertyList}
+			}
+		case 0x63:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x61:
+					if b.Has(0, []byte{0x63, 0x61, 0x66, 0x66}) {
+						return &Metadata{Kind: KindCAFAudio}
+					}
+				case 0x78:
+					if b.Has(0, []byte{0x63, 0x78, 0x73, 0x70, 0x61, 0x72, 0x73, 0x65}) {
+						return &Metadata{Kind: KindVHDDiskImage}
+					}
+				}
+			}
+		case 0x64:
+			if b.Len() > 2 {
+				_ = b[2] // BCE hint
+				switch b[2] {
+				case 0x78:
+					if b.Len() > 5 {
+						_ = b[5] // BCE hint
+						switch b[5] {
+						case 0x33:
+							if b.Len() > 6 {
+								_ = b[6] // BCE hint
+								switch b[6] {
+								case 0x35:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x33, 0x35, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX035}
+									}
+								case 0x36:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x33, 0x36, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX036}
+									}
+								case 0x37:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x33, 0x37, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX037}
+									}
+								case 0x38:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x33, 0x38, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX038}
+									}
+								case 0x39:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x33, 0x39, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX039}
+									}
+								}
+							}
+						case 0x34:
+							if b.Len() > 6 {
+								_ = b[6] // BCE hint
+								switch b[6] {
+								case 0x30:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x34, 0x30, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX040}
+									}
+								case 0x31:
+									if b.Has(0, []byte{0x64, 0x65, 0x78, 0xa, 0x30, 0x34, 0x31, 0x0}) {
+										return &Metadata{Kind: KindDalvikExecutable, Type: TypeDEX041}
+									}
+								}
+							}
+						}
+					}
+				case 0x79:
+					if b.Has(0, []byte{0x64, 0x65, 0x79, 0xa}) {
+						return &Metadata{Kind: KindAndroidODEX}
+					}
+				}
+			}
+		case 0x66:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x4c:
+					if b.Has(0, []byte{0x66, 0x4c, 0x61, 0x43}) {
+						return &Metadata{Kind: KindFLACAudio}
+					}
+				case 0x61:
+					if b.Has(0, []byte{0x66, 0x61, 0x72, 0x62, 0x66, 0x65, 0x6c, 0x64}) {
+						return &Metadata{Kind: KindFarbfeldImage}
+					}
+				}
+			}
+		case 0x67:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x69:
+					if b.Has(0, []byte{0x67, 0x69, 0x6d, 0x70, 0x20, 0x78, 0x63, 0x66, 0x20}) {
+						return &Metadata{Kind: KindGIMPXCFImage}
+					}
+				case 0x6c:
+					if b.Has(0, []byte{0x67, 0x6c, 0x54, 0x46}) {
+						return &Metadata{Kind: KindGLTFBinary}
+					}
+				}
+			}
+		case 0x68:
+			if b.Has(0, []byte{0x68, 0x73, 0x71, 0x73}) {
+				return &Metadata{Kind: KindSquashFSFilesystem}
+			}
+		case 0x69:
+			if b.Has(0, []byte{0x69, 0x63, 0x6e, 0x73}) {
+				return &Metadata{Kind: KindICNSIcon}
+			}
+		case 0x6f:
+			if b.Has(0, []byte{0x6f, 0x61, 0x74, 0xa}) {
+				return &Metadata{Kind: KindAndroidOAT}
+			}
+		case 0x71:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x6f:
+					if b.Has(0, []byte{0x71, 0x6f, 0x69, 0x66}) {
+						return &Metadata{Kind: KindQOIImage}
+					}
+				case 0xc7:
+					if b.Has(0, []byte{0x71, 0xc7}) {
+						return &Metadata{Kind: KindCPIOArchive, Type: TypeBinaryBigEndian}
+					}
+				}
+			}
+		case 0x72:
+			if b.Has(0, []byte{0x72, 0x65, 0x67, 0x66}) {
+				return &Metadata{Kind: KindWindowsRegistryHive}
+			}
+		case 0x74:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x42:
+					if b.Has(0, []byte{0x74, 0x42, 0x61, 0x4b}) {
+						return &Metadata{Kind: KindTAKAudio}
+					}
+				case 0x74:
+					if b.Has(0, []byte{0x74, 0x74, 0x63, 0x66}) {
+						return &Metadata{Kind: KindTrueTypeCollection}
+					}
+				}
+			}
+		case 0x76:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x2f:
+					if b.Has(0, []byte{0x76, 0x2f, 0x31, 0x1}) {
+						return &Metadata{Kind: KindOpenEXRImage}
+					}
+				case 0x68:
+					if b.Has(0, []byte{0x76, 0x68, 0x64, 0x78, 0x66, 0x69, 0x6c, 0x65}) {
+						return &Metadata{Kind: KindVHDXDiskImage}
+					}
+				}
+			}
+		case 0x77:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x4f:
+					if b.Len() > 3 {
+						_ = b[3] // BCE hint
+						switch b[3] {
+						case 0x32:
+							if b.Has(0, []byte{0x77, 0x4f, 0x46, 0x32}) {
+								return &Metadata{Kind: KindWOFF2Font}
+							}
+						case 0x46:
+							if b.Has(0, []byte{0x77, 0x4f, 0x46, 0x46}) {
+								return &Metadata{Kind: KindWOFFFont}
+							}
+						}
+					}
+				case 0x76:
+					if b.Has(0, []byte{0x77, 0x76, 0x70, 0x6b}) {
+						return &Metadata{Kind: KindWavPackAudio}
+					}
+				}
+			}
+		case 0x78:
+			if b.Has(0, []byte{0x78, 0x61, 0x72, 0x21}) {
+				return &Metadata{Kind: KindXARArchive}
+			}
+		case 0x7b:
+			if b.Has(0, []byte{0x7b, 0x5c, 0x72, 0x74, 0x66}) {
+				return &Metadata{Kind: KindRichTextFormatDocument}
+			}
+		case 0x7f:
+			if b.Has(0, []byte{0x7f, 0xfe, 0x80, 0x1}) {
+				return &Metadata{Kind: KindDTSAudio}
+			}
+		case 0x89:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x48:
+					if b.Has(0, []byte{0x89, 0x48, 0x44, 0x46, 0xd, 0xa, 0x1a, 0xa}) {
+						return &Metadata{Kind: KindHDF5Data}
+					}
+				case 0x4c:
+					if b.Has(0, []byte{0x89, 0x4c, 0x5a, 0x4f, 0x0, 0xd, 0xa, 0x1a, 0xa}) {
+						return &Metadata{Kind: KindLZOPArchive}
+					}
+				case 0x50:
+					if b.Has(0, []byte{0x89, 0x50, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa}) {
+						return &Metadata{Kind: KindPNGImage}
+					}
+				}
+			}
+		case 0x8b:
+			if b.Has(0, []byte{0x8b, 0x4a, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa}) {
+				return &Metadata{Kind: KindJNGImage}
+			}
+		case 0xa1:
+			if b.Len() > 2 {
+				_ = b[2] // BCE hint
+				switch b[2] {
+				case 0x3c:
+					if b.Has(0, []byte{0xa1, 0xb2, 0x3c, 0x4d}) {
+						return &Metadata{Kind: KindPCAPCapture, Type: TypeNanosecondBigEndian}
+					}
+				case 0xc3:
+					if b.Has(0, []byte{0xa1, 0xb2, 0xc3, 0xd4}) {
+						return &Metadata{Kind: KindPCAPCapture, Type: TypeBigEndian}
+					}
+				}
+			}
+		case 0xab:
+			if b.Len() > 5 {
+				_ = b[5] // BCE hint
+				switch b[5] {
+				case 0x31:
+					if b.Has(0, []byte{0xab, 0x4b, 0x54, 0x58, 0x20, 0x31, 0x31, 0xbb, 0xd, 0xa, 0x1a, 0xa}) {
+						return &Metadata{Kind: KindKTXTexture, Type: TypeKTX}
+					}
+				case 0x32:
+					if b.Has(0, []byte{0xab, 0x4b, 0x54, 0x58, 0x20, 0x32, 0x30, 0xbb, 0xd, 0xa, 0x1a, 0xa}) {
+						return &Metadata{Kind: KindKTXTexture, Type: TypeKTX2}
+					}
+				}
+			}
+		case 0xb7:
+			if b.Has(0, []byte{0xb7, 0xd8, 0x0, 0x20, 0x37, 0x49, 0xda, 0x11, 0xa6, 0x4e, 0x0, 0x7, 0xe9, 0x5e, 0xad, 0x8d}) {
+				return &Metadata{Kind: KindWTVVideo}
+			}
+		case 0xc7:
+			if b.Has(0, []byte{0xc7, 0x71}) {
+				return &Metadata{Kind: KindCPIOArchive, Type: TypeBinaryLittleEndian}
+			}
+		case 0xd4:
+			if b.Has(0, []byte{0xd4, 0xc3, 0xb2, 0xa1}) {
+				return &Metadata{Kind: KindPCAPCapture, Type: TypeLittleEndian}
+			}
+		case 0xde:
+			if b.Has(0, []byte{0xde, 0xc0, 0x17, 0xb}) {
+				return &Metadata{Kind: KindLLVMBitcode, Type: TypeWrapper}
+			}
+		case 0xed:
+			if b.Has(0, []byte{0xed, 0xab, 0xee, 0xdb}) {
+				return &Metadata{Kind: KindRPMPackage}
+			}
+		case 0xfd:
+			if b.Has(0, []byte{0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x0}) {
+				return &Metadata{Kind: KindXZArchive}
+			}
+		case 0xfe:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x7f:
+					if b.Has(0, []byte{0xfe, 0x7f, 0x1, 0x80}) {
+						return &Metadata{Kind: KindDTSAudio}
+					}
+				case 0xed:
+					if b.Has(0, []byte{0xfe, 0xed, 0xfe, 0xed}) {
+						return &Metadata{Kind: KindJavaKeyStore}
+					}
+				}
+			}
+		case 0xff:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x06:
+					if b.Has(0, []byte{0xff, 0x6, 0x0, 0x0, 0x73, 0x4e, 0x61, 0x50, 0x70, 0x59}) {
+						return &Metadata{Kind: KindSnappyFramedData}
+					}
+				case 0x0a:
+					if b.Has(0, []byte{0xff, 0xa}) {
+						return &Metadata{Kind: KindJPEGXLImage, Type: TypeCodestream}
+					}
+				case 0x1f:
+					if b.Has(0, []byte{0xff, 0x1f, 0x0, 0xe8}) {
+						return &Metadata{Kind: KindDTSAudio}
+					}
+				case 0xd8:
+					if b.Has(0, []byte{0xff, 0xd8, 0xff}) {
+						return &Metadata{Kind: KindJPEGImage}
+					}
+				case 0xf1:
+					if b.Has(0, []byte{0xff, 0xf1}) {
+						return &Metadata{Kind: KindAACAudio, Type: TypeADTS}
+					}
+				case 0xf9:
+					if b.Has(0, []byte{0xff, 0xf9}) {
+						return &Metadata{Kind: KindAACAudio, Type: TypeADTS}
+					}
+				}
+			}
+		}
+	}
+
+	if b.Len() > 2 {
+		_ = b[2] // BCE hint
+		switch b[2] {
+		case 0x2d:
+			if b.Len() > 4 {
+				_ = b[4] // BCE hint
+				switch b[4] {
+				case 0x68:
+					if b.Len() > 5 {
+						_ = b[5] // BCE hint
+						switch b[5] {
+						case 0x30:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x30, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x31:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x31, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x32:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x32, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x33:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x33, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x34:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x34, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x35:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x35, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x36:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x36, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x37:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x37, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x64:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x68, 0x64, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						}
+					}
+				case 0x7a:
+					if b.Len() > 5 {
+						_ = b[5] // BCE hint
+						switch b[5] {
+						case 0x34:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x7a, 0x34, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x35:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x7a, 0x35, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						case 0x73:
+							if b.Has(2, []byte{0x2d, 0x6c, 0x7a, 0x73, 0x2d}) {
+								return &Metadata{Kind: KindLHAArchive}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if b.Has(8, []byte{0x64, 0x65, 0x62, 0x69, 0x61, 0x6e, 0x2d, 0x62, 0x69, 0x6e, 0x61, 0x72, 0x79}) {
+		return &Metadata{Kind: KindDebianPackage}
+	}
+
+	if b.Has(34, []byte{0x4c, 0x50}) {
+		return &Metadata{Kind: KindEOTFont}
+	}
+
+	if b.Has(36, []byte{0x61, 0x63, 0x73, 0x70}) {
+		return &Metadata{Kind: KindICCProfile}
+	}
+
+	if b.Has(44, []byte{0x53, 0x43, 0x52, 0x4d}) {
+		return &Metadata{Kind: KindScreamTrackerModule}
+	}
+
+	if b.Has(60, []byte{0x42, 0x4f, 0x4f, 0x4b, 0x4d, 0x4f, 0x42, 0x49}) {
+		return &Metadata{Kind: KindMOBIDocument}
+	}
+
+	if b.Has(64, []byte{0x3c, 0x3c, 0x3c, 0x20, 0x4f, 0x72, 0x61, 0x63, 0x6c, 0x65, 0x20, 0x56, 0x4d, 0x20, 0x56, 0x69, 0x72, 0x74, 0x75, 0x61, 0x6c, 0x42, 0x6f, 0x78, 0x20, 0x44, 0x69, 0x73, 0x6b, 0x20, 0x49, 0x6d, 0x61, 0x67, 0x65, 0x20, 0x3e, 0x3e, 0x3e, 0xa}) {
+		return &Metadata{Kind: KindVirtualBoxDiskImage}
+	}
+
+	if b.Has(102, []byte{0x6d, 0x42, 0x49, 0x4e}) {
+		return &Metadata{Kind: KindMacBinary}
+	}
+
+	if b.Has(128, []byte{0x44, 0x49, 0x43, 0x4d}) {
+		return &Metadata{Kind: KindDICOMMedicalImage}
+	}
+
+	if b.Has(32769, []byte{0x43, 0x44, 0x30, 0x30, 0x31}) {
+		return &Metadata{Kind: KindISO9660Image}
+	}
+
+	if b.Has(65600, []byte{0x5f, 0x42, 0x48, 0x52, 0x66, 0x53, 0x5f, 0x4d}) {
+		return &Metadata{Kind: KindBtrfsFilesystem}
+	}
+
+	return nil
+}
