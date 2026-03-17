@@ -15,6 +15,7 @@ func init() {
 	types.RegisterSignature(types.KindIVFVideo, types.TypeNone, 0, []byte("DKIF"))
 	types.RegisterSignature(types.KindM3U8Playlist, types.TypeNone, 0, []byte("#EXTM3U"))
 	types.RegisterSignature(types.KindMPEGProgramStream, types.TypeNone, 0, []byte{0x00, 0x00, 0x01, 0xba})
+	types.RegisterSignature(types.KindMPEGVideo, types.TypeMPEG12Video, 0, []byte{0x00, 0x00, 0x01, 0xb3})
 	types.RegisterSignature(types.KindRealMedia, types.TypeNone, 0, []byte{'.', 'R', 'M', 'F'})
 	types.RegisterSignature(types.KindRIFFContainer, types.TypeNone, 0, []byte("RIFF"))
 	types.RegisterSignature(types.KindSmackerVideo, types.TypeNone, 0, []byte("SMK2"))

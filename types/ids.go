@@ -58,12 +58,15 @@ const (
 	KindExtFilesystem
 	KindFarbfeldImage
 	KindFastTrackerModule
+	KindFBXModel
 	KindFilesystemEntry
 	KindFITSAstronomicalImage
 	KindFLACAudio
 	KindFLIFImage
 	KindFLVVideo
 	KindFujifilmRAWImage
+	KindGameBoyAdvanceROM
+	KindGameBoyROM
 	KindGIFImage
 	KindGIMPXCFImage
 	KindGitIndex
@@ -74,6 +77,7 @@ const (
 	KindGzipData
 	KindHDF5Data
 	KindHFSPlusFilesystem
+	KindHTMLDocument
 	KindICalendar
 	KindICCProfile
 	KindICNSIcon
@@ -109,6 +113,7 @@ const (
 	KindMetafileImage
 	KindMicrosoftOutlookEmailFolder
 	KindMIDISequence
+	KindMNGImage
 	KindMOBIDocument
 	KindMonkeysAudio
 	KindMPEG2TransportStream
@@ -116,10 +121,16 @@ const (
 	KindMPEGAudioFrame
 	KindMPEGProgramStream
 	KindMPEGTransportStream
+	KindMPEGVideo
 	KindMusepackAudio
 	KindNESROM
 	KindNetCDFData
 	KindNetpbmImage
+	KindNintendo3DSROM
+	KindNintendo64ROM
+	KindNintendoDSROM
+	KindNintendoSwitchPackage
+	KindNintendoSwitchROM
 	KindNTFSFilesystem
 	KindOggContainer
 	KindOLECompoundDocument
@@ -137,8 +148,11 @@ const (
 	KindPGPMessage
 	KindPhotoshopDocument
 	KindPKCS12
+	KindPlayStationPortableISO
+	KindPLYModel
 	KindPNGImage
 	KindPortableExecutable
+	KindPostgreSQLCustomDump
 	KindPostScriptDocument
 	KindPVRTexture
 	KindPythonBytecode
@@ -153,6 +167,7 @@ const (
 	KindRPMPackage
 	KindRubyGemPackage
 	KindScreamTrackerModule
+	KindSGIImage
 	KindShebangScript
 	KindShockwaveFlash
 	KindSketchDocument
@@ -171,6 +186,7 @@ const (
 	KindTrueTypeCollection
 	KindTrueTypeFont
 	KindTTAAudio
+	KindU3DModel
 	KindUBootImage
 	KindUnixCompressArchive
 	KindVCard
@@ -183,6 +199,7 @@ const (
 	KindWARCFile
 	KindWavPackAudio
 	KindWebAssemblyModule
+	KindWebVTT
 	KindWindowsEventLog
 	KindWindowsImagingFormat
 	KindWindowsRegistryHive
@@ -193,6 +210,7 @@ const (
 	KindXARArchive
 	KindXFSFilesystem
 	KindXMLDocument
+	KindXPMImage
 	KindXZArchive
 	KindZIPArchive
 	KindZlibData
@@ -207,6 +225,7 @@ const (
 	Type32BitLittleEndian
 	Type3G2Media
 	Type3GPPMedia
+	Type3MFDocument
 	Type64Bit
 	Type64BitBigEndian
 	Type64BitLittleEndian
@@ -231,6 +250,7 @@ const (
 	TypeBinaryBigEndian
 	TypeBinaryLittleEndian
 	TypeBlockDevice
+	TypeByteSwapped
 	TypeCanonRAW3CR3
 	TypeCDAAudio
 	TypeCharacterDevice
@@ -306,6 +326,7 @@ const (
 	TypeMP3
 	TypeMP3ID3Tagged
 	TypeMP4Video
+	TypeMPEG12Video
 	TypeMPEG4AudioM4AFamily
 	TypeMPEGLayer2
 	TypeMPEGLayer3
@@ -437,12 +458,15 @@ var kindNames = [...]string{
 	KindExtFilesystem:               "ext Filesystem",
 	KindFarbfeldImage:               "Farbfeld Image",
 	KindFastTrackerModule:           "FastTracker Module",
+	KindFBXModel:                    "FBX Model",
 	KindFilesystemEntry:             "Filesystem Entry",
 	KindFITSAstronomicalImage:       "FITS Astronomical Image",
 	KindFLACAudio:                   "FLAC Audio",
 	KindFLIFImage:                   "FLIF Image",
 	KindFLVVideo:                    "FLV Video",
 	KindFujifilmRAWImage:            "Fujifilm RAW Image",
+	KindGameBoyAdvanceROM:           "Game Boy Advance ROM",
+	KindGameBoyROM:                  "Game Boy ROM",
 	KindGIFImage:                    "GIF Image",
 	KindGIMPXCFImage:                "GIMP XCF Image",
 	KindGitIndex:                    "Git Index",
@@ -453,6 +477,7 @@ var kindNames = [...]string{
 	KindGzipData:                    "Gzip Data",
 	KindHDF5Data:                    "HDF5 Data",
 	KindHFSPlusFilesystem:           "HFS+ Filesystem",
+	KindHTMLDocument:                "HTML Document",
 	KindICalendar:                   "iCalendar",
 	KindICCProfile:                  "ICC Profile",
 	KindICNSIcon:                    "ICNS Icon",
@@ -488,6 +513,7 @@ var kindNames = [...]string{
 	KindMetafileImage:               "Metafile Image",
 	KindMicrosoftOutlookEmailFolder: "Microsoft Outlook Email Folder",
 	KindMIDISequence:                "MIDI Sequence",
+	KindMNGImage:                    "MNG Image",
 	KindMOBIDocument:                "MOBI Document",
 	KindMonkeysAudio:                "Monkey's Audio",
 	KindMPEG2TransportStream:        "MPEG Transport Stream",
@@ -495,10 +521,16 @@ var kindNames = [...]string{
 	KindMPEGAudioFrame:              "MPEG Audio",
 	KindMPEGProgramStream:           "MPEG Program Stream",
 	KindMPEGTransportStream:         "MPEG Transport Stream",
+	KindMPEGVideo:                   "MPEG Video",
 	KindMusepackAudio:               "Musepack Audio",
 	KindNESROM:                      "NES ROM",
 	KindNetCDFData:                  "NetCDF Data",
 	KindNetpbmImage:                 "Netpbm Image",
+	KindNintendo3DSROM:              "Nintendo 3DS ROM",
+	KindNintendo64ROM:               "Nintendo 64 ROM",
+	KindNintendoDSROM:               "Nintendo DS ROM",
+	KindNintendoSwitchPackage:       "Nintendo Switch Package",
+	KindNintendoSwitchROM:           "Nintendo Switch ROM",
 	KindNTFSFilesystem:              "NTFS Filesystem",
 	KindOggContainer:                "Ogg Container",
 	KindOLECompoundDocument:         "OLE Compound Document",
@@ -516,8 +548,11 @@ var kindNames = [...]string{
 	KindPGPMessage:                  "PGP Message",
 	KindPhotoshopDocument:           "Photoshop Document",
 	KindPKCS12:                      "PKCS#12",
+	KindPlayStationPortableISO:      "PlayStation Portable ISO",
+	KindPLYModel:                    "PLY Model",
 	KindPNGImage:                    "PNG Image",
 	KindPortableExecutable:          "Portable Executable",
+	KindPostgreSQLCustomDump:        "PostgreSQL Custom Dump",
 	KindPostScriptDocument:          "PostScript Document",
 	KindPVRTexture:                  "PVR Texture",
 	KindPythonBytecode:              "Python Bytecode",
@@ -532,6 +567,7 @@ var kindNames = [...]string{
 	KindRPMPackage:                  "RPM Package",
 	KindRubyGemPackage:              "RubyGem Package",
 	KindScreamTrackerModule:         "Scream Tracker Module",
+	KindSGIImage:                    "SGI Image",
 	KindShebangScript:               "Shebang Script",
 	KindShockwaveFlash:              "Shockwave Flash",
 	KindSketchDocument:              "Sketch Document",
@@ -550,6 +586,7 @@ var kindNames = [...]string{
 	KindTrueTypeCollection:          "TrueType Collection",
 	KindTrueTypeFont:                "TrueType Font",
 	KindTTAAudio:                    "TTA Audio",
+	KindU3DModel:                    "U3D Model",
 	KindUBootImage:                  "U-Boot Image",
 	KindUnixCompressArchive:         "Unix Compress Archive",
 	KindVCard:                       "vCard",
@@ -562,6 +599,7 @@ var kindNames = [...]string{
 	KindWARCFile:                    "WARC File",
 	KindWavPackAudio:                "WavPack Audio",
 	KindWebAssemblyModule:           "WebAssembly Module",
+	KindWebVTT:                      "WebVTT",
 	KindWindowsEventLog:             "Windows Event Log",
 	KindWindowsImagingFormat:        "Windows Imaging Format",
 	KindWindowsRegistryHive:         "Windows Registry Hive",
@@ -572,6 +610,7 @@ var kindNames = [...]string{
 	KindXARArchive:                  "XAR Archive",
 	KindXFSFilesystem:               "XFS Filesystem",
 	KindXMLDocument:                 "XML Document",
+	KindXPMImage:                    "XPM Image",
 	KindXZArchive:                   "XZ Archive",
 	KindZIPArchive:                  "ZIP Archive",
 	KindZlibData:                    "Zlib Data",
@@ -586,6 +625,7 @@ var typeNames = [...]string{
 	Type32BitLittleEndian:        "32-bit Little-Endian",
 	Type3G2Media:                 "3G2 Media",
 	Type3GPPMedia:                "3GPP Media",
+	Type3MFDocument:              "3MF Document",
 	Type64Bit:                    "64-bit",
 	Type64BitBigEndian:           "64-bit Big-Endian",
 	Type64BitLittleEndian:        "64-bit Little-Endian",
@@ -610,6 +650,7 @@ var typeNames = [...]string{
 	TypeBinaryBigEndian:          "Binary Big-Endian",
 	TypeBinaryLittleEndian:       "Binary Little-Endian",
 	TypeBlockDevice:              "Block Device",
+	TypeByteSwapped:              "Byte-Swapped",
 	TypeCanonRAW3CR3:             "Canon RAW 3 (CR3)",
 	TypeCDAAudio:                 "CD Audio",
 	TypeCharacterDevice:          "Character Device",
@@ -685,6 +726,7 @@ var typeNames = [...]string{
 	TypeMP3:                                             "MP3",
 	TypeMP3ID3Tagged:                                    "MP3 (ID3 Tagged)",
 	TypeMP4Video:                                        "MP4 Video",
+	TypeMPEG12Video:                                     "MPEG-1/2 Video",
 	TypeMPEG4AudioM4AFamily:                             "MPEG-4 Audio (M4A Family)",
 	TypeMPEGLayer2:                                      "MPEG Layer II",
 	TypeMPEGLayer3:                                      "MPEG Layer III",

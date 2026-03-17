@@ -24,6 +24,7 @@ func init() {
 	types.RegisterSignature(types.KindICOCURImage, types.TypeWindowsCursor, 0, []byte{0x00, 0x00, 0x02, 0x00})
 	types.RegisterSignature(types.KindICOCURImage, types.TypeWindowsIcon, 0, []byte{0x00, 0x00, 0x01, 0x00})
 	types.RegisterSignature(types.KindJNGImage, types.TypeNone, 0, []byte{0x8b, 'J', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
+	types.RegisterSignature(types.KindJPEG2000Image, types.TypeCodestream, 0, []byte{0xff, 0x4f, 0xff, 0x51})
 	types.RegisterSignature(types.KindJPEG2000Image, types.TypeNone, 0, []byte{0x00, 0x00, 0x00, 0x0c, 'j', 'P', ' ', ' ', 0x0d, 0x0a, 0x87, 0x0a})
 	types.RegisterSignature(types.KindJPEGImage, types.TypeNone, 0, []byte{0xff, 0xd8, 0xff})
 	types.RegisterSignature(types.KindJPEGXLImage, types.TypeCodestream, 0, []byte{0xff, 0x0a})
@@ -32,6 +33,8 @@ func init() {
 	types.RegisterSignature(types.KindJPEGXRImage, types.TypeLittleEndian, 0, []byte{'I', 'I', 0xbc, 0x01})
 	types.RegisterSignature(types.KindKTXTexture, types.TypeKTX, 0, []byte{0xab, 'K', 'T', 'X', ' ', '1', '1', 0xbb, 0x0d, 0x0a, 0x1a, 0x0a})
 	types.RegisterSignature(types.KindKTXTexture, types.TypeKTX2, 0, []byte{0xab, 'K', 'T', 'X', ' ', '2', '0', 0xbb, 0x0d, 0x0a, 0x1a, 0x0a})
+	types.RegisterSignature(types.KindMetafileImage, types.TypeWindowsMetafileWMF, 0, []byte{0xd7, 0xcd, 0xc6, 0x9a})
+	types.RegisterSignature(types.KindMNGImage, types.TypeNone, 0, []byte{0x8a, 'M', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
 	types.RegisterSignature(types.KindOpenEXRImage, types.TypeNone, 0, []byte{0x76, 0x2f, 0x31, 0x01})
 	types.RegisterSignature(types.KindPhotoshopDocument, types.TypePSB, 0, []byte("8BPB"))
 	types.RegisterSignature(types.KindPhotoshopDocument, types.TypePSD, 0, []byte("8BPS"))
@@ -40,7 +43,9 @@ func init() {
 	types.RegisterSignature(types.KindQOIImage, types.TypeNone, 0, []byte("qoif"))
 	types.RegisterSignature(types.KindRadianceHDRImage, types.TypeNone, 0, []byte("#?RADIANCE"))
 	types.RegisterSignature(types.KindRadianceHDRImage, types.TypeNone, 0, []byte("#?RGBE"))
+	types.RegisterSignature(types.KindSGIImage, types.TypeNone, 0, []byte{0x01, 0xda})
 	types.RegisterSignature(types.KindSunRasterImage, types.TypeNone, 0, []byte{0x59, 0xa6, 0x6a, 0x95})
+	types.RegisterSignature(types.KindXPMImage, types.TypeNone, 0, []byte("/* XPM */"))
 
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("AT&TFORM\x00\x00\x00\x00DJVI"), []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("AT&TFORM\x00\x00\x00\x00DJVM"), []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
@@ -50,5 +55,6 @@ func init() {
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00DJVM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00DJVU"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00THUM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
+	types.RegisterMaskedSignature(types.KindMetafileImage, types.TypeEnhancedMetafileEMF, 0, []byte{0x01, 0x00, 0x00, 0x00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x20, 0x45, 0x4d, 0x46}, []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeWebPImage, 0, []byte("RIFF\x00\x00\x00\x00WEBP"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

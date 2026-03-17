@@ -119,6 +119,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidSystemPackageAPEX}
 		} else if bytes.EqualFold(name, []byte("extension.vsixmanifest")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
+		} else if bytes.EqualFold(name, []byte("extension.vsixmanifest")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeVisualStudioExtensionVSIX}
+		} else if bytes.EqualFold(name, []byte("3D/3dmodel.model")) {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.Type3MFDocument}
 		} else if bytes.HasSuffix(name, []byte(".nuspec")) && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
 		} else if bytes.EqualFold(name, []byte("Metadata/BuildVersionHistory.plist")) || bytes.HasPrefix(name, []byte("Index/Document.iwa")) {
