@@ -29,6 +29,11 @@ func DetectLZMA(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
+	// first byte of compressed stream (byte 13) MUST be 0x00
+	if b.Len() > 13 && b[13] != 0x00 {
+		return nil
+	}
+
 	uncompressedSize := binary.LittleEndian.Uint64(b[5:13])
 
 	// check if size is reasonable
