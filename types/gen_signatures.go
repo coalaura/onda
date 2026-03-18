@@ -335,6 +335,14 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 7 && string(b[:7]) == "#EXTM3U" {
 						return &Metadata{Kind: KindM3U8Playlist}
 					}
+				case 0x52:
+					if len(b) >= 13 && string(b[:13]) == "#ROSBAG V2.0\n" {
+						return &Metadata{Kind: KindROSBag}
+					}
+				case 0x56:
+					if len(b) >= 15 && string(b[:15]) == "#VRML V2.0 utf8" {
+						return &Metadata{Kind: KindVRML3DModel}
+					}
 				case 0x64:
 					if len(b) >= 8 && string(b[:8]) == "#define " {
 						return &Metadata{Kind: KindXBMImage}
@@ -562,8 +570,17 @@ func detectOptimized(b Buffer) *Metadata {
 						return &Metadata{Kind: KindAndroidBootImage}
 					}
 				case 0x52:
-					if len(b) >= 6 && string(b[:6]) == "ARROW1" {
-						return &Metadata{Kind: KindApacheArrowFile}
+					if len(b) > 3 {
+						switch b[3] {
+						case 0x49:
+							if len(b) >= 4 && string(b[:4]) == "ARRI" {
+								return &Metadata{Kind: KindARRIRAWImage}
+							}
+						case 0x4f:
+							if len(b) >= 6 && string(b[:6]) == "ARROW1" {
+								return &Metadata{Kind: KindApacheArrowFile}
+							}
+						}
 					}
 				case 0x54:
 					if b.HasMask(0, "AT&TFORM\x00\x00\x00\x00DJVI", "\xff\xff\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff") {
@@ -683,6 +700,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x49:
 					if len(b) >= 4 && string(b[:4]) == "CISO" {
 						return &Metadata{Kind: KindPlayStationPortableISO}
+					}
+				case 0x50:
+					if len(b) >= 7 && string(b[:7]) == "CPTFILE" {
+						return &Metadata{Kind: KindCorelPhotoPaintImage}
 					}
 				case 0x52:
 					if len(b) >= 4 && string(b[:4]) == "CRAM" {
@@ -873,6 +894,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 4 && string(b[:4]) == "GBS " {
 						return &Metadata{Kind: KindGameBoySound}
 					}
+				case 0x44:
+					if len(b) >= 4 && string(b[:4]) == "GDPC" {
+						return &Metadata{Kind: KindGodotPackage}
+					}
 				case 0x49:
 					if len(b) > 4 {
 						switch b[4] {
@@ -906,6 +931,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x4d:
 					if len(b) >= 4 && string(b[:4]) == "IMPM" {
 						return &Metadata{Kind: KindImpulseTrackerModule}
+					}
+				case 0x53:
+					if len(b) >= 13 && string(b[:13]) == "ISO-10303-21;" {
+						return &Metadata{Kind: KindSTEP3DModel}
 					}
 				case 0x54:
 					if len(b) > 2 {
@@ -1165,6 +1194,14 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 4 && string(b[:4]) == "PWAD" {
 						return &Metadata{Kind: KindWADArchive, Type: TypePWAD}
 					}
+				case 0x58:
+					if len(b) >= 8 && string(b[:8]) == "PXR-USDC" {
+						return &Metadata{Kind: KindUniversalSceneDescription}
+					}
+				case 0x61:
+					if len(b) >= 28 && string(b[:28]) == "Paint Shop Pro Image File\n\x1a\x00" {
+						return &Metadata{Kind: KindPaintShopProImage}
+					}
 				case 0x75:
 					if len(b) >= 20 && string(b[:20]) == "PuTTY-User-Key-File-" {
 						return &Metadata{Kind: KindPuttyPrivateKey}
@@ -1179,6 +1216,9 @@ func detectOptimized(b Buffer) *Metadata {
 						return &Metadata{Kind: KindSQLite3WriteAheadLog, Type: TypeBigEndian}
 					}
 				case 0x46:
+					if len(b) >= 8 && string(b[:8]) == "QFI\xfb\x00\x00\x00\x01" {
+						return &Metadata{Kind: KindQCOWDiskImage, Type: TypeQCOW1}
+					}
 					if len(b) >= 4 && string(b[:4]) == "QFI\xfb" {
 						return &Metadata{Kind: KindQCOWDiskImage, Type: TypeQCOW2}
 					}
@@ -1212,6 +1252,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x45:
 					if len(b) >= 5 && string(b[:5]) == "REDIS" {
 						return &Metadata{Kind: KindRedisDatabase}
+					}
+				case 0x47:
+					if len(b) >= 7 && string(b[:7]) == "RGSSAD\x00" {
+						return &Metadata{Kind: KindRPGMakerArchive}
 					}
 				case 0x49:
 					if b.HasMask(0, "RIFF\x00\x00\x00\x00AVI ", "\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff") {
@@ -1247,6 +1291,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x4b:
 					if len(b) >= 4 && string(b[:4]) == "RKA " {
 						return &Metadata{Kind: KindRKAudio}
+					}
+				case 0x50:
+					if len(b) >= 8 && string(b[:8]) == "RPA-3.0 " {
+						return &Metadata{Kind: KindRenPyArchive}
 					}
 				case 0x53:
 					if len(b) >= 4 && string(b[:4]) == "RSID" {
@@ -1377,6 +1425,23 @@ func detectOptimized(b Buffer) *Metadata {
 						case 0x02:
 							if len(b) >= 4 && string(b[:4]) == "UHA\x02" {
 								return &Metadata{Kind: KindUHAArchive}
+							}
+						}
+					}
+				case 0x6e:
+					if len(b) > 5 {
+						switch b[5] {
+						case 0x46:
+							if len(b) >= 7 && string(b[:7]) == "UnityFS" {
+								return &Metadata{Kind: KindUnityWebData}
+							}
+						case 0x52:
+							if len(b) >= 8 && string(b[:8]) == "UnityRaw" {
+								return &Metadata{Kind: KindUnityWebData}
+							}
+						case 0x57:
+							if len(b) >= 8 && string(b[:8]) == "UnityWeb" {
+								return &Metadata{Kind: KindUnityWebData}
 							}
 						}
 					}
@@ -1811,6 +1876,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 9 && string(b[:9]) == "\x89LZO\x00\r\n\x1a\n" {
 						return &Metadata{Kind: KindLZOPArchive}
 					}
+				case 0x4d:
+					if len(b) >= 8 && string(b[:8]) == "\x89MCAP0\r\n" {
+						return &Metadata{Kind: KindMCAPCapture}
+					}
 				case 0x50:
 					if len(b) >= 8 && string(b[:8]) == "\x89PNG\r\n\x1a\n" {
 						return &Metadata{Kind: KindPNGImage}
@@ -1981,6 +2050,10 @@ func detectOptimized(b Buffer) *Metadata {
 		}
 	}
 
+	if len(b) >= 10 && string(b[1:10]) == "ATARI7800" {
+		return &Metadata{Kind: KindAtari7800ROM}
+	}
+
 	if len(b) > 2 && b[2] == 0x2d {
 		if len(b) > 4 {
 			switch b[4] {
@@ -2063,8 +2136,17 @@ func detectOptimized(b Buffer) *Metadata {
 		}
 	}
 
-	if len(b) >= 12 && string(b[4:12]) == "$\xff\xaeQi\x9a\xa2!" {
-		return &Metadata{Kind: KindGameBoyAdvanceROM}
+	if len(b) > 4 {
+		switch b[4] {
+		case 0x24:
+			if len(b) >= 12 && string(b[4:12]) == "$\xff\xaeQi\x9a\xa2!" {
+				return &Metadata{Kind: KindGameBoyAdvanceROM}
+			}
+		case 0x52:
+			if len(b) >= 8 && string(b[4:8]) == "RED2" {
+				return &Metadata{Kind: KindREDRAWImage}
+			}
+		}
 	}
 
 	if len(b) >= 14 && string(b[7:14]) == "**ACE**" {
@@ -2073,6 +2155,10 @@ func detectOptimized(b Buffer) *Metadata {
 
 	if len(b) >= 21 && string(b[8:21]) == "debian-binary" {
 		return &Metadata{Kind: KindDebianPackage}
+	}
+
+	if len(b) >= 44 && string(b[11:44]) == "must be converted with BinHex 4.0" {
+		return &Metadata{Kind: KindBinHex}
 	}
 
 	if len(b) >= 32 && string(b[12:32]) == "\xc2\xea\x81`\xb3\x14\x11Ͻ\x92\b\x00\t\xc71\x8c\x18\x1f\x10\x11" {
@@ -2148,6 +2234,38 @@ func detectOptimized(b Buffer) *Metadata {
 		return &Metadata{Kind: KindGameBoyROM}
 	}
 
+	if len(b) > 344 && b[344] == 0x6e {
+		if len(b) > 345 {
+			switch b[345] {
+			case 0x2b:
+				if len(b) >= 348 && string(b[344:348]) == "n+1\x00" {
+					return &Metadata{Kind: KindNIfTIMedicalImage}
+				}
+			case 0x69:
+				if len(b) >= 348 && string(b[344:348]) == "ni1\x00" {
+					return &Metadata{Kind: KindNIfTIMedicalImage}
+				}
+			}
+		}
+	}
+
+	if len(b) > 512 {
+		switch b[512] {
+		case 0x45:
+			if len(b) >= 520 && string(b[512:520]) == "EFI PART" {
+				return &Metadata{Kind: KindGUIDPartitionTable}
+			}
+		case 0x4c:
+			if len(b) >= 520 && string(b[512:520]) == "LABELONE" {
+				return &Metadata{Kind: KindLVM2PhysicalVolume}
+			}
+		}
+	}
+
+	if len(b) >= 518 && string(b[514:518]) == "HdrS" {
+		return &Metadata{Kind: KindLinuxKernelImage}
+	}
+
 	if len(b) > 1024 {
 		switch b[1024] {
 		case 0x10:
@@ -2195,6 +2313,25 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 32774 && string(b[32769:32774]) == "NSR03" {
 						return &Metadata{Kind: KindUniversalDiskFormat}
 					}
+				}
+			}
+		}
+	}
+
+	if len(b) > 65588 && b[65588] == 0x52 {
+		if len(b) > 65594 {
+			switch b[65594] {
+			case 0x32:
+				if len(b) >= 65597 && string(b[65588:65597]) == "ReIsEr2Fs" {
+					return &Metadata{Kind: KindReiserFSFilesystem}
+				}
+			case 0x33:
+				if len(b) >= 65597 && string(b[65588:65597]) == "ReIsEr3Fs" {
+					return &Metadata{Kind: KindReiserFSFilesystem}
+				}
+			case 0x46:
+				if len(b) >= 65596 && string(b[65588:65596]) == "ReIsErFs" {
+					return &Metadata{Kind: KindReiserFSFilesystem}
 				}
 			}
 		}

@@ -39,8 +39,10 @@ const (
 	KindAppleSingle
 	KindARArchive
 	KindARJArchive
+	KindARRIRAWImage
 	KindASFContainer
 	KindASTCTexture
+	KindAtari7800ROM
 	KindAUAudio
 	KindAutoCADDrawing
 	KindAvroObjectContainer
@@ -48,6 +50,7 @@ const (
 	KindBcachefsFilesystem
 	KindBCFData
 	KindBerkeleyDB
+	KindBinHex
 	KindBinkVideo
 	KindBitcoinBlock
 	KindBitLockerDiskEncryption
@@ -66,6 +69,7 @@ const (
 	KindCommodore64Tape
 	KindCommodoreSID
 	KindCompiledTerminfo
+	KindCorelPhotoPaintImage
 	KindCPIOArchive
 	KindCRAMData
 	KindCramFS
@@ -113,7 +117,9 @@ const (
 	KindGlyphBitmapDistributionFormat
 	KindGNUGettextMachineCatalog
 	KindGnuPGKeybox
+	KindGodotPackage
 	KindGRIBData
+	KindGUIDPartitionTable
 	KindGzipArchive
 	KindGzipData
 	KindHDF4Data
@@ -146,10 +152,12 @@ const (
 	KindKTXTexture
 	KindLevelDB
 	KindLHAArchive
+	KindLinuxKernelImage
 	KindLLVMBitcode
 	KindLottieAnimation
 	KindLuaBytecode
 	KindLUKSDiskEncryption
+	KindLVM2PhysicalVolume
 	KindLZ4Frame
 	KindLZFSEData
 	KindLZIPArchive
@@ -166,6 +174,7 @@ const (
 	KindMayaASCII
 	KindMayaBinary
 	KindMBOXEmailFolder
+	KindMCAPCapture
 	KindMediaDescriptor
 	KindMetafileImage
 	KindMicrosoftAccessDatabase
@@ -192,6 +201,7 @@ const (
 	KindNESSoundFormat
 	KindNetCDFData
 	KindNetpbmImage
+	KindNIfTIMedicalImage
 	KindNILFS2Filesystem
 	KindNintendo3DSROM
 	KindNintendo64ROM
@@ -212,6 +222,7 @@ const (
 	KindOptimFROGAudio
 	KindORCColumnarData
 	KindOutlookExpressDatabase
+	KindPaintShopProImage
 	KindParallelsDiskImage
 	KindPCAPCapture
 	KindPCAPNGCapture
@@ -245,10 +256,15 @@ const (
 	KindRData
 	KindRealMedia
 	KindRedisDatabase
+	KindREDRAWImage
+	KindReiserFSFilesystem
+	KindRenPyArchive
 	KindRichTextFormatDocument
 	KindRIFFContainer
 	KindRKAudio
 	KindROMFS
+	KindROSBag
+	KindRPGMakerArchive
 	KindRPMPackage
 	KindRubyGemPackage
 	KindSASData
@@ -273,6 +289,7 @@ const (
 	KindSquashFSFilesystem
 	KindSSHPublicKey
 	KindStataData
+	KindSTEP3DModel
 	KindStuffItArchive
 	KindSunRasterImage
 	KindSVGImage
@@ -291,7 +308,9 @@ const (
 	KindUBIFSFilesystem
 	KindUBootImage
 	KindUHAArchive
+	KindUnityWebData
 	KindUniversalDiskFormat
+	KindUniversalSceneDescription
 	KindUnixCompressArchive
 	KindValvePak
 	KindValveTextureFormat
@@ -302,6 +321,7 @@ const (
 	KindVirtualBoxDiskImage
 	KindVMwareDiskImage
 	KindVOCAudio
+	KindVRML3DModel
 	KindVulkanSPIRV
 	KindWADArchive
 	KindWARCFile
@@ -458,6 +478,7 @@ const (
 	TypeMicrosoftPowerPointSlideshowPPSX
 	TypeMicrosoftPowerPointTemplatePOTX
 	TypeMicrosoftProjectDocumentMPP
+	TypeMicrosoftPublisherDocumentPUB
 	TypeMicrosoftVisioDrawingVSD
 	TypeMicrosoftWordDocumentDOC
 	TypeMicrosoftWordDocumentDOCX
@@ -517,6 +538,7 @@ const (
 	TypePWAD
 	TypePythonSourceDistributionSDist
 	TypePythonWheelWHL
+	TypeQCOW1
 	TypeQCOW2
 	TypeQCPAudio
 	TypeQuickTimeMovie
@@ -593,8 +615,10 @@ var kindNames = [...]string{
 	KindAppleSingle:                         "AppleSingle File",
 	KindARArchive:                           "AR Archive",
 	KindARJArchive:                          "ARJ Archive",
+	KindARRIRAWImage:                        "ARRI RAW Image",
 	KindASFContainer:                        "ASF Container",
 	KindASTCTexture:                         "ASTC Texture",
+	KindAtari7800ROM:                        "Atari 7800 ROM",
 	KindAUAudio:                             "AU Audio",
 	KindAutoCADDrawing:                      "AutoCAD Drawing",
 	KindAvroObjectContainer:                 "Avro Object Container",
@@ -602,6 +626,7 @@ var kindNames = [...]string{
 	KindBcachefsFilesystem:                  "Bcachefs Filesystem",
 	KindBCFData:                             "Binary Call Format (BCF)",
 	KindBerkeleyDB:                          "Berkeley DB",
+	KindBinHex:                              "BinHex Archive",
 	KindBinkVideo:                           "Bink Video",
 	KindBitcoinBlock:                        "Bitcoin Block Data",
 	KindBitLockerDiskEncryption:             "BitLocker Disk Encryption",
@@ -620,6 +645,7 @@ var kindNames = [...]string{
 	KindCommodore64Tape:                     "Commodore 64 Tape",
 	KindCommodoreSID:                        "Commodore SID Audio",
 	KindCompiledTerminfo:                    "Compiled Terminfo",
+	KindCorelPhotoPaintImage:                "Corel Photo-Paint Image",
 	KindCPIOArchive:                         "CPIO Archive",
 	KindCRAMData:                            "CRAM Data",
 	KindCramFS:                              "CramFS",
@@ -667,7 +693,9 @@ var kindNames = [...]string{
 	KindGlyphBitmapDistributionFormat:       "Glyph Bitmap Distribution Format (BDF)",
 	KindGNUGettextMachineCatalog:            "GNU Gettext Machine Catalog",
 	KindGnuPGKeybox:                         "GnuPG Keybox",
+	KindGodotPackage:                        "Godot Engine Package",
 	KindGRIBData:                            "GRIB Data",
+	KindGUIDPartitionTable:                  "GUID Partition Table",
 	KindGzipArchive:                         "Gzip Archive",
 	KindGzipData:                            "Gzip Data",
 	KindHDF4Data:                            "HDF4 Data",
@@ -700,10 +728,12 @@ var kindNames = [...]string{
 	KindKTXTexture:                          "KTX Texture",
 	KindLevelDB:                             "LevelDB/RocksDB",
 	KindLHAArchive:                          "LHA Archive",
+	KindLinuxKernelImage:                    "Linux Kernel Image",
 	KindLLVMBitcode:                         "LLVM Bitcode",
 	KindLottieAnimation:                     "Lottie Animation",
 	KindLuaBytecode:                         "Lua Bytecode",
 	KindLUKSDiskEncryption:                  "LUKS Disk Encryption",
+	KindLVM2PhysicalVolume:                  "LVM2 Physical Volume",
 	KindLZ4Frame:                            "LZ4 Frame",
 	KindLZFSEData:                           "LZFSE Data",
 	KindLZIPArchive:                         "LZIP Archive",
@@ -720,6 +750,7 @@ var kindNames = [...]string{
 	KindMayaASCII:                           "Maya ASCII",
 	KindMayaBinary:                          "Maya Binary",
 	KindMBOXEmailFolder:                     "MBOX Email Folder",
+	KindMCAPCapture:                         "MCAP Capture",
 	KindMediaDescriptor:                     "Media Descriptor",
 	KindMetafileImage:                       "Metafile Image",
 	KindMicrosoftAccessDatabase:             "Microsoft Access Database",
@@ -746,6 +777,7 @@ var kindNames = [...]string{
 	KindNESSoundFormat:                      "NES Sound Format",
 	KindNetCDFData:                          "NetCDF Data",
 	KindNetpbmImage:                         "Netpbm Image",
+	KindNIfTIMedicalImage:                   "NIfTI Medical Image",
 	KindNILFS2Filesystem:                    "NILFS2 Filesystem",
 	KindNintendo3DSROM:                      "Nintendo 3DS ROM",
 	KindNintendo64ROM:                       "Nintendo 64 ROM",
@@ -766,6 +798,7 @@ var kindNames = [...]string{
 	KindOptimFROGAudio:                      "OptimFROG Audio",
 	KindORCColumnarData:                     "ORC Columnar Data",
 	KindOutlookExpressDatabase:              "Outlook Express Database",
+	KindPaintShopProImage:                   "PaintShop Pro Image",
 	KindParallelsDiskImage:                  "Parallels Disk Image",
 	KindPCAPCapture:                         "PCAP Capture",
 	KindPCAPNGCapture:                       "PCAPNG Capture",
@@ -799,10 +832,15 @@ var kindNames = [...]string{
 	KindRData:                               "RData",
 	KindRealMedia:                           "RealMedia",
 	KindRedisDatabase:                       "Redis Database",
+	KindREDRAWImage:                         "RED RAW Image",
+	KindReiserFSFilesystem:                  "ReiserFS Filesystem",
+	KindRenPyArchive:                        "Ren'Py Archive",
 	KindRichTextFormatDocument:              "Rich Text Format Document",
 	KindRIFFContainer:                       "RIFF Container",
 	KindRKAudio:                             "RKAudio",
 	KindROMFS:                               "ROMFS",
+	KindROSBag:                              "ROS Bag",
+	KindRPGMakerArchive:                     "RPG Maker Archive",
 	KindRPMPackage:                          "RPM Package",
 	KindRubyGemPackage:                      "RubyGem Package",
 	KindSASData:                             "SAS Data",
@@ -827,6 +865,7 @@ var kindNames = [...]string{
 	KindSquashFSFilesystem:                  "SquashFS Filesystem",
 	KindSSHPublicKey:                        "SSH Public Key",
 	KindStataData:                           "Stata Data",
+	KindSTEP3DModel:                         "STEP 3D Model",
 	KindStuffItArchive:                      "StuffIt Archive",
 	KindSunRasterImage:                      "Sun Raster Image",
 	KindSVGImage:                            "SVG Image",
@@ -845,7 +884,9 @@ var kindNames = [...]string{
 	KindUBIFSFilesystem:                     "UBIFS Filesystem",
 	KindUBootImage:                          "U-Boot Image",
 	KindUHAArchive:                          "UHA Archive",
+	KindUnityWebData:                        "Unity Web Data",
 	KindUniversalDiskFormat:                 "Universal Disk Format",
+	KindUniversalSceneDescription:           "Universal Scene Description",
 	KindUnixCompressArchive:                 "Unix Compress Archive",
 	KindValvePak:                            "Valve Pak",
 	KindValveTextureFormat:                  "Valve Texture Format",
@@ -856,6 +897,7 @@ var kindNames = [...]string{
 	KindVirtualBoxDiskImage:                 "VirtualBox Disk Image",
 	KindVMwareDiskImage:                     "VMware Disk Image",
 	KindVOCAudio:                            "VOC Audio",
+	KindVRML3DModel:                         "VRML 3D Model",
 	KindVulkanSPIRV:                         "Vulkan SPIR-V",
 	KindWADArchive:                          "WAD Archive",
 	KindWARCFile:                            "WARC File",
@@ -1012,6 +1054,7 @@ var typeNames = [...]string{
 	TypeMicrosoftPowerPointSlideshowPPSX:                "Microsoft PowerPoint Slideshow (PPSX)",
 	TypeMicrosoftPowerPointTemplatePOTX:                 "Microsoft PowerPoint Template (POTX)",
 	TypeMicrosoftProjectDocumentMPP:                     "Microsoft Project Document (MPP)",
+	TypeMicrosoftPublisherDocumentPUB:                   "Microsoft Publisher Document (PUB)",
 	TypeMicrosoftVisioDrawingVSD:                        "Microsoft Visio Drawing (VSD)",
 	TypeMicrosoftWordDocumentDOC:                        "Microsoft Word Document (DOC)",
 	TypeMicrosoftWordDocumentDOCX:                       "Microsoft Word Document (DOCX)",
@@ -1071,6 +1114,7 @@ var typeNames = [...]string{
 	TypePWAD:                                            "PWAD",
 	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
 	TypePythonWheelWHL:                                  "Python Wheel (WHL)",
+	TypeQCOW1:                                           "QCOW1",
 	TypeQCOW2:                                           "QCOW2",
 	TypeQCPAudio:                                        "QCP Audio",
 	TypeQuickTimeMovie:                                  "QuickTime Movie",
