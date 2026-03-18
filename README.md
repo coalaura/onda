@@ -44,13 +44,19 @@ go install github.com/coalaura/onda@latest
 ## Usage
 
 ```bash
-onda <file>
+onda [flags] <file>
 ```
 
-Example:
+**Flags:**
+- `-p`, `--porcelain`: Print easily parseable output (tab-separated: `Kind\tType`)
+- `-v`, `--version`: Print version information
+- `-h`, `--help`: Print this help message
+
+**Examples:**
 
 ```bash
 onda sample.png
+onda --porcelain sample.png
 ```
 
 ## Go package
