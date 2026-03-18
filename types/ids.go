@@ -30,6 +30,7 @@ const (
 	KindAppleDesktopServicesStore
 	KindAppleDouble
 	KindAppleiWorkDocument
+	KindAppleKeychain
 	KindAppleSingle
 	KindARArchive
 	KindARJArchive
@@ -40,7 +41,9 @@ const (
 	KindAvroObjectContainer
 	KindBAMData
 	KindBcachefsFilesystem
+	KindBCFData
 	KindBinkVideo
+	KindBitcoinBlock
 	KindBitLockerDiskEncryption
 	KindBlenderFile
 	KindBMPImage
@@ -80,6 +83,7 @@ const (
 	KindF2FSFilesystem
 	KindFarbfeldImage
 	KindFastTrackerModule
+	KindFATFilesystem
 	KindFBXModel
 	KindFilesystemEntry
 	KindFITSAstronomicalImage
@@ -95,6 +99,7 @@ const (
 	KindGitIndex
 	KindGitPack
 	KindGLTFBinary
+	KindGnuPGKeybox
 	KindGRIBData
 	KindGzipArchive
 	KindGzipData
@@ -114,6 +119,7 @@ const (
 	KindJavaClass
 	KindJavaKeyStore
 	KindJavaModule
+	KindJavaSerialization
 	KindJFFS2Filesystem
 	KindJNGImage
 	KindJPEG2000Image
@@ -122,6 +128,7 @@ const (
 	KindJPEGXRImage
 	KindKeePassDatabase
 	KindKTXTexture
+	KindLevelDB
 	KindLHAArchive
 	KindLLVMBitcode
 	KindLuaBytecode
@@ -141,9 +148,11 @@ const (
 	KindMATLABData
 	KindMayaASCII
 	KindMayaBinary
+	KindMBOXEmailFolder
 	KindMediaDescriptor
 	KindMetafileImage
 	KindMicrosoftAccessDatabase
+	KindMicrosoftNetworkMonitor
 	KindMicrosoftOutlookEmailFolder
 	KindMIDISequence
 	KindMinoltaRAWImage
@@ -174,12 +183,15 @@ const (
 	KindOLECompoundDocument
 	KindOlympusRAWImage
 	KindOpenEXRImage
+	KindOpenSSHPrivateKey
 	KindOpenTypeFont
 	KindOptimFROGAudio
 	KindORCColumnarData
 	KindOutlookExpressDatabase
+	KindParallelsDiskImage
 	KindPCAPCapture
 	KindPCAPNGCapture
+	KindPCFFont
 	KindPCXImage
 	KindPDFDocument
 	KindPEMCertificate
@@ -197,6 +209,7 @@ const (
 	KindPostgreSQLCustomDump
 	KindPostScriptDocument
 	KindPowerISODAA
+	KindPSFFont
 	KindPuttyPrivateKey
 	KindPVRTexture
 	KindPythonBytecode
@@ -224,11 +237,13 @@ const (
 	KindSketchUpModel
 	KindSmackerVideo
 	KindSnappyFramedData
+	KindSnoopCapture
 	KindSourceEngineBSP
 	KindSPSSData
 	KindSQLite3WriteAheadLog
 	KindSQLiteDatabase
 	KindSquashFSFilesystem
+	KindSSHPublicKey
 	KindStataData
 	KindStuffItArchive
 	KindSunRasterImage
@@ -268,6 +283,7 @@ const (
 	KindWindowsImagingFormat
 	KindWindowsRegistryHive
 	KindWindowsShortcut
+	KindWindowsTypeLibrary
 	KindWOFF2Font
 	KindWOFFFont
 	KindWTVVideo
@@ -355,6 +371,9 @@ const (
 	TypeExt3
 	TypeExt4
 	TypeF4VVideo
+	TypeFAT12
+	TypeFAT16
+	TypeFAT32
 	TypeFirefoxExtensionXPI
 	TypeFLACAudio
 	TypeGIF87a
@@ -369,6 +388,7 @@ const (
 	TypeKDB
 	TypeKDBX
 	TypeKMZArchive
+	TypeKritaDocumentKRA
 	TypeKTX
 	TypeKTX2
 	TypeLittleEndian
@@ -417,6 +437,7 @@ const (
 	TypeNuGetPackageNUPKG
 	TypeOCIImageLayoutTar
 	TypeOldASCII
+	TypeOpenDocumentGraphicsODG
 	TypeOpenDocumentPresentationODP
 	TypeOpenDocumentSpreadsheetODS
 	TypeOpenDocumentTextODT
@@ -475,8 +496,12 @@ const (
 	TypeWebPImage
 	TypeWindowsCursor
 	TypeWindowsIcon
+	TypeWindowsLE
+	TypeWindowsLX
 	TypeWindowsMetafileWMF
+	TypeWindowsNE
 	TypeWrapper
+	TypeXMLPaperSpecificationXPS
 	TypeZlibCompressed
 	TypeZstandardSkinnableFrame
 )
@@ -508,6 +533,7 @@ var kindNames = [...]string{
 	KindAppleDesktopServicesStore:     "Apple Desktop Services Store",
 	KindAppleDouble:                   "AppleDouble File",
 	KindAppleiWorkDocument:            "Apple iWork Document",
+	KindAppleKeychain:                 "Apple Keychain",
 	KindAppleSingle:                   "AppleSingle File",
 	KindARArchive:                     "AR Archive",
 	KindARJArchive:                    "ARJ Archive",
@@ -518,7 +544,9 @@ var kindNames = [...]string{
 	KindAvroObjectContainer:           "Avro Object Container",
 	KindBAMData:                       "BAM Data",
 	KindBcachefsFilesystem:            "Bcachefs Filesystem",
+	KindBCFData:                       "Binary Call Format (BCF)",
 	KindBinkVideo:                     "Bink Video",
+	KindBitcoinBlock:                  "Bitcoin Block Data",
 	KindBitLockerDiskEncryption:       "BitLocker Disk Encryption",
 	KindBlenderFile:                   "Blender File",
 	KindBMPImage:                      "BMP Image",
@@ -558,6 +586,7 @@ var kindNames = [...]string{
 	KindF2FSFilesystem:                "F2FS Filesystem",
 	KindFarbfeldImage:                 "Farbfeld Image",
 	KindFastTrackerModule:             "FastTracker Module",
+	KindFATFilesystem:                 "FAT Filesystem",
 	KindFBXModel:                      "FBX Model",
 	KindFilesystemEntry:               "Filesystem Entry",
 	KindFITSAstronomicalImage:         "FITS Astronomical Image",
@@ -573,6 +602,7 @@ var kindNames = [...]string{
 	KindGitIndex:                      "Git Index",
 	KindGitPack:                       "Git Pack",
 	KindGLTFBinary:                    "glTF Binary",
+	KindGnuPGKeybox:                   "GnuPG Keybox",
 	KindGRIBData:                      "GRIB Data",
 	KindGzipArchive:                   "Gzip Archive",
 	KindGzipData:                      "Gzip Data",
@@ -592,6 +622,7 @@ var kindNames = [...]string{
 	KindJavaClass:                     "Java Class",
 	KindJavaKeyStore:                  "Java KeyStore",
 	KindJavaModule:                    "Java Module",
+	KindJavaSerialization:             "Java Serialization Data",
 	KindJFFS2Filesystem:               "JFFS2 Filesystem",
 	KindJNGImage:                      "JNG Image",
 	KindJPEG2000Image:                 "JPEG 2000 Image",
@@ -600,6 +631,7 @@ var kindNames = [...]string{
 	KindJPEGXRImage:                   "JPEG XR Image",
 	KindKeePassDatabase:               "KeePass Database",
 	KindKTXTexture:                    "KTX Texture",
+	KindLevelDB:                       "LevelDB/RocksDB",
 	KindLHAArchive:                    "LHA Archive",
 	KindLLVMBitcode:                   "LLVM Bitcode",
 	KindLuaBytecode:                   "Lua Bytecode",
@@ -619,9 +651,11 @@ var kindNames = [...]string{
 	KindMATLABData:                    "MATLAB Data",
 	KindMayaASCII:                     "Maya ASCII",
 	KindMayaBinary:                    "Maya Binary",
+	KindMBOXEmailFolder:               "MBOX Email Folder",
 	KindMediaDescriptor:               "Media Descriptor",
 	KindMetafileImage:                 "Metafile Image",
 	KindMicrosoftAccessDatabase:       "Microsoft Access Database",
+	KindMicrosoftNetworkMonitor:       "Microsoft Network Monitor Capture",
 	KindMicrosoftOutlookEmailFolder:   "Microsoft Outlook Email Folder",
 	KindMIDISequence:                  "MIDI Sequence",
 	KindMinoltaRAWImage:               "Minolta RAW Image",
@@ -652,12 +686,15 @@ var kindNames = [...]string{
 	KindOLECompoundDocument:           "OLE Compound Document",
 	KindOlympusRAWImage:               "Olympus RAW Image",
 	KindOpenEXRImage:                  "OpenEXR Image",
+	KindOpenSSHPrivateKey:             "OpenSSH Private Key",
 	KindOpenTypeFont:                  "OpenType Font",
 	KindOptimFROGAudio:                "OptimFROG Audio",
 	KindORCColumnarData:               "ORC Columnar Data",
 	KindOutlookExpressDatabase:        "Outlook Express Database",
+	KindParallelsDiskImage:            "Parallels Disk Image",
 	KindPCAPCapture:                   "PCAP Capture",
 	KindPCAPNGCapture:                 "PCAPNG Capture",
+	KindPCFFont:                       "Portable Compiled Format Font",
 	KindPCXImage:                      "PCX Image",
 	KindPDFDocument:                   "PDF Document",
 	KindPEMCertificate:                "PEM Certificate",
@@ -675,6 +712,7 @@ var kindNames = [...]string{
 	KindPostgreSQLCustomDump:          "PostgreSQL Custom Dump",
 	KindPostScriptDocument:            "PostScript Document",
 	KindPowerISODAA:                   "PowerISO DAA",
+	KindPSFFont:                       "PC Screen Font",
 	KindPuttyPrivateKey:               "PuTTY Private Key",
 	KindPVRTexture:                    "PVR Texture",
 	KindPythonBytecode:                "Python Bytecode",
@@ -702,11 +740,13 @@ var kindNames = [...]string{
 	KindSketchUpModel:                 "SketchUp Model",
 	KindSmackerVideo:                  "Smacker Video",
 	KindSnappyFramedData:              "Snappy Framed Data",
+	KindSnoopCapture:                  "Snoop Capture",
 	KindSourceEngineBSP:               "Source Engine BSP",
 	KindSPSSData:                      "SPSS Data",
 	KindSQLite3WriteAheadLog:          "SQLite Write-Ahead Log",
 	KindSQLiteDatabase:                "SQLite Database",
 	KindSquashFSFilesystem:            "SquashFS Filesystem",
+	KindSSHPublicKey:                  "SSH Public Key",
 	KindStataData:                     "Stata Data",
 	KindStuffItArchive:                "StuffIt Archive",
 	KindSunRasterImage:                "Sun Raster Image",
@@ -746,6 +786,7 @@ var kindNames = [...]string{
 	KindWindowsImagingFormat:          "Windows Imaging Format",
 	KindWindowsRegistryHive:           "Windows Registry Hive",
 	KindWindowsShortcut:               "Windows Shortcut",
+	KindWindowsTypeLibrary:            "Windows Type Library (TLB)",
 	KindWOFF2Font:                     "WOFF2 Font",
 	KindWOFFFont:                      "WOFF Font",
 	KindWTVVideo:                      "WTV Video",
@@ -833,6 +874,9 @@ var typeNames = [...]string{
 	TypeExt3:                     "ext3",
 	TypeExt4:                     "ext4",
 	TypeF4VVideo:                 "F4V Video",
+	TypeFAT12:                    "FAT12",
+	TypeFAT16:                    "FAT16",
+	TypeFAT32:                    "FAT32",
 	TypeFirefoxExtensionXPI:      "Firefox Extension (XPI)",
 	TypeFLACAudio:                "FLAC Audio",
 	TypeGIF87a:                   "GIF87a",
@@ -847,6 +891,7 @@ var typeNames = [...]string{
 	TypeKDB:                      "KDB",
 	TypeKDBX:                     "KDBX",
 	TypeKMZArchive:               "KMZ Archive",
+	TypeKritaDocumentKRA:         "Krita Document (KRA)",
 	TypeKTX:                      "KTX",
 	TypeKTX2:                     "KTX2",
 	TypeLittleEndian:             "Little-Endian",
@@ -895,6 +940,7 @@ var typeNames = [...]string{
 	TypeNuGetPackageNUPKG:                               "NuGet Package (NUPKG)",
 	TypeOCIImageLayoutTar:                               "OCI Image Layout (TAR)",
 	TypeOldASCII:                                        "Old ASCII",
+	TypeOpenDocumentGraphicsODG:                         "OpenDocument Graphics (ODG)",
 	TypeOpenDocumentPresentationODP:                     "OpenDocument Presentation (ODP)",
 	TypeOpenDocumentSpreadsheetODS:                      "OpenDocument Spreadsheet (ODS)",
 	TypeOpenDocumentTextODT:                             "OpenDocument Text (ODT)",
@@ -953,8 +999,12 @@ var typeNames = [...]string{
 	TypeWebPImage:                                       "WebP Image",
 	TypeWindowsCursor:                                   "Windows Cursor",
 	TypeWindowsIcon:                                     "Windows Icon",
+	TypeWindowsLE:                                       "Linear Executable (LE)",
+	TypeWindowsLX:                                       "OS/2 Linear Executable (LX)",
 	TypeWindowsMetafileWMF:                              "Windows Metafile (WMF)",
+	TypeWindowsNE:                                       "16-bit New Executable (NE)",
 	TypeWrapper:                                         "Wrapper",
+	TypeXMLPaperSpecificationXPS:                        "XML Paper Specification (XPS)",
 	TypeZlibCompressed:                                  "Zlib Compressed",
 	TypeZstandardSkinnableFrame:                         "Zstandard Skinnable Frame",
 }

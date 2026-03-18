@@ -116,6 +116,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if b.HasMask(0, "\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00 EMF", "\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff") {
 						return &Metadata{Kind: KindMetafileImage, Type: TypeEnhancedMetafileEMF}
 					}
+				case 0x66:
+					if b.Len() >= 4 && string(b[:4]) == "\x01fcp" {
+						return &Metadata{Kind: KindPCFFont}
+					}
 				case 0xda:
 					if b.Len() >= 2 && string(b[:2]) == "\x01\xda" {
 						return &Metadata{Kind: KindSGIImage}
@@ -412,6 +416,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() >= 4 && string(b[:4]) == "4\x12\xaaU" {
 				return &Metadata{Kind: KindValvePak}
 			}
+		case 0x36:
+			if b.Len() >= 2 && string(b[:2]) == "6\x04" {
+				return &Metadata{Kind: KindPSFFont}
+			}
 		case 0x37:
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
@@ -528,8 +536,18 @@ func detectOptimized(b Buffer) *Metadata {
 						return &Metadata{Kind: KindBAMData}
 					}
 				case 0x43:
-					if b.Len() >= 4 && string(b[:4]) == "BC\xc0\xde" {
-						return &Metadata{Kind: KindLLVMBitcode}
+					if b.Len() > 2 {
+						_ = b[2] // BCE hint
+						switch b[2] {
+						case 0x46:
+							if b.Len() >= 4 && string(b[:4]) == "BCF\x02" {
+								return &Metadata{Kind: KindBCFData}
+							}
+						case 0xc0:
+							if b.Len() >= 4 && string(b[:4]) == "BC\xc0\xde" {
+								return &Metadata{Kind: KindLLVMBitcode}
+							}
+						}
 					}
 				case 0x45:
 					if b.Len() > 9 {
@@ -827,6 +845,10 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
 				switch b[1] {
+				case 0x42:
+					if b.Len() >= 4 && string(b[:4]) == "KBXf" {
+						return &Metadata{Kind: KindGnuPGKeybox}
+					}
 				case 0x44:
 					if b.Len() >= 4 && string(b[:4]) == "KDMV" {
 						return &Metadata{Kind: KindVMwareDiskImage, Type: TypeVMDK}
@@ -868,8 +890,18 @@ func detectOptimized(b Buffer) *Metadata {
 						_ = b[2] // BCE hint
 						switch b[2] {
 						case 0x43:
-							if b.Len() >= 4 && string(b[:4]) == "MAC " {
-								return &Metadata{Kind: KindMonkeysAudio}
+							if b.Len() > 3 {
+								_ = b[3] // BCE hint
+								switch b[3] {
+								case 0x20:
+									if b.Len() >= 4 && string(b[:4]) == "MAC " {
+										return &Metadata{Kind: KindMonkeysAudio}
+									}
+								case 0x52:
+									if b.Len() >= 10 && string(b[:10]) == "MACROSOFT\x00" {
+										return &Metadata{Kind: KindMicrosoftNetworkMonitor}
+									}
+								}
 							}
 						case 0x54:
 							if b.Len() >= 19 && string(b[:19]) == "MATLAB 5.0 MAT-file" {
@@ -911,6 +943,10 @@ func detectOptimized(b Buffer) *Metadata {
 							if b.Len() >= 4 && string(b[:4]) == "MSCF" {
 								return &Metadata{Kind: KindCabinetArchive}
 							}
+						case 0x46:
+							if b.Len() >= 8 && string(b[:8]) == "MSFT\x02\x00\x01\x00" {
+								return &Metadata{Kind: KindWindowsTypeLibrary}
+							}
 						case 0x57:
 							if b.Len() >= 8 && string(b[:8]) == "MSWIM\x00\x00\x00" {
 								return &Metadata{Kind: KindWindowsImagingFormat}
@@ -934,6 +970,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x53:
 					if b.Len() >= 4 && string(b[:4]) == "NSO0" {
 						return &Metadata{Kind: KindNintendoSwitchNSO}
+					}
+				case 0x65:
+					if b.Len() >= 8 && string(b[:8]) == "NetMon\x00\x00" {
+						return &Metadata{Kind: KindMicrosoftNetworkMonitor}
 					}
 				}
 			}
@@ -1225,6 +1265,14 @@ func detectOptimized(b Buffer) *Metadata {
 					if b.Len() >= 4 && string(b[:4]) == "WUA\x01" {
 						return &Metadata{Kind: KindWiiUArchive}
 					}
+				case 0x69:
+					if b.Len() >= 14 && string(b[:14]) == "WithoutBorders" {
+						return &Metadata{Kind: KindParallelsDiskImage}
+					}
+				case 0xfb:
+					if b.Len() >= 8 && string(b[:8]) == "W\xfb\x80\x8b$uG\xdb" {
+						return &Metadata{Kind: KindLevelDB}
+					}
 				}
 			}
 		case 0x58:
@@ -1385,6 +1433,10 @@ func detectOptimized(b Buffer) *Metadata {
 					}
 				}
 			}
+		case 0x65:
+			if b.Len() >= 20 && string(b[:20]) == "ecdsa-sha2-nistp256 " {
+				return &Metadata{Kind: KindSSHPublicKey}
+			}
 		case 0x66:
 			if b.Len() > 1 {
 				_ = b[1] // BCE hint
@@ -1421,9 +1473,23 @@ func detectOptimized(b Buffer) *Metadata {
 			if b.Len() >= 4 && string(b[:4]) == "icns" {
 				return &Metadata{Kind: KindICNSIcon}
 			}
+		case 0x6b:
+			if b.Len() >= 4 && string(b[:4]) == "kych" {
+				return &Metadata{Kind: KindAppleKeychain}
+			}
 		case 0x6f:
-			if b.Len() >= 4 && string(b[:4]) == "oat\n" {
-				return &Metadata{Kind: KindAndroidOAT}
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x61:
+					if b.Len() >= 4 && string(b[:4]) == "oat\n" {
+						return &Metadata{Kind: KindAndroidOAT}
+					}
+				case 0x70:
+					if b.Len() >= 15 && string(b[:15]) == "openssh-key-v1\x00" {
+						return &Metadata{Kind: KindOpenSSHPrivateKey}
+					}
+				}
 			}
 		case 0x70:
 			if b.Len() >= 4 && string(b[:4]) == "ply\n" {
@@ -1444,8 +1510,42 @@ func detectOptimized(b Buffer) *Metadata {
 				}
 			}
 		case 0x72:
-			if b.Len() >= 4 && string(b[:4]) == "regf" {
-				return &Metadata{Kind: KindWindowsRegistryHive}
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x65:
+					if b.Len() >= 4 && string(b[:4]) == "regf" {
+						return &Metadata{Kind: KindWindowsRegistryHive}
+					}
+				case 0xb5:
+					if b.Len() >= 4 && string(b[:4]) == "r\xb5J\x86" {
+						return &Metadata{Kind: KindPSFFont}
+					}
+				}
+			}
+		case 0x73:
+			if b.Len() > 1 {
+				_ = b[1] // BCE hint
+				switch b[1] {
+				case 0x6e:
+					if b.Len() >= 8 && string(b[:8]) == "snoop\x00\x00\x00" {
+						return &Metadata{Kind: KindSnoopCapture}
+					}
+				case 0x73:
+					if b.Len() > 4 {
+						_ = b[4] // BCE hint
+						switch b[4] {
+						case 0x65:
+							if b.Len() >= 12 && string(b[:12]) == "ssh-ed25519 " {
+								return &Metadata{Kind: KindSSHPublicKey}
+							}
+						case 0x72:
+							if b.Len() >= 8 && string(b[:8]) == "ssh-rsa " {
+								return &Metadata{Kind: KindSSHPublicKey}
+							}
+						}
+					}
+				}
 			}
 		case 0x74:
 			if b.Len() > 1 {
@@ -1595,6 +1695,10 @@ func detectOptimized(b Buffer) *Metadata {
 					}
 				}
 			}
+		case 0xac:
+			if b.Len() >= 4 && string(b[:4]) == "\xac\xed\x00\x05" {
+				return &Metadata{Kind: KindJavaSerialization}
+			}
 		case 0xb7:
 			if b.Len() >= 16 && string(b[:16]) == "\xb7\xd8\x00 7I\xda\x11\xa6N\x00\a\xe9^\xad\x8d" {
 				return &Metadata{Kind: KindWTVVideo}
@@ -1630,6 +1734,10 @@ func detectOptimized(b Buffer) *Metadata {
 		case 0xed:
 			if b.Len() >= 4 && string(b[:4]) == "\xed\xab\xee\xdb" {
 				return &Metadata{Kind: KindRPMPackage}
+			}
+		case 0xf9:
+			if b.Len() >= 4 && string(b[:4]) == "\xf9\xbe\xb4\xd9" {
+				return &Metadata{Kind: KindBitcoinBlock}
 			}
 		case 0xfd:
 			if b.Len() >= 6 && string(b[:6]) == "\xfd7zXZ\x00" {
@@ -1930,8 +2038,18 @@ func detectOptimizedWeak(b Buffer) *Metadata {
 		return nil
 	}
 
-	if b.Len() >= 5 && string(b[:5]) == "<?xml" {
-		return &Metadata{Kind: KindXMLDocument}
+	if b.Len() > 0 {
+		_ = b[0] // BCE hint
+		switch b[0] {
+		case 0x3c:
+			if b.Len() >= 5 && string(b[:5]) == "<?xml" {
+				return &Metadata{Kind: KindXMLDocument}
+			}
+		case 0x46:
+			if b.Len() >= 5 && string(b[:5]) == "From " {
+				return &Metadata{Kind: KindMBOXEmailFolder}
+			}
+		}
 	}
 
 	return nil

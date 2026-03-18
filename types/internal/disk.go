@@ -20,6 +20,7 @@ func init() {
 	types.RegisterSignature(types.KindLUKSDiskEncryption, types.TypeNone, 0, []byte{'L', 'U', 'K', 'S', 0xba, 0xbe})
 	types.RegisterSignature(types.KindNILFS2Filesystem, types.TypeNone, 1032, []byte{0x02, 0x09, 0x01, 0x12})
 	types.RegisterSignature(types.KindNTFSFilesystem, types.TypeNone, 3, []byte("NTFS    "))
+	types.RegisterSignature(types.KindParallelsDiskImage, types.TypeNone, 0, []byte("WithoutBorders"))
 	types.RegisterSignature(types.KindQCOWDiskImage, types.TypeQCOW2, 0, []byte("QFI\xfb"))
 	types.RegisterSignature(types.KindROMFS, types.TypeNone, 0, []byte("-rom1fs-"))
 	types.RegisterSignature(types.KindUBIFSFilesystem, types.TypeNone, 0, []byte{0x31, 0x18, 0x10, 0x06})

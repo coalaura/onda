@@ -84,7 +84,7 @@ func main() {
 
 ## Supported types
 
-onda currently detects over **450+ file formats** across various categories. Instead of listing every single format, we maintain a robust, ever-growing library of signatures and custom detectors.
+onda currently detects over **470+ file formats** across various categories. Instead of listing every single format, we maintain a robust, ever-growing library of signatures and custom detectors.
 
 - **Archive/package/filesystem:** 7-Zip, APFS, APK, Btrfs, Bzip2, CAB, Debian, exFAT, ext2/3/4, Gzip, HFS+, JAR, LUKS, LZ4, NTFS, RAR, RPM, SquashFS, TAR, XFS, XZ, ZIP, Zstandard and many more.
 - **Audio/tracker:** AAC, AIFF, FLAC, MIDI, MP3, Ogg, Opus, Vorbis, WAV, WavPack and more.
