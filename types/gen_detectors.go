@@ -21,6 +21,20 @@ func DetectMPEGAudioFrames(b Buffer) *Metadata {
 	return nil
 }
 
+func DetectAppleDiskImage(b Buffer) *Metadata {
+	if b.Len() < 512 {
+		return nil
+	}
+
+	if b.Has(b.Len()-512, []byte("koly")) {
+		return &Metadata{
+			Kind: KindAppleDiskImage,
+		}
+	}
+
+	return nil
+}
+
 func DetectEBML(b Buffer) *Metadata {
 	if !b.Has(0, []byte{0x1a, 0x45, 0xdf, 0xa3}) {
 		return nil
@@ -620,6 +634,7 @@ var (
 	oleMSI                = []byte{0x84, 0x10, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46}
 	oleOutlookMessage     = []byte{'_', 0, '_', 0, 's', 0, 'u', 0, 'b', 0, 's', 0, 't', 0, 'g', 0, '1', 0, '.', 0, '0', 0, '_', 0}
 	oleVisioDocument      = []byte{'V', 0, 'i', 0, 's', 0, 'i', 0, 'o', 0, 'D', 0, 'o', 0, 'c', 0, 'u', 0, 'm', 0, 'e', 0, 'n', 0, 't', 0}
+	oleProject            = []byte{'M', 0, 'S', 0, 'P', 0, 'r', 0, 'o', 0, 'j', 0, 'e', 0, 'c', 0, 't', 0, '.', 0, 'P', 0, 'r', 0, 'o', 0, 'j', 0, 'e', 0, 'c', 0, 't', 0}
 )
 
 func DetectOLE(b Buffer) *Metadata {
@@ -652,6 +667,10 @@ func DetectOLE(b Buffer) *Metadata {
 
 	if bytes.Contains(data, oleVisioDocument) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftVisioDrawingVSD}
+	}
+
+	if bytes.Contains(data, oleProject) {
+		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftProjectDocumentMPP}
 	}
 
 	return &Metadata{
@@ -1095,23 +1114,25 @@ func DetectZIPContainer(b Buffer) *Metadata {
 	}
 
 	var (
-		hasManifest      bool
-		hasDex           bool
-		hasAppxManifest  bool
-		hasAppxSignature bool
-		hasSketchMeta    bool
-		hasSketchUser    bool
-		hasSketchDoc     bool
-		hasWord          bool
-		hasExcel         bool
-		hasPowerPoint    bool
-		hasManifestMF    bool
-		hasWebXML        bool
-		hasAppXML        bool
-		hasMinecraftMeta bool
-		hasFabricMod     bool
-		hasForgeMod      bool
-		firstFile        = true
+		hasManifest         bool
+		hasDex              bool
+		hasAppxManifest     bool
+		hasAppxSignature    bool
+		hasSketchMeta       bool
+		hasSketchUser       bool
+		hasSketchDoc        bool
+		hasWord             bool
+		hasExcel            bool
+		hasPowerPoint       bool
+		hasManifestMF       bool
+		hasWebXML           bool
+		hasAppXML           bool
+		hasMinecraftMeta    bool
+		hasFabricMod        bool
+		hasForgeMod         bool
+		hasLottieManifest   bool
+		hasLottieAnimations bool
+		firstFile           = true
 	)
 
 	limit := b.Len() - 30
@@ -1200,10 +1221,20 @@ func DetectZIPContainer(b Buffer) *Metadata {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {
 			return &Metadata{Kind: KindZIPArchive, Type: TypePythonWheelWHL}
-		} else if matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("xapk_version")) {
-			return &Metadata{Kind: KindZIPArchive, Type: TypeAndroidPackageXAPK}
-		} else if matchASCII(name, "install.rdf") || (matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("browser_specific_settings"))) {
+		} else if matchASCII(name, "manifest.json") {
+			hasLottieManifest = true
+
+			if bytes.Contains(b, []byte("xapk_version")) {
+				return &Metadata{Kind: KindZIPArchive, Type: TypeAndroidPackageXAPK}
+			}
+
+			if bytes.Contains(b, []byte("browser_specific_settings")) {
+				return &Metadata{Kind: KindZIPArchive, Type: TypeFirefoxExtensionXPI}
+			}
+		} else if matchASCII(name, "install.rdf") {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeFirefoxExtensionXPI}
+		} else if hasPrefixASCII(name, "animations/") {
+			hasLottieAnimations = true
 		} else if hasPrefixASCII(name, "payload/") {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeIOSApplicationArchiveIPA}
 		} else if matchASCII(name, "bundleconfig.pb") {
@@ -1348,6 +1379,10 @@ func DetectZIPContainer(b Buffer) *Metadata {
 		}
 
 		return &Metadata{Kind: KindZIPArchive, Type: TypeJavaArchiveJAR}
+	}
+
+	if hasLottieManifest && hasLottieAnimations {
+		return &Metadata{Kind: KindLottieAnimation}
 	}
 
 	return &Metadata{Kind: KindZIPArchive}

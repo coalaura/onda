@@ -27,6 +27,7 @@ func init() {
 	types.RegisterSignature(types.KindKeePassDatabase, types.TypeKDBX, 0, []byte{0x03, 0xd9, 0xa2, 0x9a, 0x67, 0xfb, 0x4b, 0xb5})
 	types.RegisterSignature(types.KindMayaASCII, types.TypeNone, 0, []byte("//Maya"))
 	types.RegisterSignature(types.KindMayaBinary, types.TypeNone, 0, []byte("FOR4"))
+	types.RegisterSignature(types.KindMicrosoftAccessDatabase, types.TypeNone, 0, []byte{0x00, 0x01, 0x00, 0x00, 'S', 't', 'a', 'n', 'd', 'a', 'r', 'd', ' ', 'A', 'C', 'E', ' ', 'D', 'B'})
 	types.RegisterSignature(types.KindMicrosoftAccessDatabase, types.TypeNone, 0, []byte{0x00, 0x01, 0x00, 0x00, 'S', 't', 'a', 'n', 'd', 'a', 'r', 'd', ' ', 'J', 'e', 't', ' ', 'D', 'B'})
 	types.RegisterSignature(types.KindMicrosoftOutlookEmailFolder, types.TypeNone, 0, []byte("!BDN"))
 	types.RegisterSignature(types.KindMicrosoftReader, types.TypeNone, 0, []byte("ITOLITLS"))

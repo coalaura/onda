@@ -68,24 +68,61 @@ func detectOptimized(b Buffer) *Metadata {
 						}
 					}
 				case 0x01:
-					if len(b) >= 19 && string(b[:19]) == "\x00\x01\x00\x00Standard Jet DB" {
-						return &Metadata{Kind: KindMicrosoftAccessDatabase}
+					if len(b) > 4 && b[4] == 0x53 {
+						if len(b) > 13 {
+							switch b[13] {
+							case 0x41:
+								if len(b) >= 19 && string(b[:19]) == "\x00\x01\x00\x00Standard ACE DB" {
+									return &Metadata{Kind: KindMicrosoftAccessDatabase}
+								}
+							case 0x4a:
+								if len(b) >= 19 && string(b[:19]) == "\x00\x01\x00\x00Standard Jet DB" {
+									return &Metadata{Kind: KindMicrosoftAccessDatabase}
+								}
+							}
+						}
 					}
 					if len(b) >= 4 && string(b[:4]) == "\x00\x01\x00\x00" {
 						return &Metadata{Kind: KindTrueTypeFont}
 					}
-				case 0x05:
-					if len(b) > 3 {
-						switch b[3] {
-						case 0x00:
-							if len(b) >= 4 && string(b[:4]) == "\x00\x05\x16\x00" {
-								return &Metadata{Kind: KindAppleSingle}
+				case 0x04:
+					if len(b) > 2 {
+						switch b[2] {
+						case 0x09:
+							if len(b) >= 4 && string(b[:4]) == "\x00\x04\t\x88" {
+								return &Metadata{Kind: KindBerkeleyDB}
 							}
-						case 0x07:
-							if len(b) >= 4 && string(b[:4]) == "\x00\x05\x16\a" {
-								return &Metadata{Kind: KindAppleDouble}
+						case 0x22:
+							if len(b) >= 4 && string(b[:4]) == "\x00\x04\"S" {
+								return &Metadata{Kind: KindBerkeleyDB}
 							}
 						}
+					}
+				case 0x05:
+					if len(b) > 2 {
+						switch b[2] {
+						case 0x16:
+							if len(b) > 3 {
+								switch b[3] {
+								case 0x00:
+									if len(b) >= 4 && string(b[:4]) == "\x00\x05\x16\x00" {
+										return &Metadata{Kind: KindAppleSingle}
+									}
+								case 0x07:
+									if len(b) >= 4 && string(b[:4]) == "\x00\x05\x16\a" {
+										return &Metadata{Kind: KindAppleDouble}
+									}
+								}
+							}
+						case 0x31:
+							if len(b) >= 4 && string(b[:4]) == "\x00\x051b" {
+								return &Metadata{Kind: KindBerkeleyDB}
+							}
+						}
+					}
+				case 0x06:
+					if len(b) >= 4 && string(b[:4]) == "\x00\x06\x15a" {
+						return &Metadata{Kind: KindBerkeleyDB}
 					}
 				case 0x4d:
 					if len(b) >= 4 && string(b[:4]) == "\x00MRM" {
@@ -154,6 +191,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 4 && string(b[:4]) == "\x03\x00\b\x00" {
 						return &Metadata{Kind: KindAndroidBinaryXML}
 					}
+				case 0x02:
+					if len(b) >= 4 && string(b[:4]) == "\x03\x02#\a" {
+						return &Metadata{Kind: KindVulkanSPIRV, Type: TypeLittleEndian}
+					}
 				case 0xd9:
 					if len(b) > 4 {
 						switch b[4] {
@@ -186,6 +227,10 @@ func detectOptimized(b Buffer) *Metadata {
 					}
 				}
 			}
+		case 0x07:
+			if len(b) >= 4 && string(b[:4]) == "\a#\x02\x03" {
+				return &Metadata{Kind: KindVulkanSPIRV, Type: TypeBigEndian}
+			}
 		case 0x0a:
 			if len(b) >= 4 && string(b[:4]) == "\n\r\r\n" {
 				return &Metadata{Kind: KindPCAPNGCapture}
@@ -201,6 +246,19 @@ func detectOptimized(b Buffer) *Metadata {
 		case 0x13:
 			if len(b) >= 4 && string(b[:4]) == "\x13\xab\xa1\\" {
 				return &Metadata{Kind: KindASTCTexture}
+			}
+		case 0x1a:
+			if len(b) > 1 {
+				switch b[1] {
+				case 0x01:
+					if len(b) >= 2 && string(b[:2]) == "\x1a\x01" {
+						return &Metadata{Kind: KindCompiledTerminfo}
+					}
+				case 0x45:
+					if len(b) >= 4 && string(b[:4]) == "\x1aE\x11\x10" {
+						return &Metadata{Kind: KindSymbianInstallationFormat}
+					}
+				}
 			}
 		case 0x1b:
 			if len(b) >= 4 && string(b[:4]) == "\x1bLua" {
@@ -605,6 +663,10 @@ func detectOptimized(b Buffer) *Metadata {
 		case 0x43:
 			if len(b) > 1 {
 				switch b[1] {
+				case 0x36:
+					if len(b) >= 19 && string(b[:19]) == "C64 tape image file" {
+						return &Metadata{Kind: KindCommodore64Tape}
+					}
 				case 0x44:
 					if len(b) > 3 {
 						switch b[3] {
@@ -675,6 +737,27 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x4b:
 					if len(b) >= 4 && string(b[:4]) == "DKIF" {
 						return &Metadata{Kind: KindIVFVideo}
+					}
+				case 0x4f:
+					if len(b) > 3 {
+						switch b[3] {
+						case 0x00:
+							if len(b) >= 4 && string(b[:4]) == "DOS\x00" {
+								return &Metadata{Kind: KindAmigaDiskFile}
+							}
+						case 0x01:
+							if len(b) >= 4 && string(b[:4]) == "DOS\x01" {
+								return &Metadata{Kind: KindAmigaDiskFile}
+							}
+						case 0x02:
+							if len(b) >= 4 && string(b[:4]) == "DOS\x02" {
+								return &Metadata{Kind: KindAmigaDiskFile}
+							}
+						case 0x03:
+							if len(b) >= 4 && string(b[:4]) == "DOS\x03" {
+								return &Metadata{Kind: KindAmigaDiskFile}
+							}
+						}
 					}
 				case 0x53:
 					if len(b) >= 4 && string(b[:4]) == "DSD " {
@@ -858,6 +941,10 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 4 && string(b[:4]) == "KDMV" {
 						return &Metadata{Kind: KindVMwareDiskImage, Type: TypeVMDK}
 					}
+				case 0x47:
+					if len(b) >= 8 && string(b[:8]) == "KGB_arch" {
+						return &Metadata{Kind: KindKGBArchive}
+					}
 				case 0x57:
 					if len(b) >= 8 && string(b[:8]) == "KWAJ\x88\xf0'3" {
 						return &Metadata{Kind: KindMicrosoftCompress}
@@ -990,6 +1077,10 @@ func detectOptimized(b Buffer) *Metadata {
 							}
 						}
 					}
+				case 0x49:
+					if len(b) >= 7 && string(b[:7]) == "NIST_1A" {
+						return &Metadata{Kind: KindNISTSPHEREAudio}
+					}
 				case 0x53:
 					if len(b) >= 4 && string(b[:4]) == "NSO0" {
 						return &Metadata{Kind: KindNintendoSwitchNSO}
@@ -1097,15 +1188,24 @@ func detectOptimized(b Buffer) *Metadata {
 			if len(b) > 1 {
 				switch b[1] {
 				case 0x44:
-					if len(b) > 3 {
-						switch b[3] {
-						case 0x32:
-							if len(b) >= 5 && string(b[:5]) == "RDX2\n" {
-								return &Metadata{Kind: KindRData}
+					if len(b) > 2 {
+						switch b[2] {
+						case 0x53:
+							if len(b) >= 4 && string(b[:4]) == "RDSK" {
+								return &Metadata{Kind: KindAmigaHardDiskFile}
 							}
-						case 0x33:
-							if len(b) >= 5 && string(b[:5]) == "RDX3\n" {
-								return &Metadata{Kind: KindRData}
+						case 0x58:
+							if len(b) > 3 {
+								switch b[3] {
+								case 0x32:
+									if len(b) >= 5 && string(b[:5]) == "RDX2\n" {
+										return &Metadata{Kind: KindRData}
+									}
+								case 0x33:
+									if len(b) >= 5 && string(b[:5]) == "RDX3\n" {
+										return &Metadata{Kind: KindRData}
+									}
+								}
 							}
 						}
 					}
@@ -1116,6 +1216,9 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x49:
 					if b.HasMask(0, "RIFF\x00\x00\x00\x00AVI ", "\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff") {
 						return &Metadata{Kind: KindRIFFContainer, Type: TypeAVIVideo}
+					}
+					if b.HasMask(0, "RIFF\x00\x00\x00\x00FXTC", "\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff") {
+						return &Metadata{Kind: KindRIFFContainer, Type: TypeAfterEffectsProjectAEP}
 					}
 					if b.HasMask(0, "RIFF\x00\x00\x00\x00CDDA", "\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff\xff") {
 						return &Metadata{Kind: KindRIFFContainer, Type: TypeCDAAudio}
@@ -1258,8 +1361,26 @@ func detectOptimized(b Buffer) *Metadata {
 				}
 			}
 		case 0x55:
-			if len(b) >= 4 && string(b[:4]) == "U3D\x00" {
-				return &Metadata{Kind: KindU3DModel}
+			if len(b) > 1 {
+				switch b[1] {
+				case 0x33:
+					if len(b) >= 4 && string(b[:4]) == "U3D\x00" {
+						return &Metadata{Kind: KindU3DModel}
+					}
+				case 0x48:
+					if len(b) > 3 {
+						switch b[3] {
+						case 0x01:
+							if len(b) >= 4 && string(b[:4]) == "UHA\x01" {
+								return &Metadata{Kind: KindUHAArchive}
+							}
+						case 0x02:
+							if len(b) >= 4 && string(b[:4]) == "UHA\x02" {
+								return &Metadata{Kind: KindUHAArchive}
+							}
+						}
+					}
+				}
 			}
 		case 0x56:
 			if len(b) > 1 {
@@ -1552,6 +1673,10 @@ func detectOptimized(b Buffer) *Metadata {
 				case 0x65:
 					if len(b) >= 4 && string(b[:4]) == "regf" {
 						return &Metadata{Kind: KindWindowsRegistryHive}
+					}
+				case 0x69:
+					if len(b) >= 16 && string(b[:16]) == "riff.\x91\xcf\x11\xa5\xd6(\xdb\x04\xc1\x00\x00" {
+						return &Metadata{Kind: KindSonyWave64Audio}
 					}
 				case 0xb5:
 					if len(b) >= 4 && string(b[:4]) == "r\xb5J\x86" {
@@ -2104,6 +2229,7 @@ func detectOptimizedWeak(b Buffer) *Metadata {
 }
 
 var detectors = [...]Detector{
+	DetectFunc(DetectAppleDiskImage),
 	DetectFunc(DetectEBML),
 	DetectFunc(DetectELF),
 	DetectFunc(DetectExt),

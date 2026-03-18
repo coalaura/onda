@@ -12,23 +12,25 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	}
 
 	var (
-		hasManifest      bool
-		hasDex           bool
-		hasAppxManifest  bool
-		hasAppxSignature bool
-		hasSketchMeta    bool
-		hasSketchUser    bool
-		hasSketchDoc     bool
-		hasWord          bool
-		hasExcel         bool
-		hasPowerPoint    bool
-		hasManifestMF    bool
-		hasWebXML        bool
-		hasAppXML        bool
-		hasMinecraftMeta bool
-		hasFabricMod     bool
-		hasForgeMod      bool
-		firstFile        = true
+		hasManifest         bool
+		hasDex              bool
+		hasAppxManifest     bool
+		hasAppxSignature    bool
+		hasSketchMeta       bool
+		hasSketchUser       bool
+		hasSketchDoc        bool
+		hasWord             bool
+		hasExcel            bool
+		hasPowerPoint       bool
+		hasManifestMF       bool
+		hasWebXML           bool
+		hasAppXML           bool
+		hasMinecraftMeta    bool
+		hasFabricMod        bool
+		hasForgeMod         bool
+		hasLottieManifest   bool
+		hasLottieAnimations bool
+		firstFile           = true
 	)
 
 	limit := b.Len() - 30
@@ -117,10 +119,20 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePythonWheelWHL}
-		} else if matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("xapk_version")) {
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
-		} else if matchASCII(name, "install.rdf") || (matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("browser_specific_settings"))) {
+		} else if matchASCII(name, "manifest.json") {
+			hasLottieManifest = true
+
+			if bytes.Contains(b, []byte("xapk_version")) {
+				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
+			}
+
+			if bytes.Contains(b, []byte("browser_specific_settings")) {
+				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
+			}
+		} else if matchASCII(name, "install.rdf") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
+		} else if hasPrefixASCII(name, "animations/") {
+			hasLottieAnimations = true
 		} else if hasPrefixASCII(name, "payload/") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeIOSApplicationArchiveIPA}
 		} else if matchASCII(name, "bundleconfig.pb") {
@@ -269,6 +281,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		}
 
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
+	}
+
+	if hasLottieManifest && hasLottieAnimations {
+		return &types.Metadata{Kind: types.KindLottieAnimation}
 	}
 
 	return &types.Metadata{Kind: types.KindZIPArchive}

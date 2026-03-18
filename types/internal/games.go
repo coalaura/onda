@@ -3,7 +3,13 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
+	types.RegisterSignature(types.KindAmigaDiskFile, types.TypeNone, 0, []byte("DOS\x00"))
+	types.RegisterSignature(types.KindAmigaDiskFile, types.TypeNone, 0, []byte("DOS\x01"))
+	types.RegisterSignature(types.KindAmigaDiskFile, types.TypeNone, 0, []byte("DOS\x02"))
+	types.RegisterSignature(types.KindAmigaDiskFile, types.TypeNone, 0, []byte("DOS\x03"))
+	types.RegisterSignature(types.KindAmigaHardDiskFile, types.TypeNone, 0, []byte("RDSK"))
 	types.RegisterSignature(types.KindCloneCDControl, types.TypeNone, 0, []byte("[CloneCD]"))
+	types.RegisterSignature(types.KindCommodore64Tape, types.TypeNone, 0, []byte("C64 tape image file"))
 	types.RegisterSignature(types.KindDolphinRVZ, types.TypeNone, 0, []byte("RVZ\x01"))
 	types.RegisterSignature(types.KindMAMECHD, types.TypeNone, 0, []byte("MComprHD"))
 	types.RegisterSignature(types.KindNintendoSwitchNRO, types.TypeNone, 16, []byte("NRO0"))

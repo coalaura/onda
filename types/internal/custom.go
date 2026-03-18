@@ -6,6 +6,7 @@ import (
 )
 
 func init() {
+	types.Register(types.DetectFunc(custom.DetectAppleDiskImage))
 	types.Register(types.DetectFunc(custom.DetectEBML))
 	types.Register(types.DetectFunc(custom.DetectELF))
 	types.Register(types.DetectFunc(custom.DetectExt))

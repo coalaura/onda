@@ -12,6 +12,8 @@ const (
 	KindAdobeInDesignDocument
 	KindAdvancedForensicFormat
 	KindALZArchive
+	KindAmigaDiskFile
+	KindAmigaHardDiskFile
 	KindAmigaHunkExecutable
 	KindAMRAudio
 	KindAMRWBAudio
@@ -30,6 +32,7 @@ const (
 	KindAppleBillOfMaterials
 	KindAppleBinaryPropertyList
 	KindAppleDesktopServicesStore
+	KindAppleDiskImage
 	KindAppleDouble
 	KindAppleiWorkDocument
 	KindAppleKeychain
@@ -44,6 +47,7 @@ const (
 	KindBAMData
 	KindBcachefsFilesystem
 	KindBCFData
+	KindBerkeleyDB
 	KindBinkVideo
 	KindBitcoinBlock
 	KindBitLockerDiskEncryption
@@ -59,7 +63,9 @@ const (
 	KindCHMDocument
 	KindCineonImage
 	KindCloneCDControl
+	KindCommodore64Tape
 	KindCommodoreSID
+	KindCompiledTerminfo
 	KindCPIOArchive
 	KindCRAMData
 	KindCramFS
@@ -136,10 +142,12 @@ const (
 	KindJPEGXLImage
 	KindJPEGXRImage
 	KindKeePassDatabase
+	KindKGBArchive
 	KindKTXTexture
 	KindLevelDB
 	KindLHAArchive
 	KindLLVMBitcode
+	KindLottieAnimation
 	KindLuaBytecode
 	KindLUKSDiskEncryption
 	KindLZ4Frame
@@ -192,6 +200,7 @@ const (
 	KindNintendoSwitchNSO
 	KindNintendoSwitchPackage
 	KindNintendoSwitchROM
+	KindNISTSPHEREAudio
 	KindNTFSFilesystem
 	KindNumPyArray
 	KindOggContainer
@@ -256,6 +265,7 @@ const (
 	KindSnappyFramedData
 	KindSNESSPC
 	KindSnoopCapture
+	KindSonyWave64Audio
 	KindSourceEngineBSP
 	KindSPSSData
 	KindSQLite3WriteAheadLog
@@ -280,6 +290,7 @@ const (
 	KindU3DModel
 	KindUBIFSFilesystem
 	KindUBootImage
+	KindUHAArchive
 	KindUniversalDiskFormat
 	KindUnixCompressArchive
 	KindValvePak
@@ -291,6 +302,7 @@ const (
 	KindVirtualBoxDiskImage
 	KindVMwareDiskImage
 	KindVOCAudio
+	KindVulkanSPIRV
 	KindWADArchive
 	KindWARCFile
 	KindWavPackAudio
@@ -344,6 +356,7 @@ const (
 	TypeAC3
 	TypeAdobeDNGDNG
 	TypeADTS
+	TypeAfterEffectsProjectAEP
 	TypeAIFCAudio
 	TypeAIFFAudio
 	TypeAndroidAppBundleAAB
@@ -444,6 +457,7 @@ const (
 	TypeMicrosoftPowerPointPresentationPPTX
 	TypeMicrosoftPowerPointSlideshowPPSX
 	TypeMicrosoftPowerPointTemplatePOTX
+	TypeMicrosoftProjectDocumentMPP
 	TypeMicrosoftVisioDrawingVSD
 	TypeMicrosoftWordDocumentDOC
 	TypeMicrosoftWordDocumentDOCX
@@ -552,6 +566,8 @@ var kindNames = [...]string{
 	KindAdobeInDesignDocument:               "Adobe InDesign Document",
 	KindAdvancedForensicFormat:              "Advanced Forensic Format",
 	KindALZArchive:                          "ALZ Archive",
+	KindAmigaDiskFile:                       "Amiga Disk File",
+	KindAmigaHardDiskFile:                   "Amiga Hard Disk File",
 	KindAmigaHunkExecutable:                 "Amiga Hunk Executable",
 	KindAMRAudio:                            "AMR Audio",
 	KindAMRWBAudio:                          "AMR-WB Audio",
@@ -570,6 +586,7 @@ var kindNames = [...]string{
 	KindAppleBillOfMaterials:                "Apple Bill of Materials",
 	KindAppleBinaryPropertyList:             "Apple Binary Property List",
 	KindAppleDesktopServicesStore:           "Apple Desktop Services Store",
+	KindAppleDiskImage:                      "Apple Disk Image",
 	KindAppleDouble:                         "AppleDouble File",
 	KindAppleiWorkDocument:                  "Apple iWork Document",
 	KindAppleKeychain:                       "Apple Keychain",
@@ -584,6 +601,7 @@ var kindNames = [...]string{
 	KindBAMData:                             "BAM Data",
 	KindBcachefsFilesystem:                  "Bcachefs Filesystem",
 	KindBCFData:                             "Binary Call Format (BCF)",
+	KindBerkeleyDB:                          "Berkeley DB",
 	KindBinkVideo:                           "Bink Video",
 	KindBitcoinBlock:                        "Bitcoin Block Data",
 	KindBitLockerDiskEncryption:             "BitLocker Disk Encryption",
@@ -599,7 +617,9 @@ var kindNames = [...]string{
 	KindCHMDocument:                         "CHM Document",
 	KindCineonImage:                         "Cineon Image",
 	KindCloneCDControl:                      "CloneCD Control File",
+	KindCommodore64Tape:                     "Commodore 64 Tape",
 	KindCommodoreSID:                        "Commodore SID Audio",
+	KindCompiledTerminfo:                    "Compiled Terminfo",
 	KindCPIOArchive:                         "CPIO Archive",
 	KindCRAMData:                            "CRAM Data",
 	KindCramFS:                              "CramFS",
@@ -676,10 +696,12 @@ var kindNames = [...]string{
 	KindJPEGXLImage:                         "JPEG XL Image",
 	KindJPEGXRImage:                         "JPEG XR Image",
 	KindKeePassDatabase:                     "KeePass Database",
+	KindKGBArchive:                          "KGB Archive",
 	KindKTXTexture:                          "KTX Texture",
 	KindLevelDB:                             "LevelDB/RocksDB",
 	KindLHAArchive:                          "LHA Archive",
 	KindLLVMBitcode:                         "LLVM Bitcode",
+	KindLottieAnimation:                     "Lottie Animation",
 	KindLuaBytecode:                         "Lua Bytecode",
 	KindLUKSDiskEncryption:                  "LUKS Disk Encryption",
 	KindLZ4Frame:                            "LZ4 Frame",
@@ -732,6 +754,7 @@ var kindNames = [...]string{
 	KindNintendoSwitchNSO:                   "Nintendo Switch NSO",
 	KindNintendoSwitchPackage:               "Nintendo Switch Package",
 	KindNintendoSwitchROM:                   "Nintendo Switch ROM",
+	KindNISTSPHEREAudio:                     "NIST SPHERE Audio",
 	KindNTFSFilesystem:                      "NTFS Filesystem",
 	KindNumPyArray:                          "NumPy Array",
 	KindOggContainer:                        "Ogg Container",
@@ -796,6 +819,7 @@ var kindNames = [...]string{
 	KindSnappyFramedData:                    "Snappy Framed Data",
 	KindSNESSPC:                             "SNES SPC Audio",
 	KindSnoopCapture:                        "Snoop Capture",
+	KindSonyWave64Audio:                     "Sony Wave64 Audio",
 	KindSourceEngineBSP:                     "Source Engine BSP",
 	KindSPSSData:                            "SPSS Data",
 	KindSQLite3WriteAheadLog:                "SQLite Write-Ahead Log",
@@ -820,6 +844,7 @@ var kindNames = [...]string{
 	KindU3DModel:                            "U3D Model",
 	KindUBIFSFilesystem:                     "UBIFS Filesystem",
 	KindUBootImage:                          "U-Boot Image",
+	KindUHAArchive:                          "UHA Archive",
 	KindUniversalDiskFormat:                 "Universal Disk Format",
 	KindUnixCompressArchive:                 "Unix Compress Archive",
 	KindValvePak:                            "Valve Pak",
@@ -831,6 +856,7 @@ var kindNames = [...]string{
 	KindVirtualBoxDiskImage:                 "VirtualBox Disk Image",
 	KindVMwareDiskImage:                     "VMware Disk Image",
 	KindVOCAudio:                            "VOC Audio",
+	KindVulkanSPIRV:                         "Vulkan SPIR-V",
 	KindWADArchive:                          "WAD Archive",
 	KindWARCFile:                            "WARC File",
 	KindWavPackAudio:                        "WavPack Audio",
@@ -884,6 +910,7 @@ var typeNames = [...]string{
 	TypeAC3:                      "AC-3",
 	TypeAdobeDNGDNG:              "Adobe DNG (DNG)",
 	TypeADTS:                     "ADTS",
+	TypeAfterEffectsProjectAEP:   "After Effects Project (AEP)",
 	TypeAIFCAudio:                "AIFC Audio",
 	TypeAIFFAudio:                "AIFF Audio",
 	TypeAndroidAppBundleAAB:      "Android App Bundle (AAB)",
@@ -984,6 +1011,7 @@ var typeNames = [...]string{
 	TypeMicrosoftPowerPointPresentationPPTX:             "Microsoft PowerPoint Presentation (PPTX)",
 	TypeMicrosoftPowerPointSlideshowPPSX:                "Microsoft PowerPoint Slideshow (PPSX)",
 	TypeMicrosoftPowerPointTemplatePOTX:                 "Microsoft PowerPoint Template (POTX)",
+	TypeMicrosoftProjectDocumentMPP:                     "Microsoft Project Document (MPP)",
 	TypeMicrosoftVisioDrawingVSD:                        "Microsoft Visio Drawing (VSD)",
 	TypeMicrosoftWordDocumentDOC:                        "Microsoft Word Document (DOC)",
 	TypeMicrosoftWordDocumentDOCX:                       "Microsoft Word Document (DOCX)",
