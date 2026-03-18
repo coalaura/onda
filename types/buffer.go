@@ -26,6 +26,8 @@ func (b Buffer) HasMask(offset int, magic string, mask string) bool {
 	// BCE pog
 	if len(magic) > 0 {
 		_ = target[len(magic)-1]
+		_ = mask[len(magic)-1]
+		_ = magic[len(magic)-1]
 	}
 
 	for i := 0; i < len(magic); i++ {

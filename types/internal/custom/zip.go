@@ -22,6 +22,9 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		hasWord          bool
 		hasExcel         bool
 		hasPowerPoint    bool
+		hasManifestMF    bool
+		hasWebXML        bool
+		hasAppXML        bool
 		firstFile        = true
 	)
 
@@ -44,7 +47,6 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 		name := b[i+30 : i+30+int(nameLen)]
 
-		// Exact match using string cast (zero allocation)
 		if firstFile && string(name) == "mimetype" {
 			compression, _ := b.U16LE(i + 8)
 			extraLen, _ := b.U16LE(i + 28)
@@ -70,7 +72,6 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 		firstFile = false
 
-		// Fast, zero-allocation ASCII case-insensitive matching
 		if matchASCII(name, "androidmanifest.xml") {
 			hasManifest = true
 		} else if hasSuffixASCII(name, ".dex") || matchASCII(name, "classes.dex") {
@@ -85,6 +86,12 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			hasSketchMeta = true
 		} else if matchASCII(name, "user.json") {
 			hasSketchUser = true
+		} else if matchASCII(name, "meta-inf/manifest.mf") {
+			hasManifestMF = true
+		} else if matchASCII(name, "web-inf/web.xml") {
+			hasWebXML = true
+		} else if matchASCII(name, "meta-inf/application.xml") {
+			hasAppXML = true
 		} else if matchASCII(name, "doc.kml") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {
@@ -93,16 +100,6 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidPackageXAPK}
 		} else if matchASCII(name, "install.rdf") || (matchASCII(name, "manifest.json") && bytes.Contains(b, []byte("browser_specific_settings"))) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFirefoxExtensionXPI}
-		} else if matchASCII(name, "meta-inf/manifest.mf") {
-			if bytes.Contains(b, []byte("WEB-INF/web.xml")) {
-				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
-			}
-
-			if bytes.Contains(b, []byte("META-INF/application.xml")) {
-				return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaEnterpriseArchiveEAR}
-			}
-
-			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
 		} else if hasPrefixASCII(name, "payload/") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeIOSApplicationArchiveIPA}
 		} else if matchASCII(name, "bundleconfig.pb") {
@@ -222,6 +219,18 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		if bytes.Contains(searchArea, []byte("com.bohemiancoding.sketch")) || bytes.Contains(searchArea, []byte("com.sketch3")) {
 			return &types.Metadata{Kind: types.KindSketchDocument, Type: types.TypeSketchDocument}
 		}
+	}
+
+	if hasManifestMF {
+		if hasWebXML {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
+		}
+
+		if hasAppXML {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaEnterpriseArchiveEAR}
+		}
+
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
 	}
 
 	return &types.Metadata{Kind: types.KindZIPArchive}

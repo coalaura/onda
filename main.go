@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,16 +12,52 @@ import (
 	_ "github.com/coalaura/onda/types/all"
 )
 
-var log = plain.New()
+var (
+	Version = "dev"
+	log     = plain.New()
+)
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Errorln("Usage: onda <file>")
+	var (
+		targetFile string
+		porcelain  bool
+	)
+
+	for _, arg := range os.Args[1:] {
+		switch arg {
+		case "-h", "--help":
+			fmt.Println("onda - hardware-accelerated file sniffer")
+			fmt.Println("\nUsage: onda [flags] <file>")
+			fmt.Println("\nFlags:")
+			fmt.Println("  -p, --porcelain  Print easily parseable output (tab-separated: Kind\\tType)")
+			fmt.Println("  -v, --version    Print version information")
+			fmt.Println("  -h, --help       Print this help message")
+
+			os.Exit(0)
+		case "-v", "--version":
+			fmt.Printf("onda version %s\n", Version)
+
+			os.Exit(0)
+		case "-p", "--porcelain":
+			porcelain = true
+		default:
+			if targetFile == "" && (len(arg) == 0 || arg[0] != '-') {
+				targetFile = arg
+			} else {
+				log.Errorln("Unknown argument or multiple files specified:", arg)
+
+				os.Exit(1)
+			}
+		}
+	}
+
+	if targetFile == "" {
+		log.Errorln("Usage: onda [flags] <file>")
 
 		os.Exit(1)
 	}
 
-	path, err := filepath.Abs(os.Args[1])
+	path, err := filepath.Abs(targetFile)
 	if err != nil {
 		log.Errorln(err)
 
@@ -38,8 +75,7 @@ func main() {
 
 	meta := detectPath(name, info)
 	if meta != nil {
-		log.Println(meta.Format())
-
+		printMeta(meta, porcelain)
 		return
 	}
 
@@ -63,12 +99,24 @@ func main() {
 
 	meta, err = types.Detect(name, buf[:n])
 	if err != nil {
-		log.Errorln(err)
+		if porcelain {
+			fmt.Println("Unknown\t")
+		} else {
+			log.Errorln(err)
+		}
 
 		os.Exit(1)
 	}
 
-	log.Println(meta.Format())
+	printMeta(meta, porcelain)
+}
+
+func printMeta(meta *types.Metadata, porcelain bool) {
+	if porcelain {
+		fmt.Printf("%s\t%s\n", meta.Kind.String(), meta.Type.String())
+	} else {
+		log.Println(meta.Format())
+	}
 }
 
 func detectPath(name string, info os.FileInfo) *types.Metadata {

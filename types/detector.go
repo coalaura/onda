@@ -1,3 +1,4 @@
+// detector.go
 //go:generate go run ../gen/optimizer
 
 package types
@@ -13,6 +14,7 @@ type priorityClass int
 const (
 	classSignature priorityClass = iota
 	classCustom
+	classWeakSignature
 	classWeak
 	classFallback
 )
@@ -57,6 +59,12 @@ func RegisterFallback(d Detector) {
 	detectors = append(detectors, registered{d: d, class: classFallback})
 }
 
+func RegisterWeakSignature(kind KindID, typ TypeID, offset int, magic []byte) {
+	sig := Signature{Kind: kind, Type: typ, Offset: offset, Magic: magic}
+
+	detectors = append(detectors, registered{d: sig, class: classWeakSignature, len: len(magic)})
+}
+
 func RegisterSignature(kind KindID, typ TypeID, offset int, magic []byte) {
 	sig := Signature{Kind: kind, Type: typ, Offset: offset, Magic: magic}
 
@@ -82,7 +90,7 @@ func Detect(name string, data []byte) (*Metadata, error) {
 				return cmp.Compare(a.class, b.class)
 			}
 
-			if a.class == classSignature {
+			if a.class == classSignature || a.class == classWeakSignature {
 				return cmp.Compare(b.len, a.len)
 			}
 

@@ -301,12 +301,13 @@ func processFormatFile(path string) {
 	}
 
 	var (
-		sigs         []ast.Stmt
-		maskedSigs   []ast.Stmt
-		customSigs   []ast.Stmt
-		weakSigs     []ast.Stmt
-		fallbackSigs []ast.Stmt
-		otherSigs    []ast.Stmt
+		sigs           []ast.Stmt
+		maskedSigs     []ast.Stmt
+		weakSigs       []ast.Stmt
+		customSigs     []ast.Stmt
+		weakSigsCustom []ast.Stmt
+		fallbackSigs   []ast.Stmt
+		otherSigs      []ast.Stmt
 	)
 
 	for _, stmt := range initFunc.Body.List {
@@ -336,10 +337,12 @@ func processFormatFile(path string) {
 			sigs = append(sigs, stmt)
 		case "RegisterMaskedSignature":
 			maskedSigs = append(maskedSigs, stmt)
+		case "RegisterWeakSignature":
+			weakSigs = append(weakSigs, stmt)
 		case "Register":
 			customSigs = append(customSigs, stmt)
 		case "RegisterWeak":
-			weakSigs = append(weakSigs, stmt)
+			weakSigsCustom = append(weakSigsCustom, stmt)
 		case "RegisterFallback":
 			fallbackSigs = append(fallbackSigs, stmt)
 		default:
@@ -357,8 +360,9 @@ func processFormatFile(path string) {
 
 	sortStmts(sigs)
 	sortStmts(maskedSigs)
-	sortStmts(customSigs)
 	sortStmts(weakSigs)
+	sortStmts(customSigs)
+	sortStmts(weakSigsCustom)
 	sortStmts(fallbackSigs)
 	sortStmts(otherSigs)
 
@@ -374,7 +378,7 @@ func processFormatFile(path string) {
 
 	bodyBuf.WriteString("{\n")
 
-	groups := [][]ast.Stmt{sigs, maskedSigs, customSigs, weakSigs, fallbackSigs, otherSigs}
+	groups := [][]ast.Stmt{sigs, maskedSigs, weakSigs, customSigs, weakSigsCustom, fallbackSigs, otherSigs}
 	firstGroup := true
 
 	for _, group := range groups {

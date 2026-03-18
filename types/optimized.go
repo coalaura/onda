@@ -470,10 +470,6 @@ func detectOptimized(b Buffer) *Metadata {
 					if b.HasMask(0, "<!DOCTYPE HTML", "\xff\xff\xdf\xdf\xdf\xdf\xdf\xdf\xdf\xff\xdf\xdf\xdf\xdf") {
 						return &Metadata{Kind: KindHTMLDocument}
 					}
-				case 0x3f:
-					if b.Len() >= 5 && string(b[:5]) == "<?xml" {
-						return &Metadata{Kind: KindXMLDocument}
-					}
 				case 0x73:
 					if b.Len() >= 11 && string(b[:11]) == "<stata_dta>" {
 						return &Metadata{Kind: KindStataData}
@@ -1927,4 +1923,20 @@ func detectOptimized(b Buffer) *Metadata {
 	}
 
 	return nil
+}
+
+func detectOptimizedWeak(b Buffer) *Metadata {
+	if b.Len() == 0 {
+		return nil
+	}
+
+	if b.Len() >= 5 && string(b[:5]) == "<?xml" {
+		return &Metadata{Kind: KindXMLDocument}
+	}
+
+	return nil
+}
+
+func init() {
+	detectors = append(detectors, registered{d: DetectFunc(detectOptimizedWeak), class: classWeakSignature})
 }

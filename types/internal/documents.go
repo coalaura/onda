@@ -54,10 +54,11 @@ func init() {
 	types.RegisterSignature(types.KindWARCFile, types.TypeNone, 0, []byte("WARC/"))
 	types.RegisterSignature(types.KindWebVTT, types.TypeNone, 0, []byte("WEBVTT"))
 	types.RegisterSignature(types.KindWindowsRegistryHive, types.TypeNone, 0, []byte("regf"))
-	types.RegisterSignature(types.KindXMLDocument, types.TypeNone, 0, []byte("<?xml"))
 
 	types.RegisterMaskedSignature(types.KindHTMLDocument, types.TypeNone, 0, []byte("<!DOCTYPE HTML"), []byte{0xff, 0xff, 0xdf, 0xdf, 0xdf, 0xdf, 0xdf, 0xdf, 0xdf, 0xff, 0xdf, 0xdf, 0xdf, 0xdf})
 	types.RegisterMaskedSignature(types.KindHTMLDocument, types.TypeNone, 0, []byte("<HTML "), []byte{0xff, 0xdf, 0xdf, 0xdf, 0xdf, 0xff})
 	types.RegisterMaskedSignature(types.KindHTMLDocument, types.TypeNone, 0, []byte("<HTML>"), []byte{0xff, 0xdf, 0xdf, 0xdf, 0xdf, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeCorelDRAWDocumentCDR, 0, []byte("RIFF\x00\x00\x00\x00CDR\x00"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00})
+
+	types.RegisterWeakSignature(types.KindXMLDocument, types.TypeNone, 0, []byte("<?xml"))
 }

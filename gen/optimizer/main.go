@@ -22,6 +22,7 @@ type Sig struct {
 	Magic  []byte
 	Mask   []byte
 	IsMask bool
+	IsWeak bool
 }
 
 func main() {
@@ -78,8 +79,9 @@ func parseSignatures(dir string) []Sig {
 
 				isMask := sel.Sel.Name == "RegisterMaskedSignature"
 				isSig := sel.Sel.Name == "RegisterSignature"
+				isWeak := sel.Sel.Name == "RegisterWeakSignature"
 
-				if !isSig && !isMask {
+				if !isSig && !isMask && !isWeak {
 					continue
 				}
 
@@ -101,6 +103,7 @@ func parseSignatures(dir string) []Sig {
 					Magic:  magic,
 					Mask:   mask,
 					IsMask: isMask,
+					IsWeak: isWeak,
 				})
 			}
 		}
@@ -110,6 +113,39 @@ func parseSignatures(dir string) []Sig {
 }
 
 func generateOptimizedCode(sigs []Sig, outPath string) {
+	var strong, weak []Sig
+
+	for _, s := range sigs {
+		if s.IsWeak {
+			weak = append(weak, s)
+		} else {
+			strong = append(strong, s)
+		}
+	}
+
+	var buf bytes.Buffer
+
+	buf.WriteString("// code generated, don't edit\n")
+	buf.WriteString("package types\n\n")
+
+	generateFunction("detectOptimized", strong, &buf)
+	generateFunction("detectOptimizedWeak", weak, &buf)
+
+	buf.WriteString("func init() {\n")
+	buf.WriteString("\tdetectors = append(detectors, registered{d: DetectFunc(detectOptimizedWeak), class: classWeakSignature})\n")
+	buf.WriteString("}\n")
+
+	formatted, err := format.Source(buf.Bytes())
+	if err != nil {
+		log.Fatalf("format error: %v\n%s", err, buf.String())
+	}
+
+	if err := os.WriteFile(outPath, formatted, 0644); err != nil {
+		log.Fatalf("write error: %v", err)
+	}
+}
+
+func generateFunction(name string, sigs []Sig, buf *bytes.Buffer) {
 	byOffset := make(map[int][]Sig)
 
 	for _, s := range sigs {
@@ -124,32 +160,19 @@ func generateOptimizedCode(sigs []Sig, outPath string) {
 
 	sort.Ints(offsets)
 
-	var buf bytes.Buffer
-
-	buf.WriteString("// code generated, don't edit\n")
-	buf.WriteString("package types\n\n")
-	buf.WriteString("func detectOptimized(b Buffer) *Metadata {\n")
+	fmt.Fprintf(buf, "func %s(b Buffer) *Metadata {\n", name)
 	buf.WriteString("\tif b.Len() == 0 {\n\t\treturn nil\n\t}\n\n")
 
 	for _, off := range offsets {
 		group := byOffset[off]
 
-		generateRadixNode(group, 0, off, &buf, "\t")
+		generateRadixNode(group, 0, off, buf, "\t")
 
 		buf.WriteString("\n")
 	}
 
 	buf.WriteString("\treturn nil\n")
-	buf.WriteString("}\n")
-
-	formatted, err := format.Source(buf.Bytes())
-	if err != nil {
-		log.Fatalf("format error: %v\n%s", err, buf.String())
-	}
-
-	if err := os.WriteFile(outPath, formatted, 0644); err != nil {
-		log.Fatalf("write error: %v", err)
-	}
+	buf.WriteString("}\n\n")
 }
 
 func generateRadixNode(sigs []Sig, depth int, offset int, buf *bytes.Buffer, indent string) {
@@ -196,7 +219,6 @@ func generateRadixNode(sigs []Sig, depth int, offset int, buf *bytes.Buffer, ind
 
 			sort.Ints(keys)
 
-			// Optimize single-branch paths into an `if` instead of a `switch`
 			if len(keys) == 1 {
 				bVal := byte(keys[0])
 				group := byByte[bVal]
@@ -211,15 +233,12 @@ func generateRadixNode(sigs []Sig, depth int, offset int, buf *bytes.Buffer, ind
 				}
 			} else {
 				fmt.Fprintf(buf, "%sif b.Len() > %d {\n", indent, offset+depth)
-
 				indent += "\t"
-
 				fmt.Fprintf(buf, "%s_ = b[%d] // BCE hint\n", indent, offset+depth)
 				fmt.Fprintf(buf, "%sswitch b[%d] {\n", indent, offset+depth)
 
 				for _, k := range keys {
 					bVal := byte(k)
-
 					group := byByte[bVal]
 
 					fmt.Fprintf(buf, "%scase %#02x:\n", indent, bVal)
@@ -228,15 +247,12 @@ func generateRadixNode(sigs []Sig, depth int, offset int, buf *bytes.Buffer, ind
 						emitIfHas(group[0], buf, indent+"\t")
 					} else {
 						l := lcp(group, depth+1)
-
 						generateRadixNode(group, l, offset, buf, indent+"\t")
 					}
 				}
 
 				fmt.Fprintf(buf, "%s}\n", indent)
-
 				indent = indent[:len(indent)-1]
-
 				fmt.Fprintf(buf, "%s}\n", indent)
 			}
 		}
@@ -281,10 +297,8 @@ func lcp(sigs []Sig, startDepth int) int {
 
 func emitIfHas(c Sig, buf *bytes.Buffer, indent string) {
 	if c.IsMask {
-		// Pass strings to HasMask to avoid []byte stack allocations
 		fmt.Fprintf(buf, "%sif b.HasMask(%d, %q, %q) {\n", indent, c.Offset, string(c.Magic), string(c.Mask))
 	} else {
-		// Generate direct slice-to-string comparisons.
 		end := c.Offset + len(c.Magic)
 
 		if c.Offset == 0 {
