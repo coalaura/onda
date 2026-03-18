@@ -64,6 +64,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentSpreadsheetODS}
 				case "application/vnd.oasis.opendocument.presentation":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentPresentationODP}
+				case "application/vnd.oasis.opendocument.graphics":
+					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentGraphicsODG}
+				case "application/x-krita":
+					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKritaDocumentKRA}
 				case "image/openraster":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenRasterImageORA}
 				}
@@ -197,6 +201,11 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 	if hasPowerPoint {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMicrosoftPowerPointPresentationPPTX}
+	}
+
+	// XPS
+	if bytes.Contains(searchArea, []byte("application/vnd.ms-xpsdocument.document+xml")) {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeXMLPaperSpecificationXPS}
 	}
 
 	if hasManifest {

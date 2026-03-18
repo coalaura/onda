@@ -9,6 +9,7 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectEBML))
 	types.Register(types.DetectFunc(custom.DetectELF))
 	types.Register(types.DetectFunc(custom.DetectExt))
+	types.Register(types.DetectFunc(custom.DetectFAT))
 	types.Register(types.DetectFunc(custom.DetectISOBaseMedia))
 	types.Register(types.DetectFunc(custom.DetectMachO))
 	types.Register(types.DetectFunc(custom.DetectMPEGAudioFrames))

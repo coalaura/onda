@@ -14,35 +14,47 @@ func DetectPE(b types.Buffer) *types.Metadata {
 
 	off := int(peOff)
 
-	if !b.Has(off, []byte{'P', 'E', 0, 0}) {
-		return &types.Metadata{Kind: types.KindDOSExecutable}
+	if b.Has(off, []byte{'P', 'E', 0, 0}) {
+		machine, ok := b.U16LE(off + 4)
+		if !ok {
+			return &types.Metadata{Kind: types.KindPortableExecutable}
+		}
+
+		magic, ok := b.U16LE(off + 24)
+		if !ok {
+			return &types.Metadata{Kind: types.KindPortableExecutable}
+		}
+
+		var typ types.TypeID
+
+		switch magic {
+		case 0x10b:
+			typ = pe32MachineType(machine)
+		case 0x20b:
+			typ = pe32PlusMachineType(machine)
+		default:
+			return &types.Metadata{Kind: types.KindPortableExecutable}
+		}
+
+		return &types.Metadata{
+			Kind: types.KindPortableExecutable,
+			Type: typ,
+		}
 	}
 
-	machine, ok := b.U16LE(off + 4)
-	if !ok {
-		return &types.Metadata{Kind: types.KindDOSExecutable}
+	if b.Has(off, []byte{'N', 'E'}) {
+		return &types.Metadata{Kind: types.KindPortableExecutable, Type: types.TypeWindowsNE}
 	}
 
-	magic, ok := b.U16LE(off + 24)
-	if !ok {
-		return &types.Metadata{Kind: types.KindDOSExecutable}
+	if b.Has(off, []byte{'L', 'E'}) {
+		return &types.Metadata{Kind: types.KindPortableExecutable, Type: types.TypeWindowsLE}
 	}
 
-	var typ types.TypeID
-
-	switch magic {
-	case 0x10b:
-		typ = pe32MachineType(machine)
-	case 0x20b:
-		typ = pe32PlusMachineType(machine)
-	default:
-		return &types.Metadata{Kind: types.KindDOSExecutable}
+	if b.Has(off, []byte{'L', 'X'}) {
+		return &types.Metadata{Kind: types.KindPortableExecutable, Type: types.TypeWindowsLX}
 	}
 
-	return &types.Metadata{
-		Kind: types.KindPortableExecutable,
-		Type: typ,
-	}
+	return &types.Metadata{Kind: types.KindDOSExecutable}
 }
 
 func pe32MachineType(machine uint16) types.TypeID {
