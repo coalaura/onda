@@ -68,13 +68,13 @@ import (
 	"fmt"
 
 	"github.com/coalaura/onda/types"
-	_ "github.com/coalaura/onda/types/all"
 )
 
 func main() {
 	meta, err := types.Detect("sample.png", []byte{0x89, 'P', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a})
 	if err != nil {
 		fmt.Println("unknown")
+
 		return
 	}
 
@@ -88,7 +88,7 @@ onda currently detects over **470+ file formats** across various categories. Ins
 
 - **Archive/package/filesystem:** 7-Zip, APFS, APK, Btrfs, Bzip2, CAB, Debian, exFAT, ext2/3/4, Gzip, HFS+, JAR, LUKS, LZ4, NTFS, RAR, RPM, SquashFS, TAR, XFS, XZ, ZIP, Zstandard and many more.
 - **Audio/tracker:** AAC, AIFF, FLAC, MIDI, MP3, Ogg, Opus, Vorbis, WAV, WavPack and more.
-- **Image/texture/icon:** AVIF, BMP, DDS, GIF, HEIF, ICO, JPEG, JPEG XL, PNG, PSD, SVG, TIFF, WebP and more.
+- **Image/textuinternalre/icon:** AVIF, BMP, DDS, GIF, HEIF, ICO, JPEG, JPEG XL, PNG, PSD, SVG, TIFF, WebP and more.
 - **Video/container:** AVI, FLV, Matroska (MKV), MP4, MPEG, QuickTime, WebM and more.
 - **Document/data:** Apache Arrow/Parquet, DICOM, EPUB, HDF5, Microsoft Office (DOCX, XLSX, PPTX), PDF, RTF, SQLite, XML and more.
 - **Font:** EOT, OpenType, TrueType, WOFF, WOFF2.

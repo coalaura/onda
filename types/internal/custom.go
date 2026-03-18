@@ -2,7 +2,7 @@ package internal
 
 import (
 	"github.com/coalaura/onda/types"
-	"github.com/coalaura/onda/types/internal/custom"
+	"github.com/coalaura/onda/types/custom"
 )
 
 func init() {

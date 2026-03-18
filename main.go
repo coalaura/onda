@@ -8,8 +8,6 @@ import (
 
 	"github.com/coalaura/onda/types"
 	"github.com/coalaura/plain"
-
-	_ "github.com/coalaura/onda/types/all"
 )
 
 var (
