@@ -102,7 +102,7 @@ func TestDetectWarOverJar(t *testing.T) {
 	t.Parallel()
 
 	data := makeZipLocalFile("META-INF/MANIFEST.MF", nil)
-	data = append(data, []byte("WEB-INF/web.xml")...)
+	data = append(data, makeZipLocalFile("WEB-INF/web.xml", nil)...)
 
 	meta, err := types.Detect("app.war", data)
 	if err != nil {

@@ -247,18 +247,6 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		}
 	}
 
-	if hasFabricMod {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFabricMod}
-	}
-
-	if hasForgeMod {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeForgeMod}
-	}
-
-	if hasMinecraftMeta {
-		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMinecraftResourcePack}
-	}
-
 	if hasManifestMF {
 		if hasWebXML {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaWebArchiveWAR}
@@ -266,6 +254,18 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 		if hasAppXML {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaEnterpriseArchiveEAR}
+		}
+
+		if hasFabricMod {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFabricMod}
+		}
+
+		if hasForgeMod {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeForgeMod}
+		}
+
+		if hasMinecraftMeta {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMinecraftResourcePack}
 		}
 
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeJavaArchiveJAR}
