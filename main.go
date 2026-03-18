@@ -35,7 +35,7 @@ func main() {
 
 			os.Exit(0)
 		case "-v", "--version":
-			fmt.Printf("onda version %s\n", Version)
+			fmt.Printf("onda %s\n", Version)
 
 			os.Exit(0)
 		case "-p", "--porcelain":
@@ -44,7 +44,7 @@ func main() {
 			if targetFile == "" && (len(arg) == 0 || arg[0] != '-') {
 				targetFile = arg
 			} else {
-				log.Errorln("Unknown argument or multiple files specified:", arg)
+				log.Errorln("Unknown argument or multiple files specified: ", arg)
 
 				os.Exit(1)
 			}
