@@ -3,6 +3,7 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
+	types.RegisterSignature(types.KindAmigaHunkExecutable, types.TypeNone, 0, []byte{0x00, 0x00, 0x03, 0xf3})
 	types.RegisterSignature(types.KindAndroidART, types.TypeNone, 0, []byte("art\n"))
 	types.RegisterSignature(types.KindAndroidBinaryXML, types.TypeNone, 0, []byte{0x03, 0x00, 0x08, 0x00})
 	types.RegisterSignature(types.KindAndroidBootImage, types.TypeNone, 0, []byte("ANDROID!"))
@@ -10,6 +11,7 @@ func init() {
 	types.RegisterSignature(types.KindAndroidOAT, types.TypeNone, 0, []byte("oat\n"))
 	types.RegisterSignature(types.KindAndroidODEX, types.TypeNone, 0, []byte("dey\n"))
 	types.RegisterSignature(types.KindAndroidVDEX, types.TypeNone, 0, []byte("vdex"))
+	types.RegisterSignature(types.KindAppleBillOfMaterials, types.TypeNone, 0, []byte("BOMStore"))
 	types.RegisterSignature(types.KindAppleDouble, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x07})
 	types.RegisterSignature(types.KindAppleKeychain, types.TypeNone, 0, []byte("kych"))
 	types.RegisterSignature(types.KindAppleSingle, types.TypeNone, 0, []byte{0x00, 0x05, 0x16, 0x00})
@@ -31,6 +33,7 @@ func init() {
 	types.RegisterSignature(types.KindGitIndex, types.TypeNone, 0, []byte("DIRC"))
 	types.RegisterSignature(types.KindGitPack, types.TypeNone, 0, []byte("PACK"))
 	types.RegisterSignature(types.KindGnuPGKeybox, types.TypeNone, 0, []byte("KBXf"))
+	types.RegisterSignature(types.KindJavaCryptographyExtensionKeyStore, types.TypeNone, 0, []byte{0xce, 0xce, 0xce, 0xce})
 	types.RegisterSignature(types.KindJavaKeyStore, types.TypeNone, 0, []byte{0xfe, 0xed, 0xfe, 0xed})
 	types.RegisterSignature(types.KindJavaModule, types.TypeJMOD, 0, []byte("JMOD"))
 	types.RegisterSignature(types.KindJavaSerialization, types.TypeNone, 0, []byte{0xac, 0xed, 0x00, 0x05})
@@ -39,6 +42,7 @@ func init() {
 	types.RegisterSignature(types.KindLuaBytecode, types.TypeNone, 0, []byte{0x1b, 'L', 'u', 'a'})
 	types.RegisterSignature(types.KindMacBinary, types.TypeNone, 102, []byte("mBIN"))
 	types.RegisterSignature(types.KindMacOSAlias, types.TypeNone, 0, []byte{0x62, 0x6f, 0x6f, 0x6b, 0x00, 0x00, 0x00, 0x00, 0x6d, 0x61, 0x72, 0x6b, 0x00, 0x00, 0x00, 0x00})
+	types.RegisterSignature(types.KindMicrosoftProgramDatabase, types.TypeNone, 0, []byte("Microsoft C/C++ MSF 7.00\r\n\x1aDS\x00\x00\x00"))
 	types.RegisterSignature(types.KindNESROM, types.TypeNone, 0, []byte{'N', 'E', 'S', 0x1a})
 	types.RegisterSignature(types.KindNintendo3DSROM, types.TypeNone, 0x100, []byte("NCSD"))
 	types.RegisterSignature(types.KindNintendo64ROM, types.TypeBigEndian, 0, []byte{0x80, 0x37, 0x12, 0x40})
@@ -73,9 +77,14 @@ func init() {
 	types.RegisterSignature(types.KindWiiBackupFileSystem, types.TypeNone, 0, []byte("WBFS"))
 	types.RegisterSignature(types.KindWiiROM, types.TypeNone, 0x18, []byte{0x5d, 0x1c, 0x9e, 0xa3})
 	types.RegisterSignature(types.KindWindowsEventLog, types.TypeNone, 0, []byte("ElfFile\x00"))
+	types.RegisterSignature(types.KindWindowsMinidump, types.TypeNone, 0, []byte("MDMP\x93\xa7"))
 	types.RegisterSignature(types.KindWindowsShortcut, types.TypeNone, 0, []byte{0x4c, 0x00, 0x00, 0x00, 0x01, 0x14, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46})
 	types.RegisterSignature(types.KindWindowsTypeLibrary, types.TypeNone, 0, []byte("MSFT\x02\x00\x01\x00"))
 	types.RegisterSignature(types.KindXboxISO, types.TypeNone, 0, []byte("XISO"))
+	types.RegisterSignature(types.KindXCOFFExecutable, types.TypeNone, 0, []byte{0x01, 0xdf})
+	types.RegisterSignature(types.KindXCOFFExecutable, types.TypeNone, 0, []byte{0x01, 0xf7})
 	types.RegisterSignature(types.KindXFSFilesystem, types.TypeNone, 0, []byte("XFSB"))
 	types.RegisterSignature(types.KindZXTape, types.TypeNone, 0, []byte("ZXTape!"))
+
+	types.RegisterMaskedSignature(types.KindErlangBEAM, types.TypeNone, 0, []byte("FOR1\x00\x00\x00\x00BEAM"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

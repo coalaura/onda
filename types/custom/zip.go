@@ -25,6 +25,9 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		hasManifestMF    bool
 		hasWebXML        bool
 		hasAppXML        bool
+		hasMinecraftMeta bool
+		hasFabricMod     bool
+		hasForgeMod      bool
 		firstFile        = true
 	)
 
@@ -66,6 +69,14 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentPresentationODP}
 				case "application/vnd.oasis.opendocument.graphics":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentGraphicsODG}
+				case "application/vnd.oasis.opendocument.database":
+					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentDatabaseODB}
+				case "application/vnd.oasis.opendocument.formula":
+					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentFormulaODF}
+				case "application/vnd.oasis.opendocument.chart":
+					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentChartODC}
+				case "application/vnd.oasis.opendocument.image":
+					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeOpenDocumentImageODI}
 				case "application/x-krita":
 					return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKritaDocumentKRA}
 				case "image/openraster":
@@ -96,6 +107,12 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			hasWebXML = true
 		} else if matchASCII(name, "meta-inf/application.xml") {
 			hasAppXML = true
+		} else if matchASCII(name, "pack.mcmeta") {
+			hasMinecraftMeta = true
+		} else if matchASCII(name, "fabric.mod.json") {
+			hasFabricMod = true
+		} else if matchASCII(name, "mcmod.info") || matchASCII(name, "meta-inf/mods.toml") {
+			hasForgeMod = true
 		} else if matchASCII(name, "doc.kml") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {
@@ -228,6 +245,18 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		if bytes.Contains(searchArea, []byte("com.bohemiancoding.sketch")) || bytes.Contains(searchArea, []byte("com.sketch3")) {
 			return &types.Metadata{Kind: types.KindSketchDocument, Type: types.TypeSketchDocument}
 		}
+	}
+
+	if hasFabricMod {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeFabricMod}
+	}
+
+	if hasForgeMod {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeForgeMod}
+	}
+
+	if hasMinecraftMeta {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeMinecraftResourcePack}
 	}
 
 	if hasManifestMF {

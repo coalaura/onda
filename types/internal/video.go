@@ -20,6 +20,7 @@ func init() {
 	types.RegisterSignature(types.KindSmackerVideo, types.TypeNone, 0, []byte("SMK2"))
 	types.RegisterSignature(types.KindSmackerVideo, types.TypeNone, 0, []byte("SMK4"))
 	types.RegisterSignature(types.KindWTVVideo, types.TypeNone, 0, []byte{0xb7, 0xd8, 0x00, 0x20, 0x37, 0x49, 0xda, 0x11, 0xa6, 0x4e, 0x00, 0x07, 0xe9, 0x5e, 0xad, 0x8d})
+	types.RegisterSignature(types.KindYUV4MPEG2Video, types.TypeNone, 0, []byte("YUV4MPEG2 "))
 
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeAVIVideo, 0, []byte("RIFF\x00\x00\x00\x00AVI "), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

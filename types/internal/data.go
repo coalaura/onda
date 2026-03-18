@@ -4,9 +4,12 @@ import "github.com/coalaura/onda/types"
 
 func init() {
 	types.RegisterSignature(types.KindBCFData, types.TypeNone, 0, []byte("BCF\x02"))
+	types.RegisterSignature(types.KindGNUGettextMachineCatalog, types.TypeNone, 0, []byte{0x95, 0x04, 0x12, 0xde})
+	types.RegisterSignature(types.KindGNUGettextMachineCatalog, types.TypeNone, 0, []byte{0xde, 0x12, 0x04, 0x95})
 	types.RegisterSignature(types.KindHDF4Data, types.TypeNone, 0, []byte{0x0e, 0x03, 0x13, 0x01})
 	types.RegisterSignature(types.KindLevelDB, types.TypeNone, 0, []byte{0x57, 0xfb, 0x80, 0x8b, 0x24, 0x75, 0x47, 0xdb})
 	types.RegisterSignature(types.KindMATLABData, types.TypeNone, 0, []byte("MATLAB 5.0 MAT-file"))
+	types.RegisterSignature(types.KindMicrosoftSQLServerDatabase, types.TypeNone, 0, []byte{0x01, 0x0f, 0x00, 0x00, 0x08, 0x02, 0x00, 0x00})
 	types.RegisterSignature(types.KindNumPyArray, types.TypeNone, 0, []byte("\x93NUMPY"))
 	types.RegisterSignature(types.KindRData, types.TypeNone, 0, []byte("RDX2\n"))
 	types.RegisterSignature(types.KindRData, types.TypeNone, 0, []byte("RDX3\n"))

@@ -28,6 +28,10 @@ func DetectTar(b types.Buffer) *types.Metadata {
 					return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypePythonSourceDistributionSDist}
 				case "info/index.json":
 					return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeCondaPackage}
+				case ".PKGINFO":
+					return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeArchLinuxPackage}
+				case "Vagrantfile":
+					return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeVagrantBox}
 				}
 			}
 		}

@@ -46,6 +46,8 @@ func init() {
 	types.RegisterSignature(types.KindSigmaRAWImage, types.TypeNone, 0, []byte("FOVb"))
 	types.RegisterSignature(types.KindSunRasterImage, types.TypeNone, 0, []byte{0x59, 0xa6, 0x6a, 0x95})
 	types.RegisterSignature(types.KindValveTextureFormat, types.TypeNone, 0, []byte("VTF\x00"))
+	types.RegisterSignature(types.KindWordPerfectGraphics, types.TypeNone, 0, []byte("\xffWPC"))
+	types.RegisterSignature(types.KindXBMImage, types.TypeNone, 0, []byte("#define "))
 	types.RegisterSignature(types.KindXPMImage, types.TypeNone, 0, []byte("/* XPM */"))
 
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("AT&TFORM\x00\x00\x00\x00DJVI"), []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
@@ -56,6 +58,7 @@ func init() {
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00DJVM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00DJVU"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00THUM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
+	types.RegisterMaskedSignature(types.KindIFFContainer, types.TypeILBMImage, 0, []byte("FORM\x00\x00\x00\x00ILBM"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindMetafileImage, types.TypeEnhancedMetafileEMF, 0, []byte{0x01, 0x00, 0x00, 0x00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x20, 0x45, 0x4d, 0x46}, []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeWebPImage, 0, []byte("RIFF\x00\x00\x00\x00WEBP"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

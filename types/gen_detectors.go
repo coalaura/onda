@@ -619,6 +619,7 @@ var (
 	olePowerPointDocument = []byte{'P', 0, 'o', 0, 'w', 0, 'e', 0, 'r', 0, 'P', 0, 'o', 0, 'i', 0, 'n', 0, 't', 0, ' ', 0, 'D', 0, 'o', 0, 'c', 0, 'u', 0, 'm', 0, 'e', 0, 'n', 0, 't', 0}
 	oleMSI                = []byte{0x84, 0x10, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46}
 	oleOutlookMessage     = []byte{'_', 0, '_', 0, 's', 0, 'u', 0, 'b', 0, 's', 0, 't', 0, 'g', 0, '1', 0, '.', 0, '0', 0, '_', 0}
+	oleVisioDocument      = []byte{'V', 0, 'i', 0, 's', 0, 'i', 0, 'o', 0, 'D', 0, 'o', 0, 'c', 0, 'u', 0, 'm', 0, 'e', 0, 'n', 0, 't', 0}
 )
 
 func DetectOLE(b Buffer) *Metadata {
@@ -647,6 +648,10 @@ func DetectOLE(b Buffer) *Metadata {
 
 	if bytes.Contains(data, oleOutlookMessage) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftOutlookMessageMSG}
+	}
+
+	if bytes.Contains(data, oleVisioDocument) {
+		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftVisioDrawingVSD}
 	}
 
 	return &Metadata{
@@ -919,6 +924,10 @@ func DetectTar(b Buffer) *Metadata {
 					return &Metadata{Kind: KindTARArchive, Type: TypePythonSourceDistributionSDist}
 				case "info/index.json":
 					return &Metadata{Kind: KindTARArchive, Type: TypeCondaPackage}
+				case ".PKGINFO":
+					return &Metadata{Kind: KindTARArchive, Type: TypeArchLinuxPackage}
+				case "Vagrantfile":
+					return &Metadata{Kind: KindTARArchive, Type: TypeVagrantBox}
 				}
 			}
 		}
@@ -1099,6 +1108,9 @@ func DetectZIPContainer(b Buffer) *Metadata {
 		hasManifestMF    bool
 		hasWebXML        bool
 		hasAppXML        bool
+		hasMinecraftMeta bool
+		hasFabricMod     bool
+		hasForgeMod      bool
 		firstFile        = true
 	)
 
@@ -1140,6 +1152,14 @@ func DetectZIPContainer(b Buffer) *Metadata {
 					return &Metadata{Kind: KindZIPArchive, Type: TypeOpenDocumentPresentationODP}
 				case "application/vnd.oasis.opendocument.graphics":
 					return &Metadata{Kind: KindZIPArchive, Type: TypeOpenDocumentGraphicsODG}
+				case "application/vnd.oasis.opendocument.database":
+					return &Metadata{Kind: KindZIPArchive, Type: TypeOpenDocumentDatabaseODB}
+				case "application/vnd.oasis.opendocument.formula":
+					return &Metadata{Kind: KindZIPArchive, Type: TypeOpenDocumentFormulaODF}
+				case "application/vnd.oasis.opendocument.chart":
+					return &Metadata{Kind: KindZIPArchive, Type: TypeOpenDocumentChartODC}
+				case "application/vnd.oasis.opendocument.image":
+					return &Metadata{Kind: KindZIPArchive, Type: TypeOpenDocumentImageODI}
 				case "application/x-krita":
 					return &Metadata{Kind: KindZIPArchive, Type: TypeKritaDocumentKRA}
 				case "image/openraster":
@@ -1170,6 +1190,12 @@ func DetectZIPContainer(b Buffer) *Metadata {
 			hasWebXML = true
 		} else if matchASCII(name, "meta-inf/application.xml") {
 			hasAppXML = true
+		} else if matchASCII(name, "pack.mcmeta") {
+			hasMinecraftMeta = true
+		} else if matchASCII(name, "fabric.mod.json") {
+			hasFabricMod = true
+		} else if matchASCII(name, "mcmod.info") || matchASCII(name, "meta-inf/mods.toml") {
+			hasForgeMod = true
 		} else if matchASCII(name, "doc.kml") {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {
@@ -1298,6 +1324,18 @@ func DetectZIPContainer(b Buffer) *Metadata {
 		if bytes.Contains(searchArea, []byte("com.bohemiancoding.sketch")) || bytes.Contains(searchArea, []byte("com.sketch3")) {
 			return &Metadata{Kind: KindSketchDocument, Type: TypeSketchDocument}
 		}
+	}
+
+	if hasFabricMod {
+		return &Metadata{Kind: KindZIPArchive, Type: TypeFabricMod}
+	}
+
+	if hasForgeMod {
+		return &Metadata{Kind: KindZIPArchive, Type: TypeForgeMod}
+	}
+
+	if hasMinecraftMeta {
+		return &Metadata{Kind: KindZIPArchive, Type: TypeMinecraftResourcePack}
 	}
 
 	if hasManifestMF {

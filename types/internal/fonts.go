@@ -4,6 +4,7 @@ import "github.com/coalaura/onda/types"
 
 func init() {
 	types.RegisterSignature(types.KindEOTFont, types.TypeNone, 34, []byte("LP"))
+	types.RegisterSignature(types.KindGlyphBitmapDistributionFormat, types.TypeNone, 0, []byte("STARTFONT "))
 	types.RegisterSignature(types.KindOpenTypeFont, types.TypeNone, 0, []byte("OTTO"))
 	types.RegisterSignature(types.KindPCFFont, types.TypeNone, 0, []byte("\x01fcp"))
 	types.RegisterSignature(types.KindPSFFont, types.TypeNone, 0, []byte{0x36, 0x04})
