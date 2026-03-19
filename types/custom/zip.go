@@ -115,6 +115,8 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			hasFabricMod = true
 		} else if matchASCII(name, "mcmod.info") || matchASCII(name, "meta-inf/mods.toml") {
 			hasForgeMod = true
+		} else if matchASCII(name, "main.lua") {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeLOVEGame}
 		} else if matchASCII(name, "doc.kml") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {

@@ -16,6 +16,8 @@ func init() {
 	types.RegisterSignature(types.KindCPIOArchive, types.TypeNewASCIIWithCRC, 0, []byte("070702"))
 	types.RegisterSignature(types.KindCPIOArchive, types.TypeOldASCII, 0, []byte("070707"))
 	types.RegisterSignature(types.KindDebianPackage, types.TypeNone, 8, []byte("debian-binary"))
+	types.RegisterSignature(types.KindEGGArchive, types.TypeNone, 0, []byte("EGGA"))
+	types.RegisterSignature(types.KindFreeArcArchive, types.TypeNone, 0, []byte("ArC\x01"))
 	types.RegisterSignature(types.KindGzipArchive, types.TypeNone, 0, []byte{0x1f, 0x8b})
 	types.RegisterSignature(types.KindJavaPack200, types.TypeNone, 0, []byte{0xca, 0xfe, 0xd0, 0x0d})
 	types.RegisterSignature(types.KindKGBArchive, types.TypeNone, 0, []byte("KGB_arch"))

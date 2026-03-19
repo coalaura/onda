@@ -952,6 +952,8 @@ func DetectTar(b Buffer) *Metadata {
 					return &Metadata{Kind: KindTARArchive, Type: TypeArchLinuxPackage}
 				case "Vagrantfile":
 					return &Metadata{Kind: KindTARArchive, Type: TypeVagrantBox}
+				case "install/doinst.sh":
+					return &Metadata{Kind: KindTARArchive, Type: TypeSlackwarePackage}
 				}
 			}
 		}
@@ -1222,6 +1224,8 @@ func DetectZIPContainer(b Buffer) *Metadata {
 			hasFabricMod = true
 		} else if matchASCII(name, "mcmod.info") || matchASCII(name, "meta-inf/mods.toml") {
 			hasForgeMod = true
+		} else if matchASCII(name, "main.lua") {
+			return &Metadata{Kind: KindZIPArchive, Type: TypeLOVEGame}
 		} else if matchASCII(name, "doc.kml") {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeKMZArchive}
 		} else if hasSuffixASCII(name, ".dist-info/wheel") {

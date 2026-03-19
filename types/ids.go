@@ -43,6 +43,7 @@ const (
 	KindASFContainer
 	KindASTCTexture
 	KindAtari7800ROM
+	KindAtariLynxROM
 	KindAUAudio
 	KindAutoCADDrawing
 	KindAvroObjectContainer
@@ -67,8 +68,10 @@ const (
 	KindCineonImage
 	KindCloneCDControl
 	KindCommodore64Tape
+	KindCommodore64TapeRAW
 	KindCommodoreSID
 	KindCompiledTerminfo
+	KindCompressedSquareWave
 	KindCorelPhotoPaintImage
 	KindCPIOArchive
 	KindCRAMData
@@ -86,6 +89,7 @@ const (
 	KindDSFAudio
 	KindDTSAudio
 	KindEBMLContainer
+	KindEGGArchive
 	KindEncapsulatedPostScript
 	KindEnCaseImage
 	KindEOTFont
@@ -95,21 +99,28 @@ const (
 	KindExFATFilesystem
 	KindExtFilesystem
 	KindF2FSFilesystem
+	KindFamicomDiskSystemROM
 	KindFarbfeldImage
 	KindFastTrackerModule
 	KindFATFilesystem
 	KindFBXModel
+	KindFeatherData
 	KindFilesystemEntry
+	KindFITActivity
 	KindFITSAstronomicalImage
 	KindFLACAudio
 	KindFLIFImage
 	KindFLVVideo
+	KindFreeArcArchive
 	KindFujifilmRAWImage
 	KindGameBoyAdvanceROM
 	KindGameBoyROM
 	KindGameBoySound
 	KindGameCubeROM
+	KindGDBMDatabase
 	KindGIFImage
+	KindGIMPBrush
+	KindGIMPPattern
 	KindGIMPXCFImage
 	KindGitIndex
 	KindGitPack
@@ -145,11 +156,13 @@ const (
 	KindJNGImage
 	KindJPEG2000Image
 	KindJPEGImage
+	KindJPEGLSImage
 	KindJPEGXLImage
 	KindJPEGXRImage
 	KindKeePassDatabase
 	KindKGBArchive
 	KindKTXTexture
+	KindKyotoCabinetDatabase
 	KindLevelDB
 	KindLHAArchive
 	KindLinuxKernelImage
@@ -196,7 +209,10 @@ const (
 	KindMPEGProgramStream
 	KindMPEGTransportStream
 	KindMPEGVideo
+	KindMUGENSound
+	KindMUGENSprite
 	KindMusepackAudio
+	KindNeoGeoPocketROM
 	KindNESROM
 	KindNESSoundFormat
 	KindNetCDFData
@@ -205,11 +221,18 @@ const (
 	KindNILFS2Filesystem
 	KindNintendo3DSROM
 	KindNintendo64ROM
+	KindNintendoBCFNT
+	KindNintendoBFLYT
+	KindNintendoBRRES
 	KindNintendoDSROM
+	KindNintendoRARC
 	KindNintendoSwitchNRO
 	KindNintendoSwitchNSO
 	KindNintendoSwitchPackage
 	KindNintendoSwitchROM
+	KindNintendoU8Archive
+	KindNintendoYay0
+	KindNintendoYaz0
 	KindNISTSPHEREAudio
 	KindNTFSFilesystem
 	KindNumPyArray
@@ -232,6 +255,7 @@ const (
 	KindPeaZipArchive
 	KindPEMCertificate
 	KindPEMPrivateKey
+	KindPGFImage
 	KindPGPMessage
 	KindPhotoshopDocument
 	KindPKCS12
@@ -249,8 +273,11 @@ const (
 	KindPuttyPrivateKey
 	KindPVRTexture
 	KindPythonBytecode
+	KindPythonPickle
 	KindQCOWDiskImage
+	KindQDBMDatabase
 	KindQOIImage
+	KindQuakePAK
 	KindRadianceHDRImage
 	KindRARArchive
 	KindRData
@@ -269,7 +296,10 @@ const (
 	KindRubyGemPackage
 	KindSASData
 	KindScreamTrackerModule
+	KindSegaDreamcastROM
+	KindSegaMasterSystemROM
 	KindSegaMegaDriveROM
+	KindSegaSaturnROM
 	KindSGIImage
 	KindShebangScript
 	KindShockwaveFlash
@@ -284,6 +314,7 @@ const (
 	KindSonyWave64Audio
 	KindSourceEngineBSP
 	KindSPSSData
+	KindSPSSPortableData
 	KindSQLite3WriteAheadLog
 	KindSQLiteDatabase
 	KindSquashFSFilesystem
@@ -296,9 +327,11 @@ const (
 	KindSymbianInstallationFormat
 	KindTAKAudio
 	KindTARArchive
+	KindTensorFlowLiteModel
 	KindTextFile
 	KindTIFFImage
 	KindTimezoneData
+	KindTokyoCabinetDatabase
 	KindTorrentFile
 	KindTransportNeutralEncapsulationFormat
 	KindTrueTypeCollection
@@ -312,6 +345,7 @@ const (
 	KindUniversalDiskFormat
 	KindUniversalSceneDescription
 	KindUnixCompressArchive
+	KindUnrealEnginePackage
 	KindValvePak
 	KindValveTextureFormat
 	KindVCard
@@ -336,6 +370,7 @@ const (
 	KindWindowsImagingFormat
 	KindWindowsMinidump
 	KindWindowsRegistryHive
+	KindWindowsResourceFile
 	KindWindowsShortcut
 	KindWindowsTypeLibrary
 	KindWOFF2Font
@@ -450,11 +485,13 @@ const (
 	TypeJMOD
 	TypeKDB
 	TypeKDBX
+	TypeKerasModel
 	TypeKMZArchive
 	TypeKritaDocumentKRA
 	TypeKTX
 	TypeKTX2
 	TypeLittleEndian
+	TypeLOVEGame
 	TypeLZ4Legacy
 	TypeLZMACompressed
 	TypeM2TS
@@ -538,6 +575,7 @@ const (
 	TypePWAD
 	TypePythonSourceDistributionSDist
 	TypePythonWheelWHL
+	TypePyTorchModel
 	TypeQCOW1
 	TypeQCOW2
 	TypeQCPAudio
@@ -546,6 +584,7 @@ const (
 	TypeRAR5
 	TypeRSAPrivateKey
 	TypeSketchDocument
+	TypeSlackwarePackage
 	TypeSocket
 	TypeSonyRAWARW
 	TypeSonyRAWSR2
@@ -619,6 +658,7 @@ var kindNames = [...]string{
 	KindASFContainer:                        "ASF Container",
 	KindASTCTexture:                         "ASTC Texture",
 	KindAtari7800ROM:                        "Atari 7800 ROM",
+	KindAtariLynxROM:                        "Atari Lynx ROM",
 	KindAUAudio:                             "AU Audio",
 	KindAutoCADDrawing:                      "AutoCAD Drawing",
 	KindAvroObjectContainer:                 "Avro Object Container",
@@ -643,8 +683,10 @@ var kindNames = [...]string{
 	KindCineonImage:                         "Cineon Image",
 	KindCloneCDControl:                      "CloneCD Control File",
 	KindCommodore64Tape:                     "Commodore 64 Tape",
+	KindCommodore64TapeRAW:                  "Commodore 64 Tape RAW",
 	KindCommodoreSID:                        "Commodore SID Audio",
 	KindCompiledTerminfo:                    "Compiled Terminfo",
+	KindCompressedSquareWave:                "Compressed Square Wave",
 	KindCorelPhotoPaintImage:                "Corel Photo-Paint Image",
 	KindCPIOArchive:                         "CPIO Archive",
 	KindCRAMData:                            "CRAM Data",
@@ -662,6 +704,7 @@ var kindNames = [...]string{
 	KindDSFAudio:                            "DSF Audio",
 	KindDTSAudio:                            "DTS Audio",
 	KindEBMLContainer:                       "EBML Container",
+	KindEGGArchive:                          "EGG Archive",
 	KindEncapsulatedPostScript:              "Encapsulated PostScript",
 	KindEnCaseImage:                         "EnCase Image",
 	KindEOTFont:                             "EOT Font",
@@ -671,21 +714,28 @@ var kindNames = [...]string{
 	KindExFATFilesystem:                     "exFAT Filesystem",
 	KindExtFilesystem:                       "ext Filesystem",
 	KindF2FSFilesystem:                      "F2FS Filesystem",
+	KindFamicomDiskSystemROM:                "Famicom Disk System ROM",
 	KindFarbfeldImage:                       "Farbfeld Image",
 	KindFastTrackerModule:                   "FastTracker Module",
 	KindFATFilesystem:                       "FAT Filesystem",
 	KindFBXModel:                            "FBX Model",
+	KindFeatherData:                         "Feather Data",
 	KindFilesystemEntry:                     "Filesystem Entry",
+	KindFITActivity:                         "FIT Activity",
 	KindFITSAstronomicalImage:               "FITS Astronomical Image",
 	KindFLACAudio:                           "FLAC Audio",
 	KindFLIFImage:                           "FLIF Image",
 	KindFLVVideo:                            "FLV Video",
+	KindFreeArcArchive:                      "FreeArc Archive",
 	KindFujifilmRAWImage:                    "Fujifilm RAW Image",
 	KindGameBoyAdvanceROM:                   "Game Boy Advance ROM",
 	KindGameBoyROM:                          "Game Boy ROM",
 	KindGameBoySound:                        "Game Boy Sound",
 	KindGameCubeROM:                         "GameCube ROM",
+	KindGDBMDatabase:                        "GDBM Database",
 	KindGIFImage:                            "GIF Image",
+	KindGIMPBrush:                           "GIMP Brush",
+	KindGIMPPattern:                         "GIMP Pattern",
 	KindGIMPXCFImage:                        "GIMP XCF Image",
 	KindGitIndex:                            "Git Index",
 	KindGitPack:                             "Git Pack",
@@ -721,11 +771,13 @@ var kindNames = [...]string{
 	KindJNGImage:                            "JNG Image",
 	KindJPEG2000Image:                       "JPEG 2000 Image",
 	KindJPEGImage:                           "JPEG Image",
+	KindJPEGLSImage:                         "JPEG-LS Image",
 	KindJPEGXLImage:                         "JPEG XL Image",
 	KindJPEGXRImage:                         "JPEG XR Image",
 	KindKeePassDatabase:                     "KeePass Database",
 	KindKGBArchive:                          "KGB Archive",
 	KindKTXTexture:                          "KTX Texture",
+	KindKyotoCabinetDatabase:                "Kyoto Cabinet Database",
 	KindLevelDB:                             "LevelDB/RocksDB",
 	KindLHAArchive:                          "LHA Archive",
 	KindLinuxKernelImage:                    "Linux Kernel Image",
@@ -772,7 +824,10 @@ var kindNames = [...]string{
 	KindMPEGProgramStream:                   "MPEG Program Stream",
 	KindMPEGTransportStream:                 "MPEG Transport Stream",
 	KindMPEGVideo:                           "MPEG Video",
+	KindMUGENSound:                          "M.U.G.E.N Sound",
+	KindMUGENSprite:                         "M.U.G.E.N Sprite",
 	KindMusepackAudio:                       "Musepack Audio",
+	KindNeoGeoPocketROM:                     "Neo Geo Pocket ROM",
 	KindNESROM:                              "NES ROM",
 	KindNESSoundFormat:                      "NES Sound Format",
 	KindNetCDFData:                          "NetCDF Data",
@@ -781,11 +836,18 @@ var kindNames = [...]string{
 	KindNILFS2Filesystem:                    "NILFS2 Filesystem",
 	KindNintendo3DSROM:                      "Nintendo 3DS ROM",
 	KindNintendo64ROM:                       "Nintendo 64 ROM",
+	KindNintendoBCFNT:                       "Nintendo BCFNT Font",
+	KindNintendoBFLYT:                       "Nintendo BFLYT Layout",
+	KindNintendoBRRES:                       "Nintendo BRRES Resource",
 	KindNintendoDSROM:                       "Nintendo DS ROM",
+	KindNintendoRARC:                        "Nintendo RARC Archive",
 	KindNintendoSwitchNRO:                   "Nintendo Switch NRO",
 	KindNintendoSwitchNSO:                   "Nintendo Switch NSO",
 	KindNintendoSwitchPackage:               "Nintendo Switch Package",
 	KindNintendoSwitchROM:                   "Nintendo Switch ROM",
+	KindNintendoU8Archive:                   "Nintendo U8 Archive",
+	KindNintendoYay0:                        "Nintendo Yay0 Compressed",
+	KindNintendoYaz0:                        "Nintendo Yaz0 Compressed",
 	KindNISTSPHEREAudio:                     "NIST SPHERE Audio",
 	KindNTFSFilesystem:                      "NTFS Filesystem",
 	KindNumPyArray:                          "NumPy Array",
@@ -808,6 +870,7 @@ var kindNames = [...]string{
 	KindPeaZipArchive:                       "PeaZip Archive",
 	KindPEMCertificate:                      "PEM Certificate",
 	KindPEMPrivateKey:                       "PEM Private Key",
+	KindPGFImage:                            "Progressive Graphics File",
 	KindPGPMessage:                          "PGP Message",
 	KindPhotoshopDocument:                   "Photoshop Document",
 	KindPKCS12:                              "PKCS#12",
@@ -825,8 +888,11 @@ var kindNames = [...]string{
 	KindPuttyPrivateKey:                     "PuTTY Private Key",
 	KindPVRTexture:                          "PVR Texture",
 	KindPythonBytecode:                      "Python Bytecode",
+	KindPythonPickle:                        "Python Pickle",
 	KindQCOWDiskImage:                       "QCOW Disk Image",
+	KindQDBMDatabase:                        "QDBM Database",
 	KindQOIImage:                            "QOI Image",
+	KindQuakePAK:                            "Quake PAK Archive",
 	KindRadianceHDRImage:                    "Radiance HDR Image",
 	KindRARArchive:                          "RAR Archive",
 	KindRData:                               "RData",
@@ -845,7 +911,10 @@ var kindNames = [...]string{
 	KindRubyGemPackage:                      "RubyGem Package",
 	KindSASData:                             "SAS Data",
 	KindScreamTrackerModule:                 "Scream Tracker Module",
+	KindSegaDreamcastROM:                    "Sega Dreamcast ROM",
+	KindSegaMasterSystemROM:                 "Sega Master System ROM",
 	KindSegaMegaDriveROM:                    "Sega Mega Drive ROM",
+	KindSegaSaturnROM:                       "Sega Saturn ROM",
 	KindSGIImage:                            "SGI Image",
 	KindShebangScript:                       "Shebang Script",
 	KindShockwaveFlash:                      "Shockwave Flash",
@@ -860,6 +929,7 @@ var kindNames = [...]string{
 	KindSonyWave64Audio:                     "Sony Wave64 Audio",
 	KindSourceEngineBSP:                     "Source Engine BSP",
 	KindSPSSData:                            "SPSS Data",
+	KindSPSSPortableData:                    "SPSS Portable Data",
 	KindSQLite3WriteAheadLog:                "SQLite Write-Ahead Log",
 	KindSQLiteDatabase:                      "SQLite Database",
 	KindSquashFSFilesystem:                  "SquashFS Filesystem",
@@ -872,9 +942,11 @@ var kindNames = [...]string{
 	KindSymbianInstallationFormat:           "Symbian Installation Format",
 	KindTAKAudio:                            "TAK Audio",
 	KindTARArchive:                          "TAR Archive",
+	KindTensorFlowLiteModel:                 "TensorFlow Lite Model",
 	KindTextFile:                            "Text File",
 	KindTIFFImage:                           "TIFF Image",
 	KindTimezoneData:                        "Timezone Data",
+	KindTokyoCabinetDatabase:                "Tokyo Cabinet Database",
 	KindTorrentFile:                         "Torrent File",
 	KindTransportNeutralEncapsulationFormat: "Transport Neutral Encapsulation Format (TNEF)",
 	KindTrueTypeCollection:                  "TrueType Collection",
@@ -888,6 +960,7 @@ var kindNames = [...]string{
 	KindUniversalDiskFormat:                 "Universal Disk Format",
 	KindUniversalSceneDescription:           "Universal Scene Description",
 	KindUnixCompressArchive:                 "Unix Compress Archive",
+	KindUnrealEnginePackage:                 "Unreal Engine Package",
 	KindValvePak:                            "Valve Pak",
 	KindValveTextureFormat:                  "Valve Texture Format",
 	KindVCard:                               "vCard",
@@ -912,6 +985,7 @@ var kindNames = [...]string{
 	KindWindowsImagingFormat:                "Windows Imaging Format",
 	KindWindowsMinidump:                     "Windows Minidump",
 	KindWindowsRegistryHive:                 "Windows Registry Hive",
+	KindWindowsResourceFile:                 "Windows Resource File",
 	KindWindowsShortcut:                     "Windows Shortcut",
 	KindWindowsTypeLibrary:                  "Windows Type Library (TLB)",
 	KindWOFF2Font:                           "WOFF2 Font",
@@ -1026,11 +1100,13 @@ var typeNames = [...]string{
 	TypeJMOD:                     "JMOD",
 	TypeKDB:                      "KDB",
 	TypeKDBX:                     "KDBX",
+	TypeKerasModel:               "Keras Model",
 	TypeKMZArchive:               "KMZ Archive",
 	TypeKritaDocumentKRA:         "Krita Document (KRA)",
 	TypeKTX:                      "KTX",
 	TypeKTX2:                     "KTX2",
 	TypeLittleEndian:             "Little-Endian",
+	TypeLOVEGame:                 "LÖVE Game",
 	TypeLZ4Legacy:                "LZ4 Legacy",
 	TypeLZMACompressed:           "LZMA Compressed",
 	TypeM2TS:                     "M2TS",
@@ -1114,6 +1190,7 @@ var typeNames = [...]string{
 	TypePWAD:                                            "PWAD",
 	TypePythonSourceDistributionSDist:                   "Python Source Distribution (sdist)",
 	TypePythonWheelWHL:                                  "Python Wheel (WHL)",
+	TypePyTorchModel:                                    "PyTorch Model",
 	TypeQCOW1:                                           "QCOW1",
 	TypeQCOW2:                                           "QCOW2",
 	TypeQCPAudio:                                        "QCP Audio",
@@ -1122,6 +1199,7 @@ var typeNames = [...]string{
 	TypeRAR5:                                            "RAR5",
 	TypeRSAPrivateKey:                                   "RSA Private Key",
 	TypeSketchDocument:                                  "Sketch Document",
+	TypeSlackwarePackage:                                "Slackware Package",
 	TypeSocket:                                          "Socket",
 	TypeSonyRAWARW:                                      "Sony RAW (ARW)",
 	TypeSonyRAWSR2:                                      "Sony RAW (SR2)",

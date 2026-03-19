@@ -85,6 +85,7 @@ func init() {
 	types.RegisterSignature(types.KindWiiROM, types.TypeNone, 0x18, []byte{0x5d, 0x1c, 0x9e, 0xa3})
 	types.RegisterSignature(types.KindWindowsEventLog, types.TypeNone, 0, []byte("ElfFile\x00"))
 	types.RegisterSignature(types.KindWindowsMinidump, types.TypeNone, 0, []byte("MDMP\x93\xa7"))
+	types.RegisterSignature(types.KindWindowsResourceFile, types.TypeNone, 0, []byte{0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00})
 	types.RegisterSignature(types.KindWindowsShortcut, types.TypeNone, 0, []byte{0x4c, 0x00, 0x00, 0x00, 0x01, 0x14, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46})
 	types.RegisterSignature(types.KindWindowsTypeLibrary, types.TypeNone, 0, []byte("MSFT\x02\x00\x01\x00"))
 	types.RegisterSignature(types.KindXboxISO, types.TypeNone, 0, []byte("XISO"))
