@@ -12,6 +12,7 @@ func init() {
 	types.RegisterSignature(types.KindAutoCADDrawing, types.TypeNone, 0, []byte("AC10"))
 	types.RegisterSignature(types.KindAvroObjectContainer, types.TypeNone, 0, []byte{'O', 'b', 'j', 0x01})
 	types.RegisterSignature(types.KindBAMData, types.TypeNone, 0, []byte{'B', 'A', 'M', 0x01})
+	types.RegisterSignature(types.KindBroadbandEBook, types.TypeNone, 0, []byte{'L', 0x00, 'R', 0x00, 'F', 0x00, 0x00, 0x00})
 	types.RegisterSignature(types.KindCBORData, types.TypeNone, 0, []byte{0xd9, 0xd9, 0xf7})
 	types.RegisterSignature(types.KindCHMDocument, types.TypeNone, 0, []byte("ITSF"))
 	types.RegisterSignature(types.KindCRAMData, types.TypeNone, 0, []byte("CRAM"))

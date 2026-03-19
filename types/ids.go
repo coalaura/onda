@@ -15,6 +15,7 @@ const (
 	KindAmigaDiskFile
 	KindAmigaHardDiskFile
 	KindAmigaHunkExecutable
+	KindAmigaOctaMED
 	KindAMRAudio
 	KindAMRWBAudio
 	KindAndroidART
@@ -29,7 +30,9 @@ const (
 	KindApacheParquet
 	KindAPFSFilesystem
 	KindAppImage
+	KindAppleArchive
 	KindAppleBillOfMaterials
+	KindAppleBinaryCrashReport
 	KindAppleBinaryPropertyList
 	KindAppleDesktopServicesStore
 	KindAppleDiskImage
@@ -37,6 +40,7 @@ const (
 	KindAppleiWorkDocument
 	KindAppleKeychain
 	KindAppleSingle
+	KindAppleSystemLog
 	KindARArchive
 	KindARJArchive
 	KindARRIRAWImage
@@ -56,12 +60,16 @@ const (
 	KindBitcoinBlock
 	KindBitLockerDiskEncryption
 	KindBlenderFile
+	KindBlizzardTexture
 	KindBMPImage
+	KindBochsDiskImage
 	KindBPGImage
+	KindBroadbandEBook
 	KindBtrfsFilesystem
 	KindBzip2Archive
 	KindCabinetArchive
 	KindCAFAudio
+	KindCALSImage
 	KindCanonRAWImage
 	KindCBORData
 	KindCHMDocument
@@ -101,6 +109,7 @@ const (
 	KindF2FSFilesystem
 	KindFamicomDiskSystemROM
 	KindFarbfeldImage
+	KindFastTracker2ExtendedInstrument
 	KindFastTrackerModule
 	KindFATFilesystem
 	KindFBXModel
@@ -110,6 +119,7 @@ const (
 	KindFITSAstronomicalImage
 	KindFLACAudio
 	KindFLIFImage
+	KindFLStudioProject
 	KindFLVVideo
 	KindFreeArcArchive
 	KindFujifilmRAWImage
@@ -118,14 +128,17 @@ const (
 	KindGameBoySound
 	KindGameCubeROM
 	KindGDBMDatabase
+	KindGHCiInterface
 	KindGIFImage
 	KindGIMPBrush
 	KindGIMPPattern
 	KindGIMPXCFImage
 	KindGitIndex
 	KindGitPack
+	KindGlibcLocale
 	KindGLTFBinary
 	KindGlyphBitmapDistributionFormat
+	KindGNOMEKeyring
 	KindGNUGettextMachineCatalog
 	KindGnuPGKeybox
 	KindGodotPackage
@@ -142,7 +155,9 @@ const (
 	KindICNSIcon
 	KindICOCURImage
 	KindIFFContainer
+	KindImpulseTrackerInstrument
 	KindImpulseTrackerModule
+	KindImpulseTrackerSample
 	KindISO9660Image
 	KindISOBaseMedia
 	KindIVFVideo
@@ -152,6 +167,7 @@ const (
 	KindJavaModule
 	KindJavaPack200
 	KindJavaSerialization
+	KindJBIG2Image
 	KindJFFS2Filesystem
 	KindJNGImage
 	KindJPEG2000Image
@@ -159,6 +175,7 @@ const (
 	KindJPEGLSImage
 	KindJPEGXLImage
 	KindJPEGXRImage
+	KindKDEKWallet
 	KindKeePassDatabase
 	KindKGBArchive
 	KindKTXTexture
@@ -168,6 +185,7 @@ const (
 	KindLinuxKernelImage
 	KindLLVMBitcode
 	KindLottieAnimation
+	KindLrzipArchive
 	KindLuaBytecode
 	KindLUKSDiskEncryption
 	KindLVM2PhysicalVolume
@@ -181,6 +199,7 @@ const (
 	KindMachOBinary
 	KindMachOUniversalBinary
 	KindMacOSAlias
+	KindMagicaVoxel
 	KindMAMECHD
 	KindMaterialExchangeFormat
 	KindMATLABData
@@ -202,6 +221,7 @@ const (
 	KindMNGImage
 	KindMOBIDocument
 	KindMonkeysAudio
+	KindMoPaQArchive
 	KindMozillaArchive
 	KindMPEG2TransportStream
 	KindMPEGAudio
@@ -224,6 +244,7 @@ const (
 	KindNintendoBCFNT
 	KindNintendoBFLYT
 	KindNintendoBRRES
+	KindNintendoDSiROM
 	KindNintendoDSROM
 	KindNintendoRARC
 	KindNintendoSwitchNRO
@@ -236,6 +257,7 @@ const (
 	KindNISTSPHEREAudio
 	KindNTFSFilesystem
 	KindNumPyArray
+	KindOCamlObject
 	KindOggContainer
 	KindOLECompoundDocument
 	KindOlympusRAWImage
@@ -276,6 +298,7 @@ const (
 	KindPythonPickle
 	KindQCOWDiskImage
 	KindQDBMDatabase
+	KindQEMUQEDDiskImage
 	KindQOIImage
 	KindQuakePAK
 	KindRadianceHDRImage
@@ -290,10 +313,13 @@ const (
 	KindRIFFContainer
 	KindRKAudio
 	KindROMFS
+	KindROOTData
 	KindROSBag
 	KindRPGMakerArchive
 	KindRPMPackage
 	KindRubyGemPackage
+	KindRubyMarshal
+	KindRzipArchive
 	KindSASData
 	KindScreamTrackerModule
 	KindSegaDreamcastROM
@@ -305,6 +331,7 @@ const (
 	KindShockwaveFlash
 	KindShortenAudio
 	KindSigmaRAWImage
+	KindSiliconGraphicsMovie
 	KindSketchDocument
 	KindSketchUpModel
 	KindSmackerVideo
@@ -324,7 +351,9 @@ const (
 	KindStuffItArchive
 	KindSunRasterImage
 	KindSVGImage
+	KindSymbianExecutable
 	KindSymbianInstallationFormat
+	KindSystemdJournal
 	KindTAKAudio
 	KindTARArchive
 	KindTensorFlowLiteModel
@@ -359,6 +388,7 @@ const (
 	KindVulkanSPIRV
 	KindWADArchive
 	KindWARCFile
+	KindWarcraftIIIReplay
 	KindWavPackAudio
 	KindWebAssemblyModule
 	KindWebVTT
@@ -369,6 +399,7 @@ const (
 	KindWindowsHelp
 	KindWindowsImagingFormat
 	KindWindowsMinidump
+	KindWindowsPrecompiledHeader
 	KindWindowsRegistryHive
 	KindWindowsResourceFile
 	KindWindowsShortcut
@@ -384,6 +415,7 @@ const (
 	KindXboxISO
 	KindXCOFFExecutable
 	KindXFSFilesystem
+	KindXilinxBitstream
 	KindXMLDocument
 	KindXPMImage
 	KindXZArchive
@@ -400,6 +432,7 @@ const (
 
 const (
 	TypeNone TypeID = iota
+	Type32Bit
 	Type32BitBigEndian
 	Type32BitLittleEndian
 	Type3G2Media
@@ -442,6 +475,7 @@ const (
 	TypeCorelDRAWDocumentCDR
 	TypeCRXVersion2
 	TypeCRXVersion3
+	TypeCubaseProjectCPR
 	TypeDEX035
 	TypeDEX036
 	TypeDEX037
@@ -451,7 +485,9 @@ const (
 	TypeDEX041
 	TypeDirectory
 	TypeDownloadableSounds
+	TypeDSAPrivateKey
 	TypeEAC3
+	TypeECPrivateKey
 	TypeELF
 	TypeELF32
 	TypeELF32BigEndian
@@ -606,6 +642,7 @@ const (
 	TypeWAVAudio
 	TypeWebM
 	TypeWebPImage
+	TypeWindowsAnimatedCursor
 	TypeWindowsCursor
 	TypeWindowsIcon
 	TypeWindowsLE
@@ -630,6 +667,7 @@ var kindNames = [...]string{
 	KindAmigaDiskFile:                       "Amiga Disk File",
 	KindAmigaHardDiskFile:                   "Amiga Hard Disk File",
 	KindAmigaHunkExecutable:                 "Amiga Hunk Executable",
+	KindAmigaOctaMED:                        "Amiga OctaMED Audio",
 	KindAMRAudio:                            "AMR Audio",
 	KindAMRWBAudio:                          "AMR-WB Audio",
 	KindAndroidART:                          "Android ART",
@@ -644,7 +682,9 @@ var kindNames = [...]string{
 	KindApacheParquet:                       "Apache Parquet",
 	KindAPFSFilesystem:                      "APFS Filesystem",
 	KindAppImage:                            "AppImage",
+	KindAppleArchive:                        "Apple Archive",
 	KindAppleBillOfMaterials:                "Apple Bill of Materials",
+	KindAppleBinaryCrashReport:              "Apple Binary Crash Report",
 	KindAppleBinaryPropertyList:             "Apple Binary Property List",
 	KindAppleDesktopServicesStore:           "Apple Desktop Services Store",
 	KindAppleDiskImage:                      "Apple Disk Image",
@@ -652,6 +692,7 @@ var kindNames = [...]string{
 	KindAppleiWorkDocument:                  "Apple iWork Document",
 	KindAppleKeychain:                       "Apple Keychain",
 	KindAppleSingle:                         "AppleSingle File",
+	KindAppleSystemLog:                      "Apple System Log",
 	KindARArchive:                           "AR Archive",
 	KindARJArchive:                          "ARJ Archive",
 	KindARRIRAWImage:                        "ARRI RAW Image",
@@ -671,12 +712,16 @@ var kindNames = [...]string{
 	KindBitcoinBlock:                        "Bitcoin Block Data",
 	KindBitLockerDiskEncryption:             "BitLocker Disk Encryption",
 	KindBlenderFile:                         "Blender File",
+	KindBlizzardTexture:                     "Blizzard Texture",
 	KindBMPImage:                            "BMP Image",
+	KindBochsDiskImage:                      "Bochs Disk Image",
 	KindBPGImage:                            "BPG Image",
+	KindBroadbandEBook:                      "Broadband eBook",
 	KindBtrfsFilesystem:                     "Btrfs Filesystem",
 	KindBzip2Archive:                        "Bzip2 Archive",
 	KindCabinetArchive:                      "Cabinet Archive",
 	KindCAFAudio:                            "CAF Audio",
+	KindCALSImage:                           "CALS Raster Image",
 	KindCanonRAWImage:                       "Canon RAW Image",
 	KindCBORData:                            "CBOR Data",
 	KindCHMDocument:                         "CHM Document",
@@ -716,6 +761,7 @@ var kindNames = [...]string{
 	KindF2FSFilesystem:                      "F2FS Filesystem",
 	KindFamicomDiskSystemROM:                "Famicom Disk System ROM",
 	KindFarbfeldImage:                       "Farbfeld Image",
+	KindFastTracker2ExtendedInstrument:      "FastTracker 2 Extended Instrument",
 	KindFastTrackerModule:                   "FastTracker Module",
 	KindFATFilesystem:                       "FAT Filesystem",
 	KindFBXModel:                            "FBX Model",
@@ -725,6 +771,7 @@ var kindNames = [...]string{
 	KindFITSAstronomicalImage:               "FITS Astronomical Image",
 	KindFLACAudio:                           "FLAC Audio",
 	KindFLIFImage:                           "FLIF Image",
+	KindFLStudioProject:                     "FL Studio Project",
 	KindFLVVideo:                            "FLV Video",
 	KindFreeArcArchive:                      "FreeArc Archive",
 	KindFujifilmRAWImage:                    "Fujifilm RAW Image",
@@ -733,14 +780,17 @@ var kindNames = [...]string{
 	KindGameBoySound:                        "Game Boy Sound",
 	KindGameCubeROM:                         "GameCube ROM",
 	KindGDBMDatabase:                        "GDBM Database",
+	KindGHCiInterface:                       "GHCi Interface",
 	KindGIFImage:                            "GIF Image",
 	KindGIMPBrush:                           "GIMP Brush",
 	KindGIMPPattern:                         "GIMP Pattern",
 	KindGIMPXCFImage:                        "GIMP XCF Image",
 	KindGitIndex:                            "Git Index",
 	KindGitPack:                             "Git Pack",
+	KindGlibcLocale:                         "Glibc Locale",
 	KindGLTFBinary:                          "glTF Binary",
 	KindGlyphBitmapDistributionFormat:       "Glyph Bitmap Distribution Format (BDF)",
+	KindGNOMEKeyring:                        "GNOME Keyring",
 	KindGNUGettextMachineCatalog:            "GNU Gettext Machine Catalog",
 	KindGnuPGKeybox:                         "GnuPG Keybox",
 	KindGodotPackage:                        "Godot Engine Package",
@@ -757,7 +807,9 @@ var kindNames = [...]string{
 	KindICNSIcon:                            "ICNS Icon",
 	KindICOCURImage:                         "ICO/CUR Image",
 	KindIFFContainer:                        "IFF Container",
+	KindImpulseTrackerInstrument:            "Impulse Tracker Instrument",
 	KindImpulseTrackerModule:                "Impulse Tracker Module",
+	KindImpulseTrackerSample:                "Impulse Tracker Sample",
 	KindISO9660Image:                        "ISO 9660 Image",
 	KindISOBaseMedia:                        "ISO Base Media",
 	KindIVFVideo:                            "IVF Video",
@@ -767,6 +819,7 @@ var kindNames = [...]string{
 	KindJavaModule:                          "Java Module",
 	KindJavaPack200:                         "Java Pack200 Archive",
 	KindJavaSerialization:                   "Java Serialization Data",
+	KindJBIG2Image:                          "JBIG2 Image",
 	KindJFFS2Filesystem:                     "JFFS2 Filesystem",
 	KindJNGImage:                            "JNG Image",
 	KindJPEG2000Image:                       "JPEG 2000 Image",
@@ -774,6 +827,7 @@ var kindNames = [...]string{
 	KindJPEGLSImage:                         "JPEG-LS Image",
 	KindJPEGXLImage:                         "JPEG XL Image",
 	KindJPEGXRImage:                         "JPEG XR Image",
+	KindKDEKWallet:                          "KDE KWallet",
 	KindKeePassDatabase:                     "KeePass Database",
 	KindKGBArchive:                          "KGB Archive",
 	KindKTXTexture:                          "KTX Texture",
@@ -783,6 +837,7 @@ var kindNames = [...]string{
 	KindLinuxKernelImage:                    "Linux Kernel Image",
 	KindLLVMBitcode:                         "LLVM Bitcode",
 	KindLottieAnimation:                     "Lottie Animation",
+	KindLrzipArchive:                        "Long Range ZIP Archive",
 	KindLuaBytecode:                         "Lua Bytecode",
 	KindLUKSDiskEncryption:                  "LUKS Disk Encryption",
 	KindLVM2PhysicalVolume:                  "LVM2 Physical Volume",
@@ -796,6 +851,7 @@ var kindNames = [...]string{
 	KindMachOBinary:                         "Mach-O Binary",
 	KindMachOUniversalBinary:                "Mach-O Universal Binary",
 	KindMacOSAlias:                          "macOS Alias",
+	KindMagicaVoxel:                         "MagicaVoxel Model",
 	KindMAMECHD:                             "MAME Compressed Hunks of Data",
 	KindMaterialExchangeFormat:              "Material Exchange Format",
 	KindMATLABData:                          "MATLAB Data",
@@ -817,6 +873,7 @@ var kindNames = [...]string{
 	KindMNGImage:                            "MNG Image",
 	KindMOBIDocument:                        "MOBI Document",
 	KindMonkeysAudio:                        "Monkey's Audio",
+	KindMoPaQArchive:                        "MoPaQ Archive",
 	KindMozillaArchive:                      "Mozilla Archive (MAR)",
 	KindMPEG2TransportStream:                "MPEG Transport Stream",
 	KindMPEGAudio:                           "MPEG Audio",
@@ -839,6 +896,7 @@ var kindNames = [...]string{
 	KindNintendoBCFNT:                       "Nintendo BCFNT Font",
 	KindNintendoBFLYT:                       "Nintendo BFLYT Layout",
 	KindNintendoBRRES:                       "Nintendo BRRES Resource",
+	KindNintendoDSiROM:                      "Nintendo DSi ROM",
 	KindNintendoDSROM:                       "Nintendo DS ROM",
 	KindNintendoRARC:                        "Nintendo RARC Archive",
 	KindNintendoSwitchNRO:                   "Nintendo Switch NRO",
@@ -851,6 +909,7 @@ var kindNames = [...]string{
 	KindNISTSPHEREAudio:                     "NIST SPHERE Audio",
 	KindNTFSFilesystem:                      "NTFS Filesystem",
 	KindNumPyArray:                          "NumPy Array",
+	KindOCamlObject:                         "OCaml Object",
 	KindOggContainer:                        "Ogg Container",
 	KindOLECompoundDocument:                 "OLE Compound Document",
 	KindOlympusRAWImage:                     "Olympus RAW Image",
@@ -891,6 +950,7 @@ var kindNames = [...]string{
 	KindPythonPickle:                        "Python Pickle",
 	KindQCOWDiskImage:                       "QCOW Disk Image",
 	KindQDBMDatabase:                        "QDBM Database",
+	KindQEMUQEDDiskImage:                    "QEMU QED Disk Image",
 	KindQOIImage:                            "QOI Image",
 	KindQuakePAK:                            "Quake PAK Archive",
 	KindRadianceHDRImage:                    "Radiance HDR Image",
@@ -905,10 +965,13 @@ var kindNames = [...]string{
 	KindRIFFContainer:                       "RIFF Container",
 	KindRKAudio:                             "RKAudio",
 	KindROMFS:                               "ROMFS",
+	KindROOTData:                            "ROOT Data",
 	KindROSBag:                              "ROS Bag",
 	KindRPGMakerArchive:                     "RPG Maker Archive",
 	KindRPMPackage:                          "RPM Package",
 	KindRubyGemPackage:                      "RubyGem Package",
+	KindRubyMarshal:                         "Ruby Marshal Data",
+	KindRzipArchive:                         "rzip Archive",
 	KindSASData:                             "SAS Data",
 	KindScreamTrackerModule:                 "Scream Tracker Module",
 	KindSegaDreamcastROM:                    "Sega Dreamcast ROM",
@@ -920,6 +983,7 @@ var kindNames = [...]string{
 	KindShockwaveFlash:                      "Shockwave Flash",
 	KindShortenAudio:                        "Shorten Audio",
 	KindSigmaRAWImage:                       "Sigma RAW Image",
+	KindSiliconGraphicsMovie:                "Silicon Graphics Movie",
 	KindSketchDocument:                      "Sketch Document",
 	KindSketchUpModel:                       "SketchUp Model",
 	KindSmackerVideo:                        "Smacker Video",
@@ -939,7 +1003,9 @@ var kindNames = [...]string{
 	KindStuffItArchive:                      "StuffIt Archive",
 	KindSunRasterImage:                      "Sun Raster Image",
 	KindSVGImage:                            "SVG Image",
+	KindSymbianExecutable:                   "Symbian Executable",
 	KindSymbianInstallationFormat:           "Symbian Installation Format",
+	KindSystemdJournal:                      "Systemd Journal",
 	KindTAKAudio:                            "TAK Audio",
 	KindTARArchive:                          "TAR Archive",
 	KindTensorFlowLiteModel:                 "TensorFlow Lite Model",
@@ -974,6 +1040,7 @@ var kindNames = [...]string{
 	KindVulkanSPIRV:                         "Vulkan SPIR-V",
 	KindWADArchive:                          "WAD Archive",
 	KindWARCFile:                            "WARC File",
+	KindWarcraftIIIReplay:                   "Warcraft III Replay",
 	KindWavPackAudio:                        "WavPack Audio",
 	KindWebAssemblyModule:                   "WebAssembly Module",
 	KindWebVTT:                              "WebVTT",
@@ -984,6 +1051,7 @@ var kindNames = [...]string{
 	KindWindowsHelp:                         "Windows Help File",
 	KindWindowsImagingFormat:                "Windows Imaging Format",
 	KindWindowsMinidump:                     "Windows Minidump",
+	KindWindowsPrecompiledHeader:            "Windows Precompiled Header",
 	KindWindowsRegistryHive:                 "Windows Registry Hive",
 	KindWindowsResourceFile:                 "Windows Resource File",
 	KindWindowsShortcut:                     "Windows Shortcut",
@@ -999,6 +1067,7 @@ var kindNames = [...]string{
 	KindXboxISO:                             "Xbox ISO",
 	KindXCOFFExecutable:                     "XCOFF Executable",
 	KindXFSFilesystem:                       "XFS Filesystem",
+	KindXilinxBitstream:                     "Xilinx Bitstream",
 	KindXMLDocument:                         "XML Document",
 	KindXPMImage:                            "XPM Image",
 	KindXZArchive:                           "XZ Archive",
@@ -1015,6 +1084,7 @@ var kindNames = [...]string{
 
 var typeNames = [...]string{
 	TypeNone:                     "",
+	Type32Bit:                    "32-bit",
 	Type32BitBigEndian:           "32-bit Big-Endian",
 	Type32BitLittleEndian:        "32-bit Little-Endian",
 	Type3G2Media:                 "3G2 Media",
@@ -1057,6 +1127,7 @@ var typeNames = [...]string{
 	TypeCorelDRAWDocumentCDR:     "CorelDRAW Document (CDR)",
 	TypeCRXVersion2:              "Version 2",
 	TypeCRXVersion3:              "Version 3",
+	TypeCubaseProjectCPR:         "Cubase Project (CPR)",
 	TypeDEX035:                   "DEX 035",
 	TypeDEX036:                   "DEX 036",
 	TypeDEX037:                   "DEX 037",
@@ -1066,7 +1137,9 @@ var typeNames = [...]string{
 	TypeDEX041:                   "DEX 041",
 	TypeDirectory:                "Directory",
 	TypeDownloadableSounds:       "Downloadable Sounds",
+	TypeDSAPrivateKey:            "DSA Private Key",
 	TypeEAC3:                     "E-AC-3",
+	TypeECPrivateKey:             "EC Private Key",
 	TypeELF:                      "ELF",
 	TypeELF32:                    "ELF32",
 	TypeELF32BigEndian:           "ELF32 Big-Endian",
@@ -1221,6 +1294,7 @@ var typeNames = [...]string{
 	TypeWAVAudio:                                        "WAV Audio",
 	TypeWebM:                                            "WebM",
 	TypeWebPImage:                                       "WebP Image",
+	TypeWindowsAnimatedCursor:                           "Windows Animated Cursor",
 	TypeWindowsCursor:                                   "Windows Cursor",
 	TypeWindowsIcon:                                     "Windows Icon",
 	TypeWindowsLE:                                       "Linear Executable (LE)",

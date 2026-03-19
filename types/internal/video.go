@@ -17,6 +17,7 @@ func init() {
 	types.RegisterSignature(types.KindMPEGVideo, types.TypeMPEG12Video, 0, []byte{0x00, 0x00, 0x01, 0xb3})
 	types.RegisterSignature(types.KindRealMedia, types.TypeNone, 0, []byte{'.', 'R', 'M', 'F'})
 	types.RegisterSignature(types.KindRIFFContainer, types.TypeNone, 0, []byte("RIFF"))
+	types.RegisterSignature(types.KindSiliconGraphicsMovie, types.TypeNone, 0, []byte("MOVI"))
 	types.RegisterSignature(types.KindSmackerVideo, types.TypeNone, 0, []byte("SMK2"))
 	types.RegisterSignature(types.KindSmackerVideo, types.TypeNone, 0, []byte("SMK4"))
 	types.RegisterSignature(types.KindWTVVideo, types.TypeNone, 0, []byte{0xb7, 0xd8, 0x00, 0x20, 0x37, 0x49, 0xda, 0x11, 0xa6, 0x4e, 0x00, 0x07, 0xe9, 0x5e, 0xad, 0x8d})
@@ -24,4 +25,6 @@ func init() {
 
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeAfterEffectsProjectAEP, 0, []byte("RIFF\x00\x00\x00\x00FXTC"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeAVIVideo, 0, []byte("RIFF\x00\x00\x00\x00AVI "), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
+	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeCubaseProjectCPR, 0, []byte("RIFF\x00\x00\x00\x00SMED"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
+	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeWindowsAnimatedCursor, 0, []byte("RIFF\x00\x00\x00\x00ACON"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }
