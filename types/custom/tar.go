@@ -10,7 +10,7 @@ func DetectTar(b types.Buffer) *types.Metadata {
 	var isTar bool
 
 	for offset := 0; offset+512 <= b.Len(); offset += 512 {
-		if b.Len() >= offset+262 && (string(b[offset+257:offset+262]) == "ustar" || string(b[offset+257:offset+264]) == "ustar  ") {
+		if b.Len() >= offset+262 && string(b[offset+257:offset+262]) == "ustar" {
 			isTar = true
 
 			nameEnd := bytes.IndexByte(b[offset:offset+100], 0)

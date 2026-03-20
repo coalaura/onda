@@ -1,6 +1,9 @@
 package types
 
-import "encoding/binary"
+import (
+	"bytes"
+	"encoding/binary"
+)
 
 type Buffer []byte
 
@@ -13,7 +16,7 @@ func (b Buffer) Has(offset int, magic []byte) bool {
 		return false
 	}
 
-	return string(b[offset:offset+len(magic)]) == string(magic)
+	return bytes.Equal(b[offset:offset+len(magic)], magic)
 }
 
 func (b Buffer) HasMask(offset int, magic string, mask string) bool {
