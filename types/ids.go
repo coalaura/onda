@@ -9,6 +9,7 @@ const (
 	KindAACAudio
 	KindACEArchive
 	KindAcrobatFormsDataFormat
+	KindAcronisTrueImage
 	KindAdobeInDesignDocument
 	KindAdvancedForensicFormat
 	KindALZArchive
@@ -19,6 +20,7 @@ const (
 	KindAMRAudio
 	KindAMRWBAudio
 	KindAndroidART
+	KindAndroidBackup
 	KindAndroidBinaryXML
 	KindAndroidBootImage
 	KindAndroidCompiledResources
@@ -41,7 +43,9 @@ const (
 	KindAppleKeychain
 	KindAppleSingle
 	KindAppleSystemLog
+	KindAppleTexture
 	KindARArchive
+	KindARCArchive
 	KindARJArchive
 	KindARRIRAWImage
 	KindASFContainer
@@ -49,7 +53,9 @@ const (
 	KindAtari7800ROM
 	KindAtariLynxROM
 	KindAUAudio
+	KindAudacityBlockFile
 	KindAutoCADDrawing
+	KindAutoCADDXF
 	KindAvroObjectContainer
 	KindBAMData
 	KindBcachefsFilesystem
@@ -63,16 +69,20 @@ const (
 	KindBlizzardTexture
 	KindBMPImage
 	KindBochsDiskImage
+	KindBouncyCastleKeystore
 	KindBPGImage
 	KindBroadbandEBook
 	KindBtrfsFilesystem
+	KindBUFR
 	KindBzip2Archive
+	KindBzip3Archive
 	KindCabinetArchive
 	KindCAFAudio
 	KindCALSImage
 	KindCanonRAWImage
 	KindCBORData
 	KindCHMDocument
+	KindCinema4DModel
 	KindCineonImage
 	KindCloneCDControl
 	KindCommodore64Tape
@@ -89,6 +99,7 @@ const (
 	KindDDSImage
 	KindDebianPackage
 	KindDICOMMedicalImage
+	KindDiracVideo
 	KindDjVuDocument
 	KindDolphinRVZ
 	KindDOSExecutable
@@ -96,6 +107,7 @@ const (
 	KindDSDIFFAudio
 	KindDSFAudio
 	KindDTSAudio
+	KindDVRMSVideo
 	KindEBMLContainer
 	KindEGGArchive
 	KindEncapsulatedPostScript
@@ -105,6 +117,7 @@ const (
 	KindESRIShapefile
 	KindExecutableAndLinkableFormat
 	KindExFATFilesystem
+	KindExtensibleMusicFormat
 	KindExtFilesystem
 	KindF2FSFilesystem
 	KindFamicomDiskSystemROM
@@ -133,8 +146,10 @@ const (
 	KindGIMPBrush
 	KindGIMPPattern
 	KindGIMPXCFImage
+	KindGitBundle
 	KindGitIndex
 	KindGitPack
+	KindGitPackIndex
 	KindGlibcLocale
 	KindGLTFBinary
 	KindGlyphBitmapDistributionFormat
@@ -146,6 +161,8 @@ const (
 	KindGUIDPartitionTable
 	KindGzipArchive
 	KindGzipData
+	KindHadoopRCFile
+	KindHadoopSequenceFile
 	KindHDF4Data
 	KindHDF5Data
 	KindHFSPlusFilesystem
@@ -158,6 +175,7 @@ const (
 	KindImpulseTrackerInstrument
 	KindImpulseTrackerModule
 	KindImpulseTrackerSample
+	KindInstallShieldCAB
 	KindISO9660Image
 	KindISOBaseMedia
 	KindIVFVideo
@@ -178,27 +196,36 @@ const (
 	KindKDEKWallet
 	KindKeePassDatabase
 	KindKGBArchive
+	KindKorgAudio
 	KindKTXTexture
 	KindKyotoCabinetDatabase
 	KindLevelDB
 	KindLHAArchive
+	KindLidarData
+	KindLightWaveScene
 	KindLinuxKernelImage
 	KindLLVMBitcode
 	KindLottieAnimation
 	KindLrzipArchive
 	KindLuaBytecode
+	KindLuceneIndex
 	KindLUKSDiskEncryption
 	KindLVM2PhysicalVolume
+	KindLytroLightField
 	KindLZ4Frame
+	KindLZFArchive
 	KindLZFSEData
 	KindLZIPArchive
 	KindLZMAData
 	KindLZOPArchive
+	KindLZXArchive
 	KindM3U8Playlist
 	KindMacBinary
 	KindMachOBinary
 	KindMachOUniversalBinary
 	KindMacOSAlias
+	KindMacOSXCodeSignature
+	KindMacriumReflectImage
 	KindMagicaVoxel
 	KindMAMECHD
 	KindMaterialExchangeFormat
@@ -216,6 +243,8 @@ const (
 	KindMicrosoftProgramDatabase
 	KindMicrosoftReader
 	KindMicrosoftSQLServerDatabase
+	KindMicrosoftXbox360Profile
+	KindMicrosoftXboxSave
 	KindMIDISequence
 	KindMinoltaRAWImage
 	KindMNGImage
@@ -232,6 +261,7 @@ const (
 	KindMUGENSound
 	KindMUGENSprite
 	KindMusepackAudio
+	KindMySQLMyISAM
 	KindNeoGeoPocketROM
 	KindNESROM
 	KindNESSoundFormat
@@ -252,10 +282,12 @@ const (
 	KindNintendoSwitchPackage
 	KindNintendoSwitchROM
 	KindNintendoU8Archive
+	KindNintendoWiiUExecutable
 	KindNintendoYay0
 	KindNintendoYaz0
 	KindNISTSPHEREAudio
 	KindNTFSFilesystem
+	KindNullsoftVideo
 	KindNumPyArray
 	KindOCamlObject
 	KindOggContainer
@@ -280,11 +312,16 @@ const (
 	KindPGFImage
 	KindPGPMessage
 	KindPhotoshopDocument
+	KindPico8Cartridge
+	KindPIMArchive
 	KindPKCS12
 	KindPlaylistFile
+	KindPlayStation1Executable
+	KindPlayStation2MemoryCard
 	KindPlayStationExecutable
 	KindPlayStationPortableExecutable
 	KindPlayStationPortableISO
+	KindPlayStationSoundFormat
 	KindPLYModel
 	KindPNGImage
 	KindPortableExecutable
@@ -309,9 +346,11 @@ const (
 	KindREDRAWImage
 	KindReiserFSFilesystem
 	KindRenPyArchive
+	KindRhino3DModel
 	KindRichTextFormatDocument
 	KindRIFFContainer
 	KindRKAudio
+	KindRNCArchive
 	KindROMFS
 	KindROOTData
 	KindROSBag
@@ -322,9 +361,11 @@ const (
 	KindRzipArchive
 	KindSASData
 	KindScreamTrackerModule
+	KindSegaCDImage
 	KindSegaDreamcastROM
 	KindSegaMasterSystemROM
 	KindSegaMegaDriveROM
+	KindSegaNaomiROM
 	KindSegaSaturnROM
 	KindSGIImage
 	KindShebangScript
@@ -338,6 +379,7 @@ const (
 	KindSnappyFramedData
 	KindSNESSPC
 	KindSnoopCapture
+	KindSonyOpenMG
 	KindSonyWave64Audio
 	KindSourceEngineBSP
 	KindSPSSData
@@ -345,15 +387,18 @@ const (
 	KindSQLite3WriteAheadLog
 	KindSQLiteDatabase
 	KindSquashFSFilesystem
+	KindSQXArchive
 	KindSSHPublicKey
 	KindStataData
 	KindSTEP3DModel
 	KindStuffItArchive
 	KindSunRasterImage
 	KindSVGImage
+	KindSymantecGhostImage
 	KindSymbianExecutable
 	KindSymbianInstallationFormat
 	KindSystemdJournal
+	KindSzipArchive
 	KindTAKAudio
 	KindTARArchive
 	KindTensorFlowLiteModel
@@ -378,11 +423,17 @@ const (
 	KindValvePak
 	KindValveTextureFormat
 	KindVCard
+	KindVeeamBackup
 	KindVHDDiskImage
 	KindVHDXDiskImage
 	KindVideoGameMusic
 	KindVirtualBoxDiskImage
+	KindVirtualBoxSavedState
 	KindVMwareDiskImage
+	KindVMwareNVRAM
+	KindVMwareSnapshot
+	KindVMwareSuspend
+	KindVocaloidProject
 	KindVOCAudio
 	KindVRML3DModel
 	KindVulkanSPIRV
@@ -390,6 +441,7 @@ const (
 	KindWARCFile
 	KindWarcraftIIIReplay
 	KindWavPackAudio
+	KindWavPackCorrection
 	KindWebAssemblyModule
 	KindWebVTT
 	KindWiiBackupFileSystem
@@ -397,13 +449,16 @@ const (
 	KindWiiUArchive
 	KindWindowsEventLog
 	KindWindowsHelp
+	KindWindowsHibernation
 	KindWindowsImagingFormat
 	KindWindowsMinidump
 	KindWindowsPrecompiledHeader
+	KindWindowsPrefetch
 	KindWindowsRegistryHive
 	KindWindowsResourceFile
 	KindWindowsShortcut
 	KindWindowsTypeLibrary
+	KindWiredTigerDatabase
 	KindWOFF2Font
 	KindWOFFFont
 	KindWordPerfectGraphics
@@ -419,7 +474,10 @@ const (
 	KindXMLDocument
 	KindXPMImage
 	KindXZArchive
+	KindYamahaSMAF
 	KindYUV4MPEG2Video
+	KindZBackup
+	KindZchunk
 	KindZFSFilesystem
 	KindZIPArchive
 	KindZlibData
@@ -661,6 +719,7 @@ var kindNames = [...]string{
 	KindAACAudio:                            "AAC Audio",
 	KindACEArchive:                          "ACE Archive",
 	KindAcrobatFormsDataFormat:              "Acrobat Forms Data Format",
+	KindAcronisTrueImage:                    "Acronis True Image",
 	KindAdobeInDesignDocument:               "Adobe InDesign Document",
 	KindAdvancedForensicFormat:              "Advanced Forensic Format",
 	KindALZArchive:                          "ALZ Archive",
@@ -671,6 +730,7 @@ var kindNames = [...]string{
 	KindAMRAudio:                            "AMR Audio",
 	KindAMRWBAudio:                          "AMR-WB Audio",
 	KindAndroidART:                          "Android ART",
+	KindAndroidBackup:                       "Android Backup",
 	KindAndroidBinaryXML:                    "Android Binary XML",
 	KindAndroidBootImage:                    "Android Boot Image",
 	KindAndroidCompiledResources:            "Android Compiled Resources",
@@ -693,7 +753,9 @@ var kindNames = [...]string{
 	KindAppleKeychain:                       "Apple Keychain",
 	KindAppleSingle:                         "AppleSingle File",
 	KindAppleSystemLog:                      "Apple System Log",
+	KindAppleTexture:                        "Apple Texture",
 	KindARArchive:                           "AR Archive",
+	KindARCArchive:                          "ARC Archive",
 	KindARJArchive:                          "ARJ Archive",
 	KindARRIRAWImage:                        "ARRI RAW Image",
 	KindASFContainer:                        "ASF Container",
@@ -701,7 +763,9 @@ var kindNames = [...]string{
 	KindAtari7800ROM:                        "Atari 7800 ROM",
 	KindAtariLynxROM:                        "Atari Lynx ROM",
 	KindAUAudio:                             "AU Audio",
+	KindAudacityBlockFile:                   "Audacity Block File",
 	KindAutoCADDrawing:                      "AutoCAD Drawing",
+	KindAutoCADDXF:                          "AutoCAD DXF",
 	KindAvroObjectContainer:                 "Avro Object Container",
 	KindBAMData:                             "BAM Data",
 	KindBcachefsFilesystem:                  "Bcachefs Filesystem",
@@ -715,16 +779,20 @@ var kindNames = [...]string{
 	KindBlizzardTexture:                     "Blizzard Texture",
 	KindBMPImage:                            "BMP Image",
 	KindBochsDiskImage:                      "Bochs Disk Image",
+	KindBouncyCastleKeystore:                "BouncyCastle Keystore",
 	KindBPGImage:                            "BPG Image",
 	KindBroadbandEBook:                      "Broadband eBook",
 	KindBtrfsFilesystem:                     "Btrfs Filesystem",
+	KindBUFR:                                "BUFR Data",
 	KindBzip2Archive:                        "Bzip2 Archive",
+	KindBzip3Archive:                        "Bzip3 Archive",
 	KindCabinetArchive:                      "Cabinet Archive",
 	KindCAFAudio:                            "CAF Audio",
 	KindCALSImage:                           "CALS Raster Image",
 	KindCanonRAWImage:                       "Canon RAW Image",
 	KindCBORData:                            "CBOR Data",
 	KindCHMDocument:                         "CHM Document",
+	KindCinema4DModel:                       "Cinema 4D Model",
 	KindCineonImage:                         "Cineon Image",
 	KindCloneCDControl:                      "CloneCD Control File",
 	KindCommodore64Tape:                     "Commodore 64 Tape",
@@ -741,6 +809,7 @@ var kindNames = [...]string{
 	KindDDSImage:                            "DDS Image",
 	KindDebianPackage:                       "Debian Package",
 	KindDICOMMedicalImage:                   "DICOM Medical Image",
+	KindDiracVideo:                          "Dirac Video",
 	KindDjVuDocument:                        "DjVu Document",
 	KindDolphinRVZ:                          "Dolphin RVZ",
 	KindDOSExecutable:                       "DOS Executable",
@@ -748,6 +817,7 @@ var kindNames = [...]string{
 	KindDSDIFFAudio:                         "DSDIFF Audio",
 	KindDSFAudio:                            "DSF Audio",
 	KindDTSAudio:                            "DTS Audio",
+	KindDVRMSVideo:                          "DVR-MS Video",
 	KindEBMLContainer:                       "EBML Container",
 	KindEGGArchive:                          "EGG Archive",
 	KindEncapsulatedPostScript:              "Encapsulated PostScript",
@@ -757,6 +827,7 @@ var kindNames = [...]string{
 	KindESRIShapefile:                       "ESRI Shapefile",
 	KindExecutableAndLinkableFormat:         "Executable and Linkable Format",
 	KindExFATFilesystem:                     "exFAT Filesystem",
+	KindExtensibleMusicFormat:               "Extensible Music Format",
 	KindExtFilesystem:                       "ext Filesystem",
 	KindF2FSFilesystem:                      "F2FS Filesystem",
 	KindFamicomDiskSystemROM:                "Famicom Disk System ROM",
@@ -785,8 +856,10 @@ var kindNames = [...]string{
 	KindGIMPBrush:                           "GIMP Brush",
 	KindGIMPPattern:                         "GIMP Pattern",
 	KindGIMPXCFImage:                        "GIMP XCF Image",
+	KindGitBundle:                           "Git Bundle",
 	KindGitIndex:                            "Git Index",
 	KindGitPack:                             "Git Pack",
+	KindGitPackIndex:                        "Git Pack Index",
 	KindGlibcLocale:                         "Glibc Locale",
 	KindGLTFBinary:                          "glTF Binary",
 	KindGlyphBitmapDistributionFormat:       "Glyph Bitmap Distribution Format (BDF)",
@@ -798,6 +871,8 @@ var kindNames = [...]string{
 	KindGUIDPartitionTable:                  "GUID Partition Table",
 	KindGzipArchive:                         "Gzip Archive",
 	KindGzipData:                            "Gzip Data",
+	KindHadoopRCFile:                        "Hadoop RCFile",
+	KindHadoopSequenceFile:                  "Hadoop SequenceFile",
 	KindHDF4Data:                            "HDF4 Data",
 	KindHDF5Data:                            "HDF5 Data",
 	KindHFSPlusFilesystem:                   "HFS+ Filesystem",
@@ -810,6 +885,7 @@ var kindNames = [...]string{
 	KindImpulseTrackerInstrument:            "Impulse Tracker Instrument",
 	KindImpulseTrackerModule:                "Impulse Tracker Module",
 	KindImpulseTrackerSample:                "Impulse Tracker Sample",
+	KindInstallShieldCAB:                    "InstallShield Cabinet",
 	KindISO9660Image:                        "ISO 9660 Image",
 	KindISOBaseMedia:                        "ISO Base Media",
 	KindIVFVideo:                            "IVF Video",
@@ -830,27 +906,36 @@ var kindNames = [...]string{
 	KindKDEKWallet:                          "KDE KWallet",
 	KindKeePassDatabase:                     "KeePass Database",
 	KindKGBArchive:                          "KGB Archive",
+	KindKorgAudio:                           "Korg Audio",
 	KindKTXTexture:                          "KTX Texture",
 	KindKyotoCabinetDatabase:                "Kyoto Cabinet Database",
 	KindLevelDB:                             "LevelDB/RocksDB",
 	KindLHAArchive:                          "LHA Archive",
+	KindLidarData:                           "LiDAR Data (LAS)",
+	KindLightWaveScene:                      "LightWave Scene",
 	KindLinuxKernelImage:                    "Linux Kernel Image",
 	KindLLVMBitcode:                         "LLVM Bitcode",
 	KindLottieAnimation:                     "Lottie Animation",
 	KindLrzipArchive:                        "Long Range ZIP Archive",
 	KindLuaBytecode:                         "Lua Bytecode",
+	KindLuceneIndex:                         "Lucene Index",
 	KindLUKSDiskEncryption:                  "LUKS Disk Encryption",
 	KindLVM2PhysicalVolume:                  "LVM2 Physical Volume",
+	KindLytroLightField:                     "Lytro Light Field",
 	KindLZ4Frame:                            "LZ4 Frame",
+	KindLZFArchive:                          "LZF Archive",
 	KindLZFSEData:                           "LZFSE Data",
 	KindLZIPArchive:                         "LZIP Archive",
 	KindLZMAData:                            "LZMA Data",
 	KindLZOPArchive:                         "LZOP Archive",
+	KindLZXArchive:                          "LZX Archive",
 	KindM3U8Playlist:                        "M3U8 Playlist",
 	KindMacBinary:                           "MacBinary",
 	KindMachOBinary:                         "Mach-O Binary",
 	KindMachOUniversalBinary:                "Mach-O Universal Binary",
 	KindMacOSAlias:                          "macOS Alias",
+	KindMacOSXCodeSignature:                 "macOS Code Signature",
+	KindMacriumReflectImage:                 "Macrium Reflect Image",
 	KindMagicaVoxel:                         "MagicaVoxel Model",
 	KindMAMECHD:                             "MAME Compressed Hunks of Data",
 	KindMaterialExchangeFormat:              "Material Exchange Format",
@@ -868,6 +953,8 @@ var kindNames = [...]string{
 	KindMicrosoftProgramDatabase:            "Microsoft Program Database (PDB)",
 	KindMicrosoftReader:                     "Microsoft Reader eBook",
 	KindMicrosoftSQLServerDatabase:          "Microsoft SQL Server Database",
+	KindMicrosoftXbox360Profile:             "Xbox 360 Profile",
+	KindMicrosoftXboxSave:                   "Xbox Save",
 	KindMIDISequence:                        "MIDI Sequence",
 	KindMinoltaRAWImage:                     "Minolta RAW Image",
 	KindMNGImage:                            "MNG Image",
@@ -884,6 +971,7 @@ var kindNames = [...]string{
 	KindMUGENSound:                          "M.U.G.E.N Sound",
 	KindMUGENSprite:                         "M.U.G.E.N Sprite",
 	KindMusepackAudio:                       "Musepack Audio",
+	KindMySQLMyISAM:                         "MySQL MyISAM",
 	KindNeoGeoPocketROM:                     "Neo Geo Pocket ROM",
 	KindNESROM:                              "NES ROM",
 	KindNESSoundFormat:                      "NES Sound Format",
@@ -904,10 +992,12 @@ var kindNames = [...]string{
 	KindNintendoSwitchPackage:               "Nintendo Switch Package",
 	KindNintendoSwitchROM:                   "Nintendo Switch ROM",
 	KindNintendoU8Archive:                   "Nintendo U8 Archive",
+	KindNintendoWiiUExecutable:              "Nintendo Wii U Executable",
 	KindNintendoYay0:                        "Nintendo Yay0 Compressed",
 	KindNintendoYaz0:                        "Nintendo Yaz0 Compressed",
 	KindNISTSPHEREAudio:                     "NIST SPHERE Audio",
 	KindNTFSFilesystem:                      "NTFS Filesystem",
+	KindNullsoftVideo:                       "Nullsoft Video",
 	KindNumPyArray:                          "NumPy Array",
 	KindOCamlObject:                         "OCaml Object",
 	KindOggContainer:                        "Ogg Container",
@@ -932,11 +1022,16 @@ var kindNames = [...]string{
 	KindPGFImage:                            "Progressive Graphics File",
 	KindPGPMessage:                          "PGP Message",
 	KindPhotoshopDocument:                   "Photoshop Document",
+	KindPico8Cartridge:                      "Pico-8 Cartridge",
+	KindPIMArchive:                          "PIM Archive",
 	KindPKCS12:                              "PKCS#12",
 	KindPlaylistFile:                        "Playlist File",
+	KindPlayStation1Executable:              "PlayStation 1 Executable",
+	KindPlayStation2MemoryCard:              "PlayStation 2 Memory Card",
 	KindPlayStationExecutable:               "PlayStation Executable",
 	KindPlayStationPortableExecutable:       "PlayStation Portable Executable",
 	KindPlayStationPortableISO:              "PlayStation Portable ISO",
+	KindPlayStationSoundFormat:              "PlayStation Sound Format",
 	KindPLYModel:                            "PLY Model",
 	KindPNGImage:                            "PNG Image",
 	KindPortableExecutable:                  "Portable Executable",
@@ -961,9 +1056,11 @@ var kindNames = [...]string{
 	KindREDRAWImage:                         "RED RAW Image",
 	KindReiserFSFilesystem:                  "ReiserFS Filesystem",
 	KindRenPyArchive:                        "Ren'Py Archive",
+	KindRhino3DModel:                        "Rhino 3D Model",
 	KindRichTextFormatDocument:              "Rich Text Format Document",
 	KindRIFFContainer:                       "RIFF Container",
 	KindRKAudio:                             "RKAudio",
+	KindRNCArchive:                          "Rob Northen Compression Archive",
 	KindROMFS:                               "ROMFS",
 	KindROOTData:                            "ROOT Data",
 	KindROSBag:                              "ROS Bag",
@@ -974,9 +1071,11 @@ var kindNames = [...]string{
 	KindRzipArchive:                         "rzip Archive",
 	KindSASData:                             "SAS Data",
 	KindScreamTrackerModule:                 "Scream Tracker Module",
+	KindSegaCDImage:                         "Sega CD Image",
 	KindSegaDreamcastROM:                    "Sega Dreamcast ROM",
 	KindSegaMasterSystemROM:                 "Sega Master System ROM",
 	KindSegaMegaDriveROM:                    "Sega Mega Drive ROM",
+	KindSegaNaomiROM:                        "Sega NAOMI ROM",
 	KindSegaSaturnROM:                       "Sega Saturn ROM",
 	KindSGIImage:                            "SGI Image",
 	KindShebangScript:                       "Shebang Script",
@@ -990,6 +1089,7 @@ var kindNames = [...]string{
 	KindSnappyFramedData:                    "Snappy Framed Data",
 	KindSNESSPC:                             "SNES SPC Audio",
 	KindSnoopCapture:                        "Snoop Capture",
+	KindSonyOpenMG:                          "Sony OpenMG Audio",
 	KindSonyWave64Audio:                     "Sony Wave64 Audio",
 	KindSourceEngineBSP:                     "Source Engine BSP",
 	KindSPSSData:                            "SPSS Data",
@@ -997,15 +1097,18 @@ var kindNames = [...]string{
 	KindSQLite3WriteAheadLog:                "SQLite Write-Ahead Log",
 	KindSQLiteDatabase:                      "SQLite Database",
 	KindSquashFSFilesystem:                  "SquashFS Filesystem",
+	KindSQXArchive:                          "SQX Archive",
 	KindSSHPublicKey:                        "SSH Public Key",
 	KindStataData:                           "Stata Data",
 	KindSTEP3DModel:                         "STEP 3D Model",
 	KindStuffItArchive:                      "StuffIt Archive",
 	KindSunRasterImage:                      "Sun Raster Image",
 	KindSVGImage:                            "SVG Image",
+	KindSymantecGhostImage:                  "Symantec Ghost Image",
 	KindSymbianExecutable:                   "Symbian Executable",
 	KindSymbianInstallationFormat:           "Symbian Installation Format",
 	KindSystemdJournal:                      "Systemd Journal",
+	KindSzipArchive:                         "Szip Archive",
 	KindTAKAudio:                            "TAK Audio",
 	KindTARArchive:                          "TAR Archive",
 	KindTensorFlowLiteModel:                 "TensorFlow Lite Model",
@@ -1030,11 +1133,17 @@ var kindNames = [...]string{
 	KindValvePak:                            "Valve Pak",
 	KindValveTextureFormat:                  "Valve Texture Format",
 	KindVCard:                               "vCard",
+	KindVeeamBackup:                         "Veeam Backup",
 	KindVHDDiskImage:                        "VHD Disk Image",
 	KindVHDXDiskImage:                       "VHDX Disk Image",
 	KindVideoGameMusic:                      "Video Game Music (VGM)",
 	KindVirtualBoxDiskImage:                 "VirtualBox Disk Image",
+	KindVirtualBoxSavedState:                "VirtualBox Saved State",
 	KindVMwareDiskImage:                     "VMware Disk Image",
+	KindVMwareNVRAM:                         "VMware NVRAM",
+	KindVMwareSnapshot:                      "VMware Snapshot",
+	KindVMwareSuspend:                       "VMware Suspend",
+	KindVocaloidProject:                     "Vocaloid Project",
 	KindVOCAudio:                            "VOC Audio",
 	KindVRML3DModel:                         "VRML 3D Model",
 	KindVulkanSPIRV:                         "Vulkan SPIR-V",
@@ -1042,6 +1151,7 @@ var kindNames = [...]string{
 	KindWARCFile:                            "WARC File",
 	KindWarcraftIIIReplay:                   "Warcraft III Replay",
 	KindWavPackAudio:                        "WavPack Audio",
+	KindWavPackCorrection:                   "WavPack Correction",
 	KindWebAssemblyModule:                   "WebAssembly Module",
 	KindWebVTT:                              "WebVTT",
 	KindWiiBackupFileSystem:                 "Wii Backup File System",
@@ -1049,13 +1159,16 @@ var kindNames = [...]string{
 	KindWiiUArchive:                         "Wii U Archive",
 	KindWindowsEventLog:                     "Windows Event Log",
 	KindWindowsHelp:                         "Windows Help File",
+	KindWindowsHibernation:                  "Windows Hibernation File",
 	KindWindowsImagingFormat:                "Windows Imaging Format",
 	KindWindowsMinidump:                     "Windows Minidump",
 	KindWindowsPrecompiledHeader:            "Windows Precompiled Header",
+	KindWindowsPrefetch:                     "Windows Prefetch",
 	KindWindowsRegistryHive:                 "Windows Registry Hive",
 	KindWindowsResourceFile:                 "Windows Resource File",
 	KindWindowsShortcut:                     "Windows Shortcut",
 	KindWindowsTypeLibrary:                  "Windows Type Library (TLB)",
+	KindWiredTigerDatabase:                  "WiredTiger Database",
 	KindWOFF2Font:                           "WOFF2 Font",
 	KindWOFFFont:                            "WOFF Font",
 	KindWordPerfectGraphics:                 "WordPerfect Graphics",
@@ -1071,7 +1184,10 @@ var kindNames = [...]string{
 	KindXMLDocument:                         "XML Document",
 	KindXPMImage:                            "XPM Image",
 	KindXZArchive:                           "XZ Archive",
+	KindYamahaSMAF:                          "Yamaha SMAF",
 	KindYUV4MPEG2Video:                      "YUV4MPEG2 Video",
+	KindZBackup:                             "ZBackup",
+	KindZchunk:                              "Zchunk Archive",
 	KindZFSFilesystem:                       "ZFS Filesystem",
 	KindZIPArchive:                          "ZIP Archive",
 	KindZlibData:                            "Zlib Data",

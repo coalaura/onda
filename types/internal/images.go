@@ -3,6 +3,7 @@ package internal
 import "github.com/coalaura/onda/types"
 
 func init() {
+	types.RegisterSignature(types.KindAppleTexture, types.TypeNone, 0, []byte("ATX "))
 	types.RegisterSignature(types.KindARRIRAWImage, types.TypeNone, 0, []byte("ARRI"))
 	types.RegisterSignature(types.KindASTCTexture, types.TypeNone, 0, []byte{0x13, 0xab, 0xa1, 0x5c})
 	types.RegisterSignature(types.KindBlizzardTexture, types.TypeNone, 0, []byte("BLP1"))
@@ -40,6 +41,7 @@ func init() {
 	types.RegisterSignature(types.KindJPEGXRImage, types.TypeLittleEndian, 0, []byte{'I', 'I', 0xbc, 0x01})
 	types.RegisterSignature(types.KindKTXTexture, types.TypeKTX, 0, []byte{0xab, 'K', 'T', 'X', ' ', '1', '1', 0xbb, 0x0d, 0x0a, 0x1a, 0x0a})
 	types.RegisterSignature(types.KindKTXTexture, types.TypeKTX2, 0, []byte{0xab, 'K', 'T', 'X', ' ', '2', '0', 0xbb, 0x0d, 0x0a, 0x1a, 0x0a})
+	types.RegisterSignature(types.KindLytroLightField, types.TypeNone, 0, []byte("\x89LFP\x0d\x0a\x1a\x0a"))
 	types.RegisterSignature(types.KindMagicaVoxel, types.TypeNone, 0, []byte("VOX "))
 	types.RegisterSignature(types.KindMetafileImage, types.TypeWindowsMetafileWMF, 0, []byte{0xd7, 0xcd, 0xc6, 0x9a})
 	types.RegisterSignature(types.KindMinoltaRAWImage, types.TypeNone, 0, []byte("\x00MRM"))
