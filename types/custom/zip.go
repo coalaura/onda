@@ -30,6 +30,8 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		hasForgeMod         bool
 		hasLottieManifest   bool
 		hasLottieAnimations bool
+		hasPyTorchData      bool
+		hasPyTorchVersion   bool
 		firstFile           = true
 	)
 
@@ -115,6 +117,12 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			hasFabricMod = true
 		} else if matchASCII(name, "mcmod.info") || matchASCII(name, "meta-inf/mods.toml") {
 			hasForgeMod = true
+		} else if matchASCII(name, "model.weights.h5") {
+			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeKerasModel}
+		} else if hasSuffixASCII(name, "/data.pkl") || matchASCII(name, "data.pkl") {
+			hasPyTorchData = true
+		} else if hasSuffixASCII(name, "/version") || matchASCII(name, "version") {
+			hasPyTorchVersion = true
 		} else if matchASCII(name, "main.lua") {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeLOVEGame}
 		} else if matchASCII(name, "doc.kml") {
@@ -287,6 +295,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 	if hasLottieManifest && hasLottieAnimations {
 		return &types.Metadata{Kind: types.KindLottieAnimation}
+	}
+
+	if hasPyTorchData && hasPyTorchVersion {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePyTorchModel}
 	}
 
 	return &types.Metadata{Kind: types.KindZIPArchive}
