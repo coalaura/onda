@@ -30,4 +30,7 @@ func init() {
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeAVIVideo, 0, []byte("RIFF\x00\x00\x00\x00AVI "), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeCubaseProjectCPR, 0, []byte("RIFF\x00\x00\x00\x00SMED"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeWindowsAnimatedCursor, 0, []byte("RIFF\x00\x00\x00\x00ACON"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
+
+	types.RegisterWeakSignature(types.KindSubRipText, types.TypeNone, 0, []byte("1\n00:00:"))
+	types.RegisterWeakSignature(types.KindSubRipText, types.TypeNone, 0, []byte("1\r\n00:00:"))
 }

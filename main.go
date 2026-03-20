@@ -74,7 +74,14 @@ func main() {
 	meta := detectPath(name, info)
 	if meta != nil {
 		printMeta(meta, porcelain)
+
 		return
+	}
+
+	if info.Size() == 0 {
+		log.Errorln("empty file")
+
+		os.Exit(2)
 	}
 
 	file, err := os.Open(path)

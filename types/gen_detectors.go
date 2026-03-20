@@ -330,6 +330,24 @@ func hasISOBrandPrefix(b Buffer, majorOffset int, compatOffset int, boxEnd int, 
 	return false
 }
 
+func DetectJSON(b Buffer) *Metadata {
+	limit := min(b.Len(), 4096)
+	data := b[:limit]
+
+	trimmed := bytes.TrimSpace(data)
+	if len(trimmed) < 2 {
+		return nil
+	}
+
+	if trimmed[0] == '{' || trimmed[0] == '[' {
+		if bytes.Contains(trimmed, []byte(`":`)) || bytes.Contains(trimmed, []byte(`": `)) {
+			return &Metadata{Kind: KindJSONDocument}
+		}
+	}
+
+	return nil
+}
+
 func DetectLZMA(b Buffer) *Metadata {
 	if b.Len() < 13 {
 		return nil
@@ -359,7 +377,7 @@ func DetectLZMA(b Buffer) *Metadata {
 
 	uncompressedSize := binary.LittleEndian.Uint64(b[5:13])
 
-	if uncompressedSize != ^uint64(0) && uncompressedSize > (1<<50) {
+	if uncompressedSize != ^uint64(0) && uncompressedSize > (1<<40) {
 		return nil
 	}
 
@@ -906,6 +924,31 @@ func DetectPYC(b Buffer) *Metadata {
 	}
 }
 
+func DetectSQLiteSHM(b Buffer) *Metadata {
+	if b.Len() < 96 {
+		return nil
+	}
+
+	if !bytes.Equal(b[:48], b[48:96]) {
+		return nil
+	}
+
+	var typ TypeID
+
+	if b[0] == 0x18 {
+		typ = TypeLittleEndian
+	} else if b[3] == 0x18 {
+		typ = TypeBigEndian
+	} else {
+		return nil
+	}
+
+	return &Metadata{
+		Kind: KindSQLite3SharedMemory,
+		Type: typ,
+	}
+}
+
 func DetectSVG(b Buffer) *Metadata {
 	if b.Len() < 4 {
 		return nil
@@ -954,6 +997,8 @@ func DetectTar(b Buffer) *Metadata {
 					return &Metadata{Kind: KindTARArchive, Type: TypeVagrantBox}
 				case "install/doinst.sh":
 					return &Metadata{Kind: KindTARArchive, Type: TypeSlackwarePackage}
+				case "ComicInfo.xml", "comicinfo.xml":
+					return &Metadata{Kind: KindComicBookArchive, Type: TypeCBT}
 				}
 			}
 		}
@@ -1115,6 +1160,44 @@ func DetectTorrent(b Buffer) *Metadata {
 	return &Metadata{Kind: KindTorrentFile}
 }
 
+func DetectXMLSubtypes(b Buffer) *Metadata {
+	limit := min(b.Len(), 1024)
+	data := b[:limit]
+
+	trimmed := bytes.TrimSpace(data)
+	if len(trimmed) < 5 || trimmed[0] != '<' {
+		return nil
+	}
+
+	if bytes.HasPrefix(trimmed, []byte("<?xml")) || bytes.HasPrefix(trimmed, []byte("<!DOCTYPE")) {
+		if bytes.Contains(data, []byte("<plist")) || bytes.Contains(data, []byte("<!DOCTYPE plist")) {
+			return &Metadata{Kind: KindAppleXMLPropertyList}
+		}
+
+		if bytes.Contains(data, []byte("<kml")) {
+			return &Metadata{Kind: KindKeyholeMarkupLanguage}
+		}
+
+		if bytes.Contains(data, []byte("<gpx")) {
+			return &Metadata{Kind: KindGPSExchangeFormat}
+		}
+
+		if bytes.Contains(data, []byte("<rss")) {
+			return &Metadata{Kind: KindRSSFeed}
+		}
+
+		if bytes.Contains(data, []byte("<feed")) {
+			return &Metadata{Kind: KindAtomFeed}
+		}
+
+		if bytes.Contains(data, []byte("<soap:Envelope")) {
+			return &Metadata{Kind: KindSOAPMessage}
+		}
+	}
+
+	return nil
+}
+
 func DetectZIPContainer(b Buffer) *Metadata {
 	if b.Len() < 4 || string(b[:4]) != "PK\x03\x04" {
 		return nil
@@ -1139,6 +1222,9 @@ func DetectZIPContainer(b Buffer) *Metadata {
 		hasForgeMod         bool
 		hasLottieManifest   bool
 		hasLottieAnimations bool
+		hasPyTorchData      bool
+		hasPyTorchVersion   bool
+		hasComicInfo        bool
 		firstFile           = true
 	)
 
@@ -1224,6 +1310,12 @@ func DetectZIPContainer(b Buffer) *Metadata {
 			hasFabricMod = true
 		} else if matchASCII(name, "mcmod.info") || matchASCII(name, "meta-inf/mods.toml") {
 			hasForgeMod = true
+		} else if matchASCII(name, "model.weights.h5") {
+			return &Metadata{Kind: KindZIPArchive, Type: TypeKerasModel}
+		} else if hasSuffixASCII(name, "/data.pkl") || matchASCII(name, "data.pkl") {
+			hasPyTorchData = true
+		} else if hasSuffixASCII(name, "/version") || matchASCII(name, "version") {
+			hasPyTorchVersion = true
 		} else if matchASCII(name, "main.lua") {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeLOVEGame}
 		} else if matchASCII(name, "doc.kml") {
@@ -1258,6 +1350,8 @@ func DetectZIPContainer(b Buffer) *Metadata {
 			return &Metadata{Kind: KindZIPArchive, Type: Type3MFDocument}
 		} else if hasSuffixASCII(name, ".nuspec") && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
 			return &Metadata{Kind: KindZIPArchive, Type: TypeNuGetPackageNUPKG}
+		} else if matchASCII(name, "comicinfo.xml") {
+			hasComicInfo = true
 		} else if matchASCII(name, "metadata/buildversionhistory.plist") || hasPrefixASCII(name, "index/document.iwa") {
 			return &Metadata{Kind: KindAppleiWorkDocument}
 		}
@@ -1392,6 +1486,14 @@ func DetectZIPContainer(b Buffer) *Metadata {
 
 	if hasLottieManifest && hasLottieAnimations {
 		return &Metadata{Kind: KindLottieAnimation}
+	}
+
+	if hasPyTorchData && hasPyTorchVersion {
+		return &Metadata{Kind: KindZIPArchive, Type: TypePyTorchModel}
+	}
+
+	if hasComicInfo {
+		return &Metadata{Kind: KindComicBookArchive, Type: TypeCBZ}
 	}
 
 	return &Metadata{Kind: KindZIPArchive}

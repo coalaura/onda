@@ -20,6 +20,7 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectPE))
 	types.Register(types.DetectFunc(custom.DetectPKCS12))
 	types.Register(types.DetectFunc(custom.DetectPYC))
+	types.Register(types.DetectFunc(custom.DetectSQLiteSHM))
 	types.Register(types.DetectFunc(custom.DetectSVG))
 	types.Register(types.DetectFunc(custom.DetectTar))
 	types.Register(types.DetectFunc(custom.DetectTIFFSubtypes))
@@ -30,5 +31,8 @@ func init() {
 	types.RegisterWeak(types.DetectFunc(custom.DetectMP3))
 	types.RegisterWeak(types.DetectFunc(custom.DetectMPEGTransport))
 	types.RegisterWeak(types.DetectFunc(custom.DetectPCX))
+	types.RegisterWeak(types.DetectFunc(custom.DetectXMLSubtypes))
 	types.RegisterWeak(types.DetectFunc(custom.DetectZlib))
+
+	types.RegisterFallback(types.DetectFunc(custom.DetectJSON))
 }

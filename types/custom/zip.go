@@ -32,6 +32,7 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		hasLottieAnimations bool
 		hasPyTorchData      bool
 		hasPyTorchVersion   bool
+		hasComicInfo        bool
 		firstFile           = true
 	)
 
@@ -157,6 +158,8 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.Type3MFDocument}
 		} else if hasSuffixASCII(name, ".nuspec") && bytes.Contains(b, []byte("package/services/metadata/core-properties")) {
 			return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeNuGetPackageNUPKG}
+		} else if matchASCII(name, "comicinfo.xml") {
+			hasComicInfo = true
 		} else if matchASCII(name, "metadata/buildversionhistory.plist") || hasPrefixASCII(name, "index/document.iwa") {
 			return &types.Metadata{Kind: types.KindAppleiWorkDocument}
 		}
@@ -299,6 +302,10 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 
 	if hasPyTorchData && hasPyTorchVersion {
 		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypePyTorchModel}
+	}
+
+	if hasComicInfo {
+		return &types.Metadata{Kind: types.KindComicBookArchive, Type: types.TypeCBZ}
 	}
 
 	return &types.Metadata{Kind: types.KindZIPArchive}

@@ -44,6 +44,7 @@ const (
 	KindAppleSingle
 	KindAppleSystemLog
 	KindAppleTexture
+	KindAppleXMLPropertyList
 	KindARArchive
 	KindARCArchive
 	KindARJArchive
@@ -52,6 +53,7 @@ const (
 	KindASTCTexture
 	KindAtari7800ROM
 	KindAtariLynxROM
+	KindAtomFeed
 	KindAUAudio
 	KindAudacityBlockFile
 	KindAutoCADDrawing
@@ -67,6 +69,7 @@ const (
 	KindBitLockerDiskEncryption
 	KindBlenderFile
 	KindBlizzardTexture
+	KindBluetoothSnoop
 	KindBMPImage
 	KindBochsDiskImage
 	KindBouncyCastleKeystore
@@ -85,6 +88,7 @@ const (
 	KindCinema4DModel
 	KindCineonImage
 	KindCloneCDControl
+	KindComicBookArchive
 	KindCommodore64Tape
 	KindCommodore64TapeRAW
 	KindCommodoreSID
@@ -147,9 +151,12 @@ const (
 	KindGIMPPattern
 	KindGIMPXCFImage
 	KindGitBundle
+	KindGitCommitGraph
 	KindGitIndex
 	KindGitPack
+	KindGitPackBitmap
 	KindGitPackIndex
+	KindGitPackReverseIndex
 	KindGlibcLocale
 	KindGLTFBinary
 	KindGlyphBitmapDistributionFormat
@@ -157,6 +164,7 @@ const (
 	KindGNUGettextMachineCatalog
 	KindGnuPGKeybox
 	KindGodotPackage
+	KindGPSExchangeFormat
 	KindGRIBData
 	KindGUIDPartitionTable
 	KindGzipArchive
@@ -193,8 +201,10 @@ const (
 	KindJPEGLSImage
 	KindJPEGXLImage
 	KindJPEGXRImage
+	KindJSONDocument
 	KindKDEKWallet
 	KindKeePassDatabase
+	KindKeyholeMarkupLanguage
 	KindKGBArchive
 	KindKorgAudio
 	KindKTXTexture
@@ -356,6 +366,7 @@ const (
 	KindROSBag
 	KindRPGMakerArchive
 	KindRPMPackage
+	KindRSSFeed
 	KindRubyGemPackage
 	KindRubyMarshal
 	KindRzipArchive
@@ -379,11 +390,13 @@ const (
 	KindSnappyFramedData
 	KindSNESSPC
 	KindSnoopCapture
+	KindSOAPMessage
 	KindSonyOpenMG
 	KindSonyWave64Audio
 	KindSourceEngineBSP
 	KindSPSSData
 	KindSPSSPortableData
+	KindSQLite3SharedMemory
 	KindSQLite3WriteAheadLog
 	KindSQLiteDatabase
 	KindSquashFSFilesystem
@@ -392,6 +405,7 @@ const (
 	KindStataData
 	KindSTEP3DModel
 	KindStuffItArchive
+	KindSubRipText
 	KindSunRasterImage
 	KindSVGImage
 	KindSymantecGhostImage
@@ -525,6 +539,10 @@ const (
 	TypeBlockDevice
 	TypeByteSwapped
 	TypeCanonRAW3CR3
+	TypeCB7
+	TypeCBR
+	TypeCBT
+	TypeCBZ
 	TypeCDAAudio
 	TypeCharacterDevice
 	TypeCodestream
@@ -676,6 +694,8 @@ const (
 	TypeQuickTimeMovie
 	TypeRAR4
 	TypeRAR5
+	TypeRIFFMIDI
+	TypeRIFFPalette
 	TypeRSAPrivateKey
 	TypeSketchDocument
 	TypeSlackwarePackage
@@ -754,6 +774,7 @@ var kindNames = [...]string{
 	KindAppleSingle:                         "AppleSingle File",
 	KindAppleSystemLog:                      "Apple System Log",
 	KindAppleTexture:                        "Apple Texture",
+	KindAppleXMLPropertyList:                "Apple XML Property List",
 	KindARArchive:                           "AR Archive",
 	KindARCArchive:                          "ARC Archive",
 	KindARJArchive:                          "ARJ Archive",
@@ -762,6 +783,7 @@ var kindNames = [...]string{
 	KindASTCTexture:                         "ASTC Texture",
 	KindAtari7800ROM:                        "Atari 7800 ROM",
 	KindAtariLynxROM:                        "Atari Lynx ROM",
+	KindAtomFeed:                            "Atom Feed",
 	KindAUAudio:                             "AU Audio",
 	KindAudacityBlockFile:                   "Audacity Block File",
 	KindAutoCADDrawing:                      "AutoCAD Drawing",
@@ -777,6 +799,7 @@ var kindNames = [...]string{
 	KindBitLockerDiskEncryption:             "BitLocker Disk Encryption",
 	KindBlenderFile:                         "Blender File",
 	KindBlizzardTexture:                     "Blizzard Texture",
+	KindBluetoothSnoop:                      "Bluetooth Snoop Capture",
 	KindBMPImage:                            "BMP Image",
 	KindBochsDiskImage:                      "Bochs Disk Image",
 	KindBouncyCastleKeystore:                "BouncyCastle Keystore",
@@ -795,6 +818,7 @@ var kindNames = [...]string{
 	KindCinema4DModel:                       "Cinema 4D Model",
 	KindCineonImage:                         "Cineon Image",
 	KindCloneCDControl:                      "CloneCD Control File",
+	KindComicBookArchive:                    "Comic Book Archive",
 	KindCommodore64Tape:                     "Commodore 64 Tape",
 	KindCommodore64TapeRAW:                  "Commodore 64 Tape RAW",
 	KindCommodoreSID:                        "Commodore SID Audio",
@@ -857,9 +881,12 @@ var kindNames = [...]string{
 	KindGIMPPattern:                         "GIMP Pattern",
 	KindGIMPXCFImage:                        "GIMP XCF Image",
 	KindGitBundle:                           "Git Bundle",
+	KindGitCommitGraph:                      "Git Commit Graph",
 	KindGitIndex:                            "Git Index",
 	KindGitPack:                             "Git Pack",
+	KindGitPackBitmap:                       "Git Pack Bitmap",
 	KindGitPackIndex:                        "Git Pack Index",
+	KindGitPackReverseIndex:                 "Git Pack Reverse Index",
 	KindGlibcLocale:                         "Glibc Locale",
 	KindGLTFBinary:                          "glTF Binary",
 	KindGlyphBitmapDistributionFormat:       "Glyph Bitmap Distribution Format (BDF)",
@@ -867,6 +894,7 @@ var kindNames = [...]string{
 	KindGNUGettextMachineCatalog:            "GNU Gettext Machine Catalog",
 	KindGnuPGKeybox:                         "GnuPG Keybox",
 	KindGodotPackage:                        "Godot Engine Package",
+	KindGPSExchangeFormat:                   "GPS Exchange Format",
 	KindGRIBData:                            "GRIB Data",
 	KindGUIDPartitionTable:                  "GUID Partition Table",
 	KindGzipArchive:                         "Gzip Archive",
@@ -903,8 +931,10 @@ var kindNames = [...]string{
 	KindJPEGLSImage:                         "JPEG-LS Image",
 	KindJPEGXLImage:                         "JPEG XL Image",
 	KindJPEGXRImage:                         "JPEG XR Image",
+	KindJSONDocument:                        "JSON Document",
 	KindKDEKWallet:                          "KDE KWallet",
 	KindKeePassDatabase:                     "KeePass Database",
+	KindKeyholeMarkupLanguage:               "Keyhole Markup Language",
 	KindKGBArchive:                          "KGB Archive",
 	KindKorgAudio:                           "Korg Audio",
 	KindKTXTexture:                          "KTX Texture",
@@ -1066,6 +1096,7 @@ var kindNames = [...]string{
 	KindROSBag:                              "ROS Bag",
 	KindRPGMakerArchive:                     "RPG Maker Archive",
 	KindRPMPackage:                          "RPM Package",
+	KindRSSFeed:                             "RSS Feed",
 	KindRubyGemPackage:                      "RubyGem Package",
 	KindRubyMarshal:                         "Ruby Marshal Data",
 	KindRzipArchive:                         "rzip Archive",
@@ -1089,11 +1120,13 @@ var kindNames = [...]string{
 	KindSnappyFramedData:                    "Snappy Framed Data",
 	KindSNESSPC:                             "SNES SPC Audio",
 	KindSnoopCapture:                        "Snoop Capture",
+	KindSOAPMessage:                         "SOAP Message",
 	KindSonyOpenMG:                          "Sony OpenMG Audio",
 	KindSonyWave64Audio:                     "Sony Wave64 Audio",
 	KindSourceEngineBSP:                     "Source Engine BSP",
 	KindSPSSData:                            "SPSS Data",
 	KindSPSSPortableData:                    "SPSS Portable Data",
+	KindSQLite3SharedMemory:                 "SQLite Shared Memory",
 	KindSQLite3WriteAheadLog:                "SQLite Write-Ahead Log",
 	KindSQLiteDatabase:                      "SQLite Database",
 	KindSquashFSFilesystem:                  "SquashFS Filesystem",
@@ -1102,6 +1135,7 @@ var kindNames = [...]string{
 	KindStataData:                           "Stata Data",
 	KindSTEP3DModel:                         "STEP 3D Model",
 	KindStuffItArchive:                      "StuffIt Archive",
+	KindSubRipText:                          "SubRip Text (SRT)",
 	KindSunRasterImage:                      "Sun Raster Image",
 	KindSVGImage:                            "SVG Image",
 	KindSymantecGhostImage:                  "Symantec Ghost Image",
@@ -1235,6 +1269,10 @@ var typeNames = [...]string{
 	TypeBlockDevice:              "Block Device",
 	TypeByteSwapped:              "Byte-Swapped",
 	TypeCanonRAW3CR3:             "Canon RAW 3 (CR3)",
+	TypeCB7:                      "CB7",
+	TypeCBR:                      "CBR",
+	TypeCBT:                      "CBT",
+	TypeCBZ:                      "CBZ",
 	TypeCDAAudio:                 "CD Audio",
 	TypeCharacterDevice:          "Character Device",
 	TypeCodestream:               "Codestream",
@@ -1386,6 +1424,8 @@ var typeNames = [...]string{
 	TypeQuickTimeMovie:                                  "QuickTime Movie",
 	TypeRAR4:                                            "RAR4",
 	TypeRAR5:                                            "RAR5",
+	TypeRIFFMIDI:                                        "MIDI",
+	TypeRIFFPalette:                                     "Palette",
 	TypeRSAPrivateKey:                                   "RSA Private Key",
 	TypeSketchDocument:                                  "Sketch Document",
 	TypeSlackwarePackage:                                "Slackware Package",

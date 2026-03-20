@@ -78,5 +78,6 @@ func init() {
 	types.RegisterMaskedSignature(types.KindDjVuDocument, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00THUM"), []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindIFFContainer, types.TypeILBMImage, 0, []byte("FORM\x00\x00\x00\x00ILBM"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindMetafileImage, types.TypeEnhancedMetafileEMF, 0, []byte{0x01, 0x00, 0x00, 0x00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x20, 0x45, 0x4d, 0x46}, []byte{0xff, 0xff, 0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
+	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeRIFFPalette, 0, []byte("RIFF\x00\x00\x00\x00PAL "), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 	types.RegisterMaskedSignature(types.KindRIFFContainer, types.TypeWebPImage, 0, []byte("RIFF\x00\x00\x00\x00WEBP"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
 }

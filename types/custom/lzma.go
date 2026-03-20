@@ -37,7 +37,7 @@ func DetectLZMA(b types.Buffer) *types.Metadata {
 	uncompressedSize := binary.LittleEndian.Uint64(b[5:13])
 
 	// check if size is reasonable
-	if uncompressedSize != ^uint64(0) && uncompressedSize > (1<<50) {
+	if uncompressedSize != ^uint64(0) && uncompressedSize > (1<<40) {
 		return nil
 	}
 
