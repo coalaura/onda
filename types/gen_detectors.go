@@ -4,6 +4,7 @@ package types
 import (
 	"bytes"
 	"encoding/binary"
+	"io"
 	"math"
 	"slices"
 	"sort"
@@ -131,7 +132,14 @@ func DetectAppleDiskImage(b Buffer) *Metadata {
 		return nil
 	}
 
-	if b.Has(b.Len()-512, []byte("koly")) {
+	offset := b.Len() - 512
+
+	version, versionOK := b.U32BE(offset + 4)
+	headerSize, sizeOK := b.U32BE(offset + 8)
+	segmentNumber, segmentOK := b.U32BE(offset + 56)
+	segmentCount, countOK := b.U32BE(offset + 60)
+
+	if b.Has(offset, []byte("koly")) && versionOK && version == 4 && sizeOK && headerSize == 512 && segmentOK && segmentNumber > 0 && countOK && segmentCount > 0 && segmentNumber <= segmentCount {
 		return &Metadata{
 			Kind: KindAppleDiskImage,
 		}
@@ -718,7 +726,7 @@ func DetectH26x(b Buffer) *Metadata {
 
 	if nalOffset+1 < b.Len() {
 		h265Type := (nalHeader >> 1) & 0x3F
-		temporalIdPlus1 := (b[nalOffset+1] >> 3) & 0x07
+		temporalIdPlus1 := b[nalOffset+1] & 0x07
 
 		if temporalIdPlus1 >= 1 {
 			switch h265Type {
@@ -800,8 +808,10 @@ func DetectISOBaseMedia(b Buffer) *Metadata {
 	}
 
 	if boxEnd > uint64(b.Len()) {
-		boxEnd = uint64(b.Len())
+		return nil
 	}
+
+	boxEnd = min(boxEnd, uint64(maxScanSize))
 
 	if !hasISOBrand(b, brandOffset, compatibleOffset, int(boxEnd), "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "mjp2", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw", "MSNV") {
 		return nil
@@ -996,7 +1006,7 @@ func DetectLZMA(b Buffer) *Metadata {
 
 func DetectMachO(b Buffer) *Metadata {
 	if b.Has(0, []byte{0xfe, 0xed, 0xfa, 0xce}) {
-		if !isValidMachOHeaderBE(b, 4) {
+		if !isValidMachOHeaderBE(b, 28) {
 			return nil
 		}
 
@@ -1007,7 +1017,7 @@ func DetectMachO(b Buffer) *Metadata {
 	}
 
 	if b.Has(0, []byte{0xce, 0xfa, 0xed, 0xfe}) {
-		if !isValidMachOHeaderLE(b, 4) {
+		if !isValidMachOHeaderLE(b, 28) {
 			return nil
 		}
 
@@ -1018,7 +1028,7 @@ func DetectMachO(b Buffer) *Metadata {
 	}
 
 	if b.Has(0, []byte{0xfe, 0xed, 0xfa, 0xcf}) {
-		if !isValidMachOHeaderBE(b, 4) {
+		if !isValidMachOHeaderBE(b, 32) {
 			return nil
 		}
 
@@ -1029,7 +1039,7 @@ func DetectMachO(b Buffer) *Metadata {
 	}
 
 	if b.Has(0, []byte{0xcf, 0xfa, 0xed, 0xfe}) {
-		if !isValidMachOHeaderLE(b, 4) {
+		if !isValidMachOHeaderLE(b, 32) {
 			return nil
 		}
 
@@ -1071,22 +1081,28 @@ func DetectMachO(b Buffer) *Metadata {
 	return nil
 }
 
-func isValidMachOHeaderBE(b Buffer, cpuOffset int) bool {
-	cpuType, ok := b.U32BE(cpuOffset)
-	if !ok {
+func isValidMachOHeaderBE(b Buffer, headerSize int) bool {
+	if b.Len() < headerSize {
 		return false
 	}
 
-	return isKnownMachOCPUType(cpuType)
+	cpuType, _ := b.U32BE(4)
+	ncmds, _ := b.U32BE(16)
+	sizeofcmds, _ := b.U32BE(20)
+
+	return isKnownMachOCPUType(cpuType) && ncmds <= 4096 && uint64(headerSize)+uint64(sizeofcmds) <= uint64(b.Len())
 }
 
-func isValidMachOHeaderLE(b Buffer, cpuOffset int) bool {
-	cpuType, ok := b.U32LE(cpuOffset)
-	if !ok {
+func isValidMachOHeaderLE(b Buffer, headerSize int) bool {
+	if b.Len() < headerSize {
 		return false
 	}
 
-	return isKnownMachOCPUType(cpuType)
+	cpuType, _ := b.U32LE(4)
+	ncmds, _ := b.U32LE(16)
+	sizeofcmds, _ := b.U32LE(20)
+
+	return isKnownMachOCPUType(cpuType) && ncmds <= 4096 && uint64(headerSize)+uint64(sizeofcmds) <= uint64(b.Len())
 }
 
 func isValidFatMachO(b Buffer, archSize int) bool {
@@ -1095,9 +1111,42 @@ func isValidFatMachO(b Buffer, archSize int) bool {
 		return false
 	}
 
-	cpuType, _ := b.U32BE(8)
+	tableEnd := uint64(8) + uint64(nfatArch)*uint64(archSize)
 
-	return isKnownMachOCPUType(cpuType)
+	for i := range int(nfatArch) {
+		offset := 8 + i*archSize
+
+		cpuType, _ := b.U32BE(offset)
+		if !isKnownMachOCPUType(cpuType) {
+			return false
+		}
+
+		if archSize == 20 {
+			archOffset, _ := b.U32BE(offset + 8)
+			archLength, _ := b.U32BE(offset + 12)
+
+			if uint64(archOffset) < tableEnd || archLength == 0 {
+				return false
+			}
+
+			continue
+		}
+
+		offsetHigh, _ := b.U32BE(offset + 8)
+		offsetLow, _ := b.U32BE(offset + 12)
+
+		lengthHigh, _ := b.U32BE(offset + 16)
+		lengthLow, _ := b.U32BE(offset + 20)
+
+		archOffset := uint64(offsetHigh)<<32 | uint64(offsetLow)
+		archLength := uint64(lengthHigh)<<32 | uint64(lengthLow)
+
+		if archOffset < tableEnd || archLength == 0 {
+			return false
+		}
+	}
+
+	return true
 }
 
 func isKnownMachOCPUType(cpuType uint32) bool {
@@ -1220,16 +1269,60 @@ func isNetpbmDelimiter(c byte) bool {
 }
 
 func DetectOgg(b Buffer) *Metadata {
-	if !b.Has(0, []byte("OggS")) {
+	if b.Len() < 27 || !b.Has(0, []byte("OggS")) {
 		return nil
 	}
 
 	limit := min(b.Len(), 4096)
-	data := b[:limit]
-	fishead := bytes.Index(data, []byte("fishead\x00"))
+	offset := 0
 
-	if fishead >= 0 && fishead+10 <= len(data) {
-		switch uint16(data[fishead+8]) | uint16(data[fishead+9])<<8 {
+	for offset+27 <= limit {
+		if !b.Has(offset, []byte("OggS")) || b[offset+4] != 0 || b[offset+5]&^byte(0x07) != 0 {
+			return nil
+		}
+
+		segmentCount := int(b[offset+26])
+		headerEnd := offset + 27 + segmentCount
+		if headerEnd > limit {
+			break
+		}
+
+		payloadSize := 0
+
+		for _, size := range b[offset+27 : headerEnd] {
+			payloadSize += int(size)
+		}
+
+		pageEnd := headerEnd + payloadSize
+		if pageEnd > limit {
+			break
+		}
+
+		packetStart := headerEnd
+		packetOffset := headerEnd
+
+		for _, size := range b[offset+27 : headerEnd] {
+			packetOffset += int(size)
+			if size == 255 {
+				continue
+			}
+
+			if meta := detectOggPacket(b[packetStart:packetOffset]); meta != nil {
+				return meta
+			}
+
+			packetStart = packetOffset
+		}
+
+		offset = pageEnd
+	}
+
+	return &Metadata{Kind: KindOggContainer}
+}
+
+func detectOggPacket(packet Buffer) *Metadata {
+	if packet.Has(0, []byte("fishead\x00")) && packet.Len() >= 10 {
+		switch uint16(packet[8]) | uint16(packet[9])<<8 {
 		case 3:
 			return &Metadata{Kind: KindOggSkeleton, Type: TypeOggSkeleton3}
 		case 4:
@@ -1238,20 +1331,25 @@ func DetectOgg(b Buffer) *Metadata {
 	}
 
 	switch {
-	case bytes.Contains(data, []byte("OpusHead")):
+	case packet.Has(0, []byte("OpusHead")):
 		return &Metadata{Kind: KindOggContainer, Type: TypeOpusAudio}
-	case bytes.Contains(data, []byte{0x01, 'v', 'o', 'r', 'b', 'i', 's'}):
+	case packet.Has(0, []byte{0x01, 'v', 'o', 'r', 'b', 'i', 's'}):
 		return &Metadata{Kind: KindOggContainer, Type: TypeVorbisAudio}
-	case bytes.Contains(data, []byte("Speex   ")):
+	case packet.Has(0, []byte("Speex   ")):
 		return &Metadata{Kind: KindOggContainer, Type: TypeSpeexAudio}
-	case bytes.Contains(data, []byte{0x80, 't', 'h', 'e', 'o', 'r', 'a'}):
+	case packet.Has(0, []byte{0x80, 't', 'h', 'e', 'o', 'r', 'a'}):
 		return &Metadata{Kind: KindOggContainer, Type: TypeTheoraVideo}
-	case bytes.Contains(data, []byte{0x7f, 'F', 'L', 'A', 'C'}):
+	case packet.Has(0, []byte{0x7f, 'F', 'L', 'A', 'C'}):
 		return &Metadata{Kind: KindOggContainer, Type: TypeFLACAudio}
 	default:
-		return &Metadata{Kind: KindOggContainer}
+		return nil
 	}
 }
+
+const (
+	maxDIFATSectors   = 16
+	maxDirectoryBytes = maxScanSize
+)
 
 var (
 	oleWordDocument       = []byte{'W', 0, 'o', 0, 'r', 0, 'd', 0, 'D', 0, 'o', 0, 'c', 0, 'u', 0, 'm', 0, 'e', 0, 'n', 0, 't', 0, 0, 0}
@@ -1271,6 +1369,22 @@ func DetectOLE(b Buffer) *Metadata {
 		return nil
 	}
 
+	meta := detectOLEReaderAt(bytes.NewReader(b), int64(b.Len()))
+	if meta != nil {
+		return meta
+	}
+
+	meta = detectOLESubtype(b)
+	if meta != nil {
+		return meta
+	}
+
+	return &Metadata{
+		Kind: KindOLECompoundDocument,
+	}
+}
+
+func detectOLESubtype(b Buffer) *Metadata {
 	if containsOLE(b, oleWordDocument) || containsOLE(b, []byte("MSWordDoc")) || containsOLE(b, []byte("Word.Document.")) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftWordDocument}
 	}
@@ -1307,9 +1421,7 @@ func DetectOLE(b Buffer) *Metadata {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftPublisherDocument}
 	}
 
-	return &Metadata{
-		Kind: KindOLECompoundDocument,
-	}
+	return nil
 }
 
 func containsOLE(b Buffer, magic []byte) bool {
@@ -1321,6 +1433,167 @@ func containsOLE(b Buffer, magic []byte) bool {
 	suffixStart := max(prefixEnd, b.Len()-maxScanSize)
 
 	return bytes.Contains(b[suffixStart:], magic)
+}
+
+func detectOLEReaderAt(r io.ReaderAt, size int64) *Metadata {
+	header := make([]byte, 512)
+	if size < int64(len(header)) || !readAtExactly(r, header, 0) {
+		return nil
+	}
+
+	b := Buffer(header)
+	if !b.Has(0, []byte{0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1}) {
+		return nil
+	}
+
+	majorVersion, _ := b.U16LE(26)
+	byteOrder, _ := b.U16LE(28)
+	sectorShift, _ := b.U16LE(30)
+
+	if byteOrder != 0xfffe || majorVersion == 3 && sectorShift != 9 || majorVersion == 4 && sectorShift != 12 || majorVersion != 3 && majorVersion != 4 {
+		return nil
+	}
+
+	sectorSize := int64(1) << sectorShift
+	if size < sectorSize {
+		return nil
+	}
+
+	totalSectors := uint32((size - sectorSize) / sectorSize)
+
+	numFATSectors, _ := b.U32LE(44)
+	firstDirectorySector, _ := b.U32LE(48)
+	firstDIFATSector, _ := b.U32LE(68)
+	numDIFATSectors, _ := b.U32LE(72)
+
+	if numFATSectors == 0 || numFATSectors > maxScanSize/4 || numDIFATSectors > maxDIFATSectors || firstDirectorySector >= totalSectors {
+		return nil
+	}
+
+	fatSectors := make([]uint32, 0, numFATSectors)
+
+	for i := 0; i < 109 && len(fatSectors) < int(numFATSectors); i++ {
+		sector, _ := b.U32LE(76 + i*4)
+		if sector == 0xffffffff {
+			continue
+		}
+
+		if sector >= totalSectors {
+			return nil
+		}
+
+		fatSectors = append(fatSectors, sector)
+	}
+
+	difatSector := firstDIFATSector
+	difatSeen := make(map[uint32]bool)
+
+	for i := uint32(0); i < numDIFATSectors && len(fatSectors) < int(numFATSectors); i++ {
+		if difatSector >= totalSectors || difatSeen[difatSector] {
+			return nil
+		}
+
+		difatSeen[difatSector] = true
+
+		sectorData := make([]byte, int(sectorSize))
+
+		if !readAtExactly(r, sectorData, (int64(difatSector)+1)*sectorSize) {
+			return nil
+		}
+
+		sectorBuffer := Buffer(sectorData)
+
+		for offset := 0; offset+4 < len(sectorData) && len(fatSectors) < int(numFATSectors); offset += 4 {
+			sector, _ := sectorBuffer.U32LE(offset)
+			if sector == 0xffffffff {
+				continue
+			}
+
+			if sector >= totalSectors {
+				return nil
+			}
+
+			fatSectors = append(fatSectors, sector)
+		}
+
+		difatSector, _ = sectorBuffer.U32LE(len(sectorData) - 4)
+	}
+
+	if len(fatSectors) != int(numFATSectors) {
+		return nil
+	}
+
+	fatCache := make(map[uint32][]byte)
+
+	nextSector := func(sector uint32) (uint32, bool) {
+		entriesPerSector := uint32(sectorSize / 4)
+
+		fatIndex := sector / entriesPerSector
+		if fatIndex >= uint32(len(fatSectors)) {
+			return 0, false
+		}
+
+		fatSector := fatSectors[fatIndex]
+
+		data := fatCache[fatSector]
+		if data == nil {
+			data = make([]byte, int(sectorSize))
+			if !readAtExactly(r, data, (int64(fatSector)+1)*sectorSize) {
+				return 0, false
+			}
+
+			fatCache[fatSector] = data
+		}
+
+		next, ok := Buffer(data).U32LE(int(sector%entriesPerSector) * 4)
+		return next, ok
+	}
+
+	directory := make([]byte, 0, min(maxDirectoryBytes, int(sectorSize)*4))
+	directorySeen := make(map[uint32]bool)
+	sector := firstDirectorySector
+
+	for sector != 0xfffffffe {
+		if sector >= totalSectors || directorySeen[sector] || len(directory)+int(sectorSize) > maxDirectoryBytes {
+			return nil
+		}
+
+		directorySeen[sector] = true
+
+		start := len(directory)
+
+		directory = append(directory, make([]byte, int(sectorSize))...)
+
+		if !readAtExactly(r, directory[start:], (int64(sector)+1)*sectorSize) {
+			return nil
+		}
+
+		var ok bool
+
+		sector, ok = nextSector(sector)
+		if !ok || sector >= 0xfffffff8 && sector != 0xfffffffe {
+			return nil
+		}
+	}
+
+	for offset := 0; offset+128 <= len(directory); offset += 128 {
+		entry := Buffer(directory[offset : offset+128])
+
+		nameLength, _ := entry.U16LE(64)
+		if nameLength == 0 {
+			continue
+		}
+
+		if nameLength < 2 || nameLength > 64 || nameLength&1 != 0 || entry[nameLength-2] != 0 || entry[nameLength-1] != 0 {
+			return nil
+		}
+	}
+
+	if meta := detectOLESubtype(Buffer(directory)); meta != nil {
+		return meta
+	}
+
+	return &Metadata{Kind: KindOLECompoundDocument}
 }
 
 func DetectPCX(b Buffer) *Metadata {
@@ -1415,6 +1688,10 @@ func DetectPE(b Buffer) *Metadata {
 		return nil
 	}
 
+	if !isValidDOSHeader(b) {
+		return nil
+	}
+
 	peOff, ok := b.U32LE(0x3c)
 	if !ok {
 		return &Metadata{Kind: KindDOSExecutable}
@@ -1465,6 +1742,30 @@ func DetectPE(b Buffer) *Metadata {
 	return &Metadata{Kind: KindDOSExecutable}
 }
 
+func isValidDOSHeader(b Buffer) bool {
+	if b.Len() < 28 {
+		return false
+	}
+
+	lastPage, ok := b.U16LE(2)
+	if !ok || lastPage > 512 {
+		return false
+	}
+
+	pages, ok := b.U16LE(4)
+	if !ok || pages == 0 {
+		return false
+	}
+
+	headerParagraphs, ok := b.U16LE(8)
+	if !ok || headerParagraphs < 2 {
+		return false
+	}
+
+	relocationOffset, ok := b.U16LE(24)
+	return ok && relocationOffset >= 0x1c
+}
+
 func pe32MachineType(machine uint16) TypeID {
 	switch machine {
 	case 0x014c:
@@ -1496,16 +1797,68 @@ func pe32PlusMachineType(machine uint16) TypeID {
 }
 
 func DetectPKCS12(b Buffer) *Metadata {
-	if b.Len() < 32 || b[0] != 0x30 {
+	if b.Len() < 32 {
 		return nil
 	}
 
-	limit := min(b.Len(), 4096)
-	if !bytes.Contains(b[:limit], []byte{0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x07, 0x01}) {
+	offset, length, ok := asn1Value(b, 0, 0x30)
+	if !ok {
+		return nil
+	}
+
+	end := offset + length
+
+	versionOffset, versionLength, ok := asn1Value(b, offset, 0x02)
+	if !ok || versionLength != 1 || versionOffset+versionLength > end || b[versionOffset] != 3 {
+		return nil
+	}
+
+	offset = versionOffset + versionLength
+
+	contentOffset, contentLength, ok := asn1Value(b, offset, 0x30)
+	if !ok || contentOffset+contentLength > end {
+		return nil
+	}
+
+	contentEnd := contentOffset + contentLength
+
+	oidOffset, oidLength, ok := asn1Value(b, contentOffset, 0x06)
+	if !ok || oidLength != 9 || oidOffset+oidLength > contentEnd || !b.Has(oidOffset, []byte{0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x07, 0x01}) {
 		return nil
 	}
 
 	return &Metadata{Kind: KindPKCS12}
+}
+
+func asn1Value(b Buffer, offset int, tag byte) (int, int, bool) {
+	if offset < 0 || offset+2 > b.Len() || b[offset] != tag {
+		return 0, 0, false
+	}
+
+	length := int(b[offset+1])
+	headerSize := 2
+
+	if length&0x80 != 0 {
+		lengthBytes := length & 0x7f
+		if lengthBytes == 0 || lengthBytes > 4 || offset+2+lengthBytes > b.Len() {
+			return 0, 0, false
+		}
+
+		length = 0
+
+		for i := range lengthBytes {
+			length = length<<8 | int(b[offset+2+i])
+		}
+
+		headerSize += lengthBytes
+	}
+
+	valueOffset := offset + headerSize
+	if length < 0 || valueOffset > b.Len() || length > b.Len()-valueOffset {
+		return 0, 0, false
+	}
+
+	return valueOffset, length, true
 }
 
 var pycMagic = map[uint16]struct{}{
@@ -1521,7 +1874,7 @@ var pycMagic = map[uint16]struct{}{
 	3290: {}, 3300: {}, 3310: {}, 3320: {}, 3330: {}, 3340: {},
 	3350: {}, 3360: {}, 3370: {}, 3390: {}, 3400: {}, 3410: {},
 	3420: {}, 3430: {}, 3450: {}, 3460: {}, 3470: {}, 3490: {},
-	3500: {}, 3510: {}, 3520: {}, 3530: {},
+	3500: {}, 3510: {}, 3520: {}, 3530: {}, 3531: {}, 3571: {}, 3627: {}, 3705: {},
 }
 
 func DetectPYC(b Buffer) *Metadata {
@@ -1545,6 +1898,39 @@ func DetectPYC(b Buffer) *Metadata {
 	return &Metadata{
 		Kind: KindPythonBytecode,
 	}
+}
+
+const qnx4SuperOffset = 512
+
+func DetectQNX4(b Buffer) *Metadata {
+	if !b.Has(qnx4SuperOffset, []byte{'/', 0}) {
+		return nil
+	}
+
+	rootBlock, ok := b.U32LE(qnx4SuperOffset + 20)
+	if !ok || rootBlock == 0 {
+		return nil
+	}
+
+	rootBlocks, ok := b.U32LE(qnx4SuperOffset + 24)
+	if !ok || rootBlocks == 0 {
+		return nil
+	}
+
+	rootOffset := uint64(rootBlock-1) * 512
+	rootSize := min(uint64(rootBlocks)*512, uint64(maxScanSize))
+
+	if rootOffset > uint64(b.Len()) || rootSize > uint64(b.Len())-rootOffset {
+		return nil
+	}
+
+	for offset := int(rootOffset); offset+64 <= int(rootOffset+rootSize); offset += 64 {
+		if b.Has(offset, []byte(".bitmap\x00")) {
+			return &Metadata{Kind: KindQNX4Filesystem}
+		}
+	}
+
+	return nil
 }
 
 func DetectSQLiteSHM(b Buffer) *Metadata {
@@ -1590,25 +1976,33 @@ func DetectTar(b Buffer) *Metadata {
 			nameEnd = 100
 		}
 
+		prefixEnd := bytes.IndexByte(header[345:500], 0)
+		if prefixEnd == -1 {
+			prefixEnd = 155
+		}
+
 		if nameEnd > 0 {
-			switch string(header[:nameEnd]) {
-			case "package/package.json", "package.json":
+			name := header[:nameEnd]
+			prefix := header[345 : 345+prefixEnd]
+
+			switch {
+			case tarPathEqual(prefix, name, "package/package.json"), tarPathEqual(prefix, name, "package.json"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeNpmPackage}
-			case "oci-layout", "index.json", "manifest.json":
+			case tarPathEqual(prefix, name, "oci-layout"), tarPathEqual(prefix, name, "index.json"), tarPathEqual(prefix, name, "manifest.json"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeOCIImageLayout}
-			case "PKG-INFO", "setup.py", "pyproject.toml":
+			case tarPathEqual(prefix, name, "PKG-INFO"), tarPathEqual(prefix, name, "setup.py"), tarPathEqual(prefix, name, "pyproject.toml"):
 				return &Metadata{Kind: KindTARArchive, Type: TypePythonSourceDistribution}
-			case "info/index.json":
+			case tarPathEqual(prefix, name, "info/index.json"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeCondaPackage}
-			case ".PKGINFO":
+			case tarPathEqual(prefix, name, ".PKGINFO"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeArchLinuxPackage}
-			case "Vagrantfile":
+			case tarPathEqual(prefix, name, "Vagrantfile"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeVagrantBox}
-			case "install/doinst.sh":
+			case tarPathEqual(prefix, name, "install/doinst.sh"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeSlackwarePackage}
-			case "ComicInfo.xml", "comicinfo.xml":
+			case tarPathEqual(prefix, name, "ComicInfo.xml"), tarPathEqual(prefix, name, "comicinfo.xml"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeComicBook}
-			case "metadata", "deploy":
+			case tarPathEqual(prefix, name, "metadata"), tarPathEqual(prefix, name, "deploy"):
 				return &Metadata{Kind: KindTARArchive, Type: TypeFlatpak}
 			}
 		}
@@ -1639,20 +2033,40 @@ func validTarChecksum(header []byte) bool {
 		return false
 	}
 
-	var sum uint64
+	var unsignedSum uint64
+	var signedSum int64
 
 	for i, value := range header {
 		if i >= 148 && i < 156 {
 			value = ' '
 		}
 
-		sum += uint64(value)
+		unsignedSum += uint64(value)
+		signedSum += int64(int8(value))
 	}
 
-	return sum == stored
+	return unsignedSum == stored || signedSum >= 0 && uint64(signedSum) == stored
 }
 
 func parseTarOctal(field []byte) (uint64, bool) {
+	if len(field) > 0 && field[0]&0x80 != 0 {
+		if field[0]&0x40 != 0 {
+			return 0, false
+		}
+
+		value := uint64(field[0] & 0x3f)
+
+		for _, part := range field[1:] {
+			if value > (^uint64(0)-uint64(part))/256 {
+				return 0, false
+			}
+
+			value = value*256 + uint64(part)
+		}
+
+		return value, true
+	}
+
 	field = bytes.Trim(field, " \x00")
 	if len(field) == 0 {
 		return 0, false
@@ -1669,6 +2083,14 @@ func parseTarOctal(field []byte) (uint64, bool) {
 	}
 
 	return value, true
+}
+
+func tarPathEqual(prefix []byte, name []byte, target string) bool {
+	if len(prefix) == 0 {
+		return string(name) == target
+	}
+
+	return len(prefix)+1+len(name) == len(target) && string(prefix) == target[:len(prefix)] && target[len(prefix)] == '/' && string(name) == target[len(prefix)+1:]
 }
 
 func DetectText(b Buffer) *Metadata {
@@ -2342,6 +2764,24 @@ func isLikelyTextUTF8(b Buffer) bool {
 	return printable*100/limit >= 90
 }
 
+func Detect3DStudio(b Buffer) *Metadata {
+	if !b.Has(0, []byte{0x4d, 0x4d}) {
+		return nil
+	}
+
+	chunkSize, ok := b.U32LE(2)
+	if !ok || chunkSize < 12 {
+		return nil
+	}
+
+	child, ok := b.U16LE(6)
+	if !ok || child != 0x0002 && child != 0x3d3d && child != 0xb000 {
+		return nil
+	}
+
+	return &Metadata{Kind: Kind3DStudioMaxModel}
+}
+
 type tiffByteOrder uint8
 
 const (
@@ -2350,16 +2790,16 @@ const (
 )
 
 func DetectTIFFSubtypes(b Buffer) *Metadata {
+	if b.Has(0, []byte{'I', 'I', 'U', 0x00, 0x18, 0x00, 0x00, 0x00}) {
+		return &Metadata{Kind: KindTIFFImage, Type: TypePanasonicRAW}
+	}
+
 	if !isTIFFHeader(b) {
 		if b.Has(0, []byte{'I', 'I', 'R', 'O', 0x08, 0x00}) || b.Has(0, []byte{'M', 'M', 'O', 'R', 0x00, 0x00}) {
 			return &Metadata{Kind: KindTIFFImage, Type: TypeOlympusRAW}
 		}
 
 		return nil
-	}
-
-	if b.Has(0, []byte{'I', 'I', 'U', 0x00}) {
-		return &Metadata{Kind: KindTIFFImage, Type: TypePanasonicRAW}
 	}
 
 	if b.Has(0, []byte{'I', 'I', 0x2a, 0x00, 0x10, 0x00, 0x00, 0x00, 'C', 'R'}) {
@@ -2643,24 +3083,52 @@ func DetectXMLSubtypes(b Buffer) *Metadata {
 	return nil
 }
 
+const (
+	maxEOCDSize       = 22 + 65535
+	maxCentralSize    = maxScanSize * 8
+	maxSyntheticSize  = maxScanSize * 16
+	centralHeaderSize = 46
+	localHeaderSize   = 30
+)
+
 func DetectZIPContainer(b Buffer) *Metadata {
 	if b.Len() < 4 || string(b[:4]) != "PK\x03\x04" {
 		return nil
 	}
 
-	prefixEnd := min(b.Len(), maxScanSize*2)
-	suffixStart := max(prefixEnd, b.Len()-maxScanSize*8)
+	meta := detectZIPEntries(b[:min(b.Len(), maxScanSize)])
 
-	if hasZIPEntry(b[:prefixEnd], "bundleconfig.pb") || hasZIPEntry(b[suffixStart:], "bundleconfig.pb") {
-		return &Metadata{Kind: KindZIPArchive, Type: TypeAndroidAppBundle}
+	refined := detectZIPReaderAt(bytes.NewReader(b), int64(b.Len()))
+	if refined != nil {
+		return preferZIPMetadata(meta, refined)
 	}
 
-	if hasZIPEntry(b[:prefixEnd], "comicinfo.xml") || hasZIPEntry(b[suffixStart:], "comicinfo.xml") {
-		return &Metadata{Kind: KindZIPArchive, Type: TypeComicBook}
+	return meta
+}
+
+func preferZIPMetadata(current, refined *Metadata) *Metadata {
+	switch refined.Type {
+	case TypeMicrosoftWordDocument:
+		switch current.Type {
+		case TypeMicrosoftWordMacroEnabledDocument, TypeMicrosoftWordTemplate, TypeMicrosoftWordMacroEnabledTemplate:
+			return current
+		}
+	case TypeMicrosoftExcelWorkbook:
+		switch current.Type {
+		case TypeMicrosoftExcelMacroEnabledWorkbook, TypeMicrosoftExcelTemplate, TypeMicrosoftExcelMacroEnabledTemplate, TypeMicrosoftExcelAddIn:
+			return current
+		}
+	case TypeMicrosoftPowerPointPresentation:
+		switch current.Type {
+		case TypeMicrosoftPowerPointMacroEnabledPresentation, TypeMicrosoftPowerPointTemplate, TypeMicrosoftPowerPointMacroEnabledTemplate, TypeMicrosoftPowerPointSlideshow, TypeMicrosoftPowerPointMacroEnabledSlideshow, TypeMicrosoftPowerPointAddIn:
+			return current
+		}
 	}
 
-	b = b[:min(b.Len(), maxScanSize)]
+	return refined
+}
 
+func detectZIPEntries(b Buffer) *Metadata {
 	var (
 		hasManifest         bool
 		hasDex              bool
@@ -2708,7 +3176,13 @@ func DetectZIPContainer(b Buffer) *Metadata {
 		i += idx
 
 		nameLen, ok := b.U16LE(i + 26)
-		if !ok || nameLen == 0 || i+30+int(nameLen) > b.Len() {
+		extraLen, extraOK := b.U16LE(i + 28)
+		compressedSize, sizeOK := b.U32LE(i + 18)
+		flags, flagsOK := b.U16LE(i + 6)
+
+		dataStart := i + 30 + int(nameLen) + int(extraLen)
+
+		if !ok || !extraOK || !sizeOK || !flagsOK || nameLen == 0 || dataStart < i || dataStart > b.Len() {
 			i += 4
 			continue
 		}
@@ -2717,12 +3191,10 @@ func DetectZIPContainer(b Buffer) *Metadata {
 
 		if firstFile && string(name) == "mimetype" {
 			compression, _ := b.U16LE(i + 8)
-			extraLen, _ := b.U16LE(i + 28)
-			dataLen, _ := b.U32LE(i + 18)
-			dataStart := i + 30 + int(nameLen) + int(extraLen)
-			dataEnd := dataStart + int(dataLen)
 
-			if compression == 0 && dataStart >= 0 && int(dataLen) >= 0 && dataEnd >= dataStart && dataEnd <= b.Len() {
+			dataEnd := dataStart + int(compressedSize)
+
+			if compression == 0 && dataEnd >= dataStart && dataEnd <= b.Len() {
 				switch string(b[dataStart:dataEnd]) {
 				case "application/epub+zip":
 					return &Metadata{Kind: KindZIPArchive, Type: TypeEPUBDocument}
@@ -2856,7 +3328,11 @@ func DetectZIPContainer(b Buffer) *Metadata {
 			hasPowerPointVBA = true
 		}
 
-		i += 30 + int(nameLen)
+		if flags&0x08 != 0 || uint64(dataStart)+uint64(compressedSize) > uint64(b.Len()) {
+			break
+		}
+
+		i = dataStart + int(compressedSize)
 	}
 
 	limitSearch := min(b.Len(), 32768)
@@ -3031,43 +3507,139 @@ func DetectZIPContainer(b Buffer) *Metadata {
 	return &Metadata{Kind: KindZIPArchive}
 }
 
-func hasZIPEntry(b []byte, lower string) bool {
-	for offset := 0; offset+30 <= len(b); {
-		index := bytes.Index(b[offset:], []byte{'P', 'K'})
-		if index == -1 {
-			return false
-		}
-
-		offset += index
-
-		headerSize := 0
-		nameOffset := 0
-
-		if offset+30 <= len(b) && b[offset+2] == 3 && b[offset+3] == 4 {
-			headerSize = 30
-			nameOffset = 26
-		} else if offset+46 <= len(b) && b[offset+2] == 1 && b[offset+3] == 2 {
-			headerSize = 46
-			nameOffset = 28
-		} else {
-			offset += 2
-
-			continue
-		}
-
-		nameLen := int(b[offset+nameOffset]) | int(b[offset+nameOffset+1])<<8
-
-		nameStart := offset + headerSize
-		nameEnd := nameStart + nameLen
-
-		if nameEnd <= len(b) && matchASCII(b[nameStart:nameEnd], lower) {
-			return true
-		}
-
-		offset += headerSize
+func detectZIPReaderAt(r io.ReaderAt, size int64) *Metadata {
+	if size < 22 {
+		return nil
 	}
 
-	return false
+	tailSize := min(size, int64(maxEOCDSize))
+	tail := make([]byte, int(tailSize))
+
+	if !readAtExactly(r, tail, size-tailSize) {
+		return nil
+	}
+
+	eocd := -1
+	searchEnd := len(tail)
+
+	for searchEnd >= 4 {
+		candidate := bytes.LastIndex(tail[:searchEnd], []byte{'P', 'K', 5, 6})
+		if candidate < 0 {
+			break
+		}
+
+		if candidate+22 <= len(tail) {
+			commentLength, _ := Buffer(tail).U16LE(candidate + 20)
+			if candidate+22+int(commentLength) == len(tail) {
+				eocd = candidate
+
+				break
+			}
+		}
+
+		searchEnd = candidate
+	}
+
+	if eocd < 0 {
+		return nil
+	}
+
+	tailBuffer := Buffer(tail)
+	disk, _ := tailBuffer.U16LE(eocd + 4)
+	centralDisk, _ := tailBuffer.U16LE(eocd + 6)
+	entriesOnDisk, _ := tailBuffer.U16LE(eocd + 8)
+	entryCount, _ := tailBuffer.U16LE(eocd + 10)
+	centralSize, _ := tailBuffer.U32LE(eocd + 12)
+	centralOffset, _ := tailBuffer.U32LE(eocd + 16)
+	eocdOffset := size - tailSize + int64(eocd)
+
+	if disk != 0 || centralDisk != 0 || entriesOnDisk != entryCount || entryCount == 0 || entryCount == 0xffff || centralSize == 0xffffffff || centralOffset == 0xffffffff || centralSize > maxCentralSize || int64(centralOffset)+int64(centralSize) != eocdOffset {
+		return nil
+	}
+
+	central := make([]byte, int(centralSize))
+	if !readAtExactly(r, central, int64(centralOffset)) {
+		return nil
+	}
+
+	entryData := make([]byte, 0, min(maxSyntheticSize, int(centralSize)))
+
+	var (
+		offset           int
+		firstLocalOffset uint32
+		firstName        []byte
+	)
+
+	for i := 0; i < int(entryCount); i++ {
+		if offset+centralHeaderSize > len(central) || !bytes.Equal(central[offset:offset+4], []byte{'P', 'K', 1, 2}) {
+			return nil
+		}
+
+		record := Buffer(central[offset:])
+
+		nameLength, _ := record.U16LE(28)
+		extraLength, _ := record.U16LE(30)
+		commentLength, _ := record.U16LE(32)
+		localOffset, _ := record.U32LE(42)
+
+		recordSize := centralHeaderSize + int(nameLength) + int(extraLength) + int(commentLength)
+
+		if nameLength == 0 || recordSize > len(central)-offset || len(entryData)+localHeaderSize+int(nameLength) > maxSyntheticSize {
+			return nil
+		}
+
+		name := central[offset+centralHeaderSize : offset+centralHeaderSize+int(nameLength)]
+
+		if i == 0 {
+			firstLocalOffset = localOffset
+			firstName = name
+		}
+
+		start := len(entryData)
+
+		entryData = append(entryData, make([]byte, localHeaderSize)...)
+
+		entryData[start] = 'P'
+		entryData[start+1] = 'K'
+		entryData[start+2] = 3
+		entryData[start+3] = 4
+		entryData[start+26] = byte(nameLength)
+		entryData[start+27] = byte(nameLength >> 8)
+
+		entryData = append(entryData, name...)
+
+		offset += recordSize
+	}
+
+	if offset != len(central) || int64(firstLocalOffset) >= int64(centralOffset) {
+		return nil
+	}
+
+	local := make([]byte, localHeaderSize+len(firstName))
+
+	if !readAtExactly(r, local, int64(firstLocalOffset)) || !bytes.Equal(local[:4], []byte{'P', 'K', 3, 4}) {
+		return nil
+	}
+
+	localBuffer := Buffer(local)
+
+	localNameLength, _ := localBuffer.U16LE(26)
+
+	if int(localNameLength) != len(firstName) || !bytes.Equal(local[localHeaderSize:localHeaderSize+len(firstName)], firstName) {
+		return nil
+	}
+
+	meta := detectZIPEntries(Buffer(entryData))
+	if meta.Kind == KindZIPArchive && meta.Type == TypeNone {
+		return nil
+	}
+
+	return meta
+}
+
+func readAtExactly(r io.ReaderAt, data []byte, offset int64) bool {
+	n, err := r.ReadAt(data, offset)
+	return n == len(data) && (err == nil || err == io.EOF)
 }
 
 func matchASCII(b []byte, lower string) bool {

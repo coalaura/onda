@@ -5,7 +5,6 @@ import "github.com/coalaura/wtf/types"
 func init() {
 	types.RegisterSignature(types.KindAntennaData, types.TypeNone, 0, []byte("REVNUM:,"))
 	types.RegisterSignature(types.KindAOLData, types.TypeNone, 0, []byte("AOL Feed"))
-	types.RegisterSignature(types.KindAOLData, types.TypeNone, 0, []byte("AOL"))
 	types.RegisterSignature(types.KindAOLData, types.TypeNone, 0, []byte("AOLDB"))
 	types.RegisterSignature(types.KindAOLData, types.TypeNone, 0, []byte("AOLIDX"))
 	types.RegisterSignature(types.KindAOLData, types.TypeNone, 0, []byte("AOLINDEX"))
@@ -30,6 +29,7 @@ func init() {
 	types.RegisterSignature(types.KindBUFR, types.TypeNone, 0, []byte("BUFR"))
 	types.RegisterSignature(types.KindClamAVDatabase, types.TypeNone, 0, []byte("ClamAV-VDB:"))
 	types.RegisterSignature(types.KindDB2Conversion, types.TypeNone, 0, []byte("SQLOCONV"))
+	types.RegisterSignature(types.KindDuckDBDatabase, types.TypeNone, 8, []byte("DUCK"))
 	types.RegisterSignature(types.KindENVIRemoteSensingHeader, types.TypeNone, 0, []byte("ENVI"))
 	types.RegisterSignature(types.KindEuropeanDataFormat, types.TypeNone, 0, []byte("0       "))
 	types.RegisterSignature(types.KindFeatherData, types.TypeNone, 0, []byte("FEA1"))
@@ -48,6 +48,7 @@ func init() {
 	types.RegisterSignature(types.KindGDBMDatabase, types.TypeNone, 0, []byte{0xce, 0x9a, 0x57, 0x13})
 	types.RegisterSignature(types.KindGDBMDatabase, types.TypeNone, 0, []byte{0xcf, 0x9a, 0x57, 0x13})
 	types.RegisterSignature(types.KindGDSIIICLayout, types.TypeNone, 0, []byte{0x00, 0x06, 0x00, 0x02})
+	types.RegisterSignature(types.KindGGUFModel, types.TypeNone, 0, []byte("GGUF"))
 	types.RegisterSignature(types.KindGHCiInterface, types.Type32Bit, 0, []byte{0x1d, 0xfa, 0xce, 0x10})
 	types.RegisterSignature(types.KindGHCiInterface, types.Type64Bit, 0, []byte{0x1d, 0xfa, 0xce, 0x14})
 	types.RegisterSignature(types.KindGitBundle, types.TypeNone, 0, []byte("# v2 git bundle\n"))
@@ -121,4 +122,6 @@ func init() {
 	types.RegisterSignature(types.KindXilinxBitstream, types.TypeNone, 0, []byte{0x00, 0x09, 0x0f, 0xf0, 0x0f, 0xf0, 0x0f, 0xf0, 0x0f, 0xf0, 0x00, 0x00, 0x01, 0x61})
 
 	types.RegisterMaskedSignature(types.KindSQLiteDatabase, types.TypeMBTiles, 0, []byte("SQLite format 3\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00MBTI"), []byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
+
+	types.RegisterWeakSignature(types.KindAOLData, types.TypeNone, 0, []byte("AOL"))
 }

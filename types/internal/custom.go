@@ -6,8 +6,8 @@ import (
 )
 
 func init() {
+	types.Register(types.DetectFunc(custom.Detect3DStudio))
 	types.Register(types.DetectFunc(custom.DetectAC3))
-	types.Register(types.DetectFunc(custom.DetectAppleDiskImage))
 	types.Register(types.DetectFunc(custom.DetectEBML))
 	types.Register(types.DetectFunc(custom.DetectELF))
 	types.Register(types.DetectFunc(custom.DetectExt))
@@ -20,6 +20,7 @@ func init() {
 	types.Register(types.DetectFunc(custom.DetectPE))
 	types.Register(types.DetectFunc(custom.DetectPKCS12))
 	types.Register(types.DetectFunc(custom.DetectPYC))
+	types.Register(types.DetectFunc(custom.DetectQNX4))
 	types.Register(types.DetectFunc(custom.DetectSQLiteSHM))
 	types.Register(types.DetectFunc(custom.DetectTar))
 	types.Register(types.DetectFunc(custom.DetectTIFFSubtypes))

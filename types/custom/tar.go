@@ -24,25 +24,33 @@ func DetectTar(b types.Buffer) *types.Metadata {
 			nameEnd = 100
 		}
 
+		prefixEnd := bytes.IndexByte(header[345:500], 0)
+		if prefixEnd == -1 {
+			prefixEnd = 155
+		}
+
 		if nameEnd > 0 {
-			switch string(header[:nameEnd]) {
-			case "package/package.json", "package.json":
+			name := header[:nameEnd]
+			prefix := header[345 : 345+prefixEnd]
+
+			switch {
+			case tarPathEqual(prefix, name, "package/package.json"), tarPathEqual(prefix, name, "package.json"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeNpmPackage}
-			case "oci-layout", "index.json", "manifest.json":
+			case tarPathEqual(prefix, name, "oci-layout"), tarPathEqual(prefix, name, "index.json"), tarPathEqual(prefix, name, "manifest.json"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeOCIImageLayout}
-			case "PKG-INFO", "setup.py", "pyproject.toml":
+			case tarPathEqual(prefix, name, "PKG-INFO"), tarPathEqual(prefix, name, "setup.py"), tarPathEqual(prefix, name, "pyproject.toml"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypePythonSourceDistribution}
-			case "info/index.json":
+			case tarPathEqual(prefix, name, "info/index.json"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeCondaPackage}
-			case ".PKGINFO":
+			case tarPathEqual(prefix, name, ".PKGINFO"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeArchLinuxPackage}
-			case "Vagrantfile":
+			case tarPathEqual(prefix, name, "Vagrantfile"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeVagrantBox}
-			case "install/doinst.sh":
+			case tarPathEqual(prefix, name, "install/doinst.sh"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeSlackwarePackage}
-			case "ComicInfo.xml", "comicinfo.xml":
+			case tarPathEqual(prefix, name, "ComicInfo.xml"), tarPathEqual(prefix, name, "comicinfo.xml"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeComicBook}
-			case "metadata", "deploy":
+			case tarPathEqual(prefix, name, "metadata"), tarPathEqual(prefix, name, "deploy"):
 				return &types.Metadata{Kind: types.KindTARArchive, Type: types.TypeFlatpak}
 			}
 		}
@@ -73,20 +81,40 @@ func validTarChecksum(header []byte) bool {
 		return false
 	}
 
-	var sum uint64
+	var unsignedSum uint64
+	var signedSum int64
 
 	for i, value := range header {
 		if i >= 148 && i < 156 {
 			value = ' '
 		}
 
-		sum += uint64(value)
+		unsignedSum += uint64(value)
+		signedSum += int64(int8(value))
 	}
 
-	return sum == stored
+	return unsignedSum == stored || signedSum >= 0 && uint64(signedSum) == stored
 }
 
 func parseTarOctal(field []byte) (uint64, bool) {
+	if len(field) > 0 && field[0]&0x80 != 0 {
+		if field[0]&0x40 != 0 {
+			return 0, false
+		}
+
+		value := uint64(field[0] & 0x3f)
+
+		for _, part := range field[1:] {
+			if value > (^uint64(0)-uint64(part))/256 {
+				return 0, false
+			}
+
+			value = value*256 + uint64(part)
+		}
+
+		return value, true
+	}
+
 	field = bytes.Trim(field, " \x00")
 	if len(field) == 0 {
 		return 0, false
@@ -103,4 +131,12 @@ func parseTarOctal(field []byte) (uint64, bool) {
 	}
 
 	return value, true
+}
+
+func tarPathEqual(prefix []byte, name []byte, target string) bool {
+	if len(prefix) == 0 {
+		return string(name) == target
+	}
+
+	return len(prefix)+1+len(name) == len(target) && string(prefix) == target[:len(prefix)] && target[len(prefix)] == '/' && string(name) == target[len(prefix)+1:]
 }

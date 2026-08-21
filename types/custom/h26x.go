@@ -23,7 +23,7 @@ func DetectH26x(b types.Buffer) *types.Metadata {
 
 	if nalOffset+1 < b.Len() {
 		h265Type := (nalHeader >> 1) & 0x3F
-		temporalIdPlus1 := (b[nalOffset+1] >> 3) & 0x07
+		temporalIdPlus1 := b[nalOffset+1] & 0x07
 
 		if temporalIdPlus1 >= 1 {
 			switch h265Type {

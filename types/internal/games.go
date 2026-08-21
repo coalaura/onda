@@ -17,8 +17,6 @@ func init() {
 	types.RegisterSignature(types.KindBethesdaPlugin, types.TypeNone, 0, []byte("TES4"))
 	types.RegisterSignature(types.KindBlizzardM2Model, types.TypeNone, 0, []byte("MD20"))
 	types.RegisterSignature(types.KindCloneCDControl, types.TypeNone, 0, []byte("[CloneCD]"))
-	types.RegisterSignature(types.KindCommodore64DiskImage, types.TypeCommodore64, 0, []byte{0x01, 0x08})
-	types.RegisterSignature(types.KindCommodore64Program, types.TypeCommodore64, 0, []byte{0x00, 0xc0})
 	types.RegisterSignature(types.KindCommodore64TapeImage, types.TypeNone, 0, []byte("C64 tape image file"))
 	types.RegisterSignature(types.KindCommodore64TapeRAWImage, types.TypeNone, 0, []byte("C64-TAPE-RAW"))
 	types.RegisterSignature(types.KindCompressedSquareWave, types.TypeNone, 0, []byte("Compressed Square Wave"))
@@ -104,4 +102,7 @@ func init() {
 	types.RegisterSignature(types.KindXboxExecutable, types.TypeNone, 0, []byte("XBEH"))
 
 	types.RegisterMaskedSignature(types.KindGameMakerData, types.TypeNone, 0, []byte("FORM\x00\x00\x00\x00GEN8"), []byte{0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff})
+
+	types.RegisterWeakSignature(types.KindCommodore64Program, types.TypeCommodore64, 0, []byte{0x00, 0xc0})
+	types.RegisterWeakSignature(types.KindCommodore64Program, types.TypeCommodore64, 0, []byte{0x01, 0x08})
 }

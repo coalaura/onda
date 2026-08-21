@@ -1,5 +1,6 @@
 package types
 
+// KindID values are generated in alphabetical order and are not stable across releases.
 type KindID uint16
 
 const (
@@ -90,7 +91,6 @@ const (
 	KindAutoCADDXFDrawing
 	KindAutodesk123DDesign
 	KindAutodeskAliasStudio
-	KindAutodeskInventor
 	KindAV1Video
 	KindAVG6IntegrityDatabase
 	KindAvidDNxHD
@@ -128,7 +128,6 @@ const (
 	KindBPGImage
 	KindBroadbandEBookDocument
 	KindBrotherEmbroidery
-	KindBrotliData
 	KindBtrfsFilesystem
 	KindBUFR
 	KindBzip2Archive
@@ -151,7 +150,6 @@ const (
 	KindCloneCDControl
 	KindCLOOPImage
 	KindColladaModel
-	KindCommodore64DiskImage
 	KindCommodore64Program
 	KindCommodore64TapeImage
 	KindCommodore64TapeRAWImage
@@ -198,6 +196,7 @@ const (
 	KindDSTCompression
 	KindDTSAudio
 	KindDTSHDAudio
+	KindDuckDBDatabase
 	KindDVRMSVideo
 	KindEasyStreetDrawDrawing
 	KindEBMLContainer
@@ -215,6 +214,7 @@ const (
 	KindENVIRemoteSensingHeader
 	KindEOTFont
 	KindErlangBEAMBytecode
+	KindEROFSFilesystem
 	KindESRIShapefile
 	KindEuropeanDataFormat
 	KindEVRCAudio
@@ -265,6 +265,7 @@ const (
 	KindGenetecVideo
 	KindGeographyMarkupLanguage
 	KindGerberFormat
+	KindGGUFModel
 	KindGHCiInterface
 	KindGIFImage
 	KindGIMPBrush
@@ -366,6 +367,7 @@ const (
 	KindLidarData
 	KindLightWaveScene
 	KindLinuxKernelImage
+	KindLinuxPerfData
 	KindLinuxSwapSpace
 	KindLLVMBitcode
 	KindLogicalFileEvidence
@@ -446,6 +448,7 @@ const (
 	KindMinecraftLevel
 	KindMinixFilesystem
 	KindMinoltaRAWImage
+	KindMLIRBytecode
 	KindMNGImage
 	KindMOBIDocument
 	KindMoneroWallet
@@ -963,7 +966,6 @@ var kindNames = [...]string{
 	KindAutoCADDXFDrawing:                   "AutoCAD DXF Drawing",
 	KindAutodesk123DDesign:                  "Autodesk 123D Design",
 	KindAutodeskAliasStudio:                 "Autodesk AliasStudio",
-	KindAutodeskInventor:                    "Autodesk Inventor",
 	KindAV1Video:                            "AV1 Video",
 	KindAVG6IntegrityDatabase:               "AVG6 Integrity Database",
 	KindAvidDNxHD:                           "Avid DNxHD Video",
@@ -1001,7 +1003,6 @@ var kindNames = [...]string{
 	KindBPGImage:                            "BPG Image",
 	KindBroadbandEBookDocument:              "Broadband eBook Document",
 	KindBrotherEmbroidery:                   "Brother Embroidery",
-	KindBrotliData:                          "Brotli Data",
 	KindBtrfsFilesystem:                     "Btrfs Filesystem",
 	KindBUFR:                                "BUFR Data",
 	KindBzip2Archive:                        "Bzip2 Archive",
@@ -1024,7 +1025,6 @@ var kindNames = [...]string{
 	KindCloneCDControl:                      "CloneCD Control",
 	KindCLOOPImage:                          "CLOOP Image",
 	KindColladaModel:                        "COLLADA Model",
-	KindCommodore64DiskImage:                "Commodore 64 Disk Image",
 	KindCommodore64Program:                  "Commodore 64 Program",
 	KindCommodore64TapeImage:                "Commodore 64 Tape Image",
 	KindCommodore64TapeRAWImage:             "Commodore 64 Tape RAW Image",
@@ -1071,6 +1071,7 @@ var kindNames = [...]string{
 	KindDSTCompression:                      "DST Compression",
 	KindDTSAudio:                            "DTS Audio",
 	KindDTSHDAudio:                          "DTS-HD Audio",
+	KindDuckDBDatabase:                      "DuckDB Database",
 	KindDVRMSVideo:                          "DVR-MS Video",
 	KindEasyStreetDrawDrawing:               "Easy Street Draw Drawing",
 	KindEBMLContainer:                       "EBML Container",
@@ -1088,6 +1089,7 @@ var kindNames = [...]string{
 	KindENVIRemoteSensingHeader:             "ENVI Remote Sensing Header",
 	KindEOTFont:                             "EOT Font",
 	KindErlangBEAMBytecode:                  "Erlang BEAM Bytecode",
+	KindEROFSFilesystem:                     "EROFS Filesystem",
 	KindESRIShapefile:                       "ESRI Shapefile",
 	KindEuropeanDataFormat:                  "European Data Format",
 	KindEVRCAudio:                           "EVRC Audio",
@@ -1138,6 +1140,7 @@ var kindNames = [...]string{
 	KindGenetecVideo:                        "Genetec Video",
 	KindGeographyMarkupLanguage:             "Geography Markup Language",
 	KindGerberFormat:                        "Gerber Format",
+	KindGGUFModel:                           "GGUF Model",
 	KindGHCiInterface:                       "GHCi Interface",
 	KindGIFImage:                            "GIF Image",
 	KindGIMPBrush:                           "GIMP Brush",
@@ -1239,6 +1242,7 @@ var kindNames = [...]string{
 	KindLidarData:                           "LiDAR Data",
 	KindLightWaveScene:                      "LightWave Scene",
 	KindLinuxKernelImage:                    "Linux Kernel Image",
+	KindLinuxPerfData:                       "Linux perf.data",
 	KindLinuxSwapSpace:                      "Linux Swap Space",
 	KindLLVMBitcode:                         "LLVM Bitcode",
 	KindLogicalFileEvidence:                 "Logical File Evidence",
@@ -1319,6 +1323,7 @@ var kindNames = [...]string{
 	KindMinecraftLevel:                      "Minecraft Level",
 	KindMinixFilesystem:                     "Minix Filesystem",
 	KindMinoltaRAWImage:                     "Minolta RAW Image",
+	KindMLIRBytecode:                        "MLIR Bytecode",
 	KindMNGImage:                            "MNG Image",
 	KindMOBIDocument:                        "MOBI Document",
 	KindMoneroWallet:                        "Monero Wallet",

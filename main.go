@@ -162,7 +162,7 @@ func processFile(path string, porcelain bool, timing bool, deepAnalysis bool) {
 	d0 := time.Since(t0)
 	t1 := time.Now()
 
-	meta, err = types.Detect(name, buf[:n])
+	meta, err = types.DetectReaderAt(name, buf[:n], file, info.Size())
 	if err != nil && !errors.Is(err, types.ErrUnknownFormat) {
 		if porcelain {
 			log.Println("Unknown\t")
@@ -173,33 +173,15 @@ func processFile(path string, porcelain bool, timing bool, deepAnalysis bool) {
 		os.Exit(1)
 	}
 
-	if errors.Is(err, types.ErrUnknownFormat) && info.Size() > int64(n) && info.Size() >= 512 {
-		tail := make([]byte, 512)
-
-		_, tailErr := file.ReadAt(tail, info.Size()-int64(len(tail)))
-		if tailErr != nil {
-			log.Errorln(tailErr)
-
-			os.Exit(1)
-		}
-
-		tailMeta := types.DetectAppleDiskImage(types.Buffer(tail))
-		if tailMeta != nil {
-			tailMeta.File = name
-			meta = tailMeta
-			err = nil
-		}
-	}
-
-	d1 := time.Since(t1)
-
-	if deepAnalysis || errors.Is(err, types.ErrUnknownFormat) {
+	if deepAnalysis && errors.Is(err, types.ErrUnknownFormat) {
 		deep := types.DetectDeepAnalysis(types.Buffer(buf[:n]))
 		if deep != nil {
 			deep.File = name
 			meta = deep
 		}
 	}
+
+	d1 := time.Since(t1)
 
 	if meta == nil {
 		if porcelain {

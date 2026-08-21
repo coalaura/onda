@@ -5,7 +5,6 @@ import "github.com/coalaura/wtf/types"
 func init() {
 	types.RegisterSignature(types.KindAdobeFontMetrics, types.TypeNone, 0, []byte("StartFontMetrics"))
 	types.RegisterSignature(types.KindBMFont, types.TypeNone, 0, []byte("BMF\x03"))
-	types.RegisterSignature(types.KindEOTFont, types.TypeNone, 34, []byte("LP"))
 	types.RegisterSignature(types.KindGlyphBitmapDistributionFormat, types.TypeNone, 0, []byte("STARTFONT "))
 	types.RegisterSignature(types.KindOpenTypeFont, types.TypeNone, 0, []byte("OTTO"))
 	types.RegisterSignature(types.KindPCFFont, types.TypeNone, 0, []byte("\x01fcp"))
@@ -18,4 +17,6 @@ func init() {
 	types.RegisterSignature(types.KindTrueTypeFont, types.TypeNone, 0, []byte{0x00, 0x01, 0x00, 0x00})
 	types.RegisterSignature(types.KindWOFF2Font, types.TypeNone, 0, []byte("wOF2"))
 	types.RegisterSignature(types.KindWOFFFont, types.TypeNone, 0, []byte("wOFF"))
+
+	types.RegisterWeakSignature(types.KindEOTFont, types.TypeNone, 34, []byte("LP"))
 }

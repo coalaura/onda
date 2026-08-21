@@ -12,12 +12,6 @@ func init() {
 	types.RegisterSignature(types.KindAmigaDiskMasherArchive, types.TypeNone, 0, []byte("DMS!"))
 	types.RegisterSignature(types.KindAppleArchive, types.TypeNone, 0, []byte("AA01"))
 	types.RegisterSignature(types.KindARArchive, types.TypeNone, 0, []byte("!<arch>\n"))
-	types.RegisterSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x02})
-	types.RegisterSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x03})
-	types.RegisterSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x04})
-	types.RegisterSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x08})
-	types.RegisterSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x09})
-	types.RegisterSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x0b})
 	types.RegisterSignature(types.KindARJArchive, types.TypeNone, 0, []byte{0x60, 0xea})
 	types.RegisterSignature(types.KindB1Archive, types.TypeNone, 0, []byte("B1\x0a"))
 	types.RegisterSignature(types.KindBethesdaArchive, types.TypeNone, 0, []byte("BSA\x00"))
@@ -143,5 +137,10 @@ func init() {
 
 	types.RegisterMaskedSignature(types.KindGzipData, types.TypeBGZF, 0, []byte{0x1f, 0x8b, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'B', 'C', 0x02, 0x00}, []byte{0xff, 0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff})
 
-	types.RegisterWeakMaskedSignature(types.KindBrotliData, types.TypeNone, 0, []byte{0x00, 0x00, 0x00, 0x00}, []byte{0x0f, 0xff, 0xff, 0xff})
+	types.RegisterWeakSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x02})
+	types.RegisterWeakSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x03})
+	types.RegisterWeakSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x04})
+	types.RegisterWeakSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x08})
+	types.RegisterWeakSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x09})
+	types.RegisterWeakSignature(types.KindARCArchive, types.TypeNone, 0, []byte{0x1a, 0x0b})
 }

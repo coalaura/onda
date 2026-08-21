@@ -1,5 +1,6 @@
 package types
 
+// TypeID values are generated in alphabetical order and are not stable across releases.
 type TypeID uint16
 
 const (
@@ -24,6 +25,7 @@ const (
 	TypeAndroidPackageX
 	TypeAndroidSplitAPKSet
 	TypeAndroidSystemPackage
+	TypeAndroidVendorBoot
 	TypeAngularComponent
 	TypeApacheLog
 	TypeAPPXPackage
@@ -375,6 +377,7 @@ var typeNames = [...]string{
 	TypeAndroidPackageX:                    "XAPK Package",
 	TypeAndroidSplitAPKSet:                 "APKS Package",
 	TypeAndroidSystemPackage:               "Android System Package",
+	TypeAndroidVendorBoot:                  "Android Vendor Boot Image",
 	TypeAngularComponent:                   "Angular Component",
 	TypeApacheLog:                          "Apache Log",
 	TypeAPPXPackage:                        "APPX Package",

@@ -7,6 +7,10 @@ func DetectPE(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
+	if !isValidDOSHeader(b) {
+		return nil
+	}
+
 	peOff, ok := b.U32LE(0x3c)
 	if !ok {
 		return &types.Metadata{Kind: types.KindDOSExecutable}
@@ -55,6 +59,30 @@ func DetectPE(b types.Buffer) *types.Metadata {
 	}
 
 	return &types.Metadata{Kind: types.KindDOSExecutable}
+}
+
+func isValidDOSHeader(b types.Buffer) bool {
+	if b.Len() < 28 {
+		return false
+	}
+
+	lastPage, ok := b.U16LE(2)
+	if !ok || lastPage > 512 {
+		return false
+	}
+
+	pages, ok := b.U16LE(4)
+	if !ok || pages == 0 {
+		return false
+	}
+
+	headerParagraphs, ok := b.U16LE(8)
+	if !ok || headerParagraphs < 2 {
+		return false
+	}
+
+	relocationOffset, ok := b.U16LE(24)
+	return ok && relocationOffset >= 0x1c
 }
 
 func pe32MachineType(machine uint16) types.TypeID {

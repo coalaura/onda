@@ -44,8 +44,10 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 	}
 
 	if boxEnd > uint64(b.Len()) {
-		boxEnd = uint64(b.Len())
+		return nil
 	}
+
+	boxEnd = min(boxEnd, uint64(maxScanSize))
 
 	if !hasISOBrand(b, brandOffset, compatibleOffset, int(boxEnd), "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "mjp2", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw", "MSNV") {
 		return nil

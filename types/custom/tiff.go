@@ -14,16 +14,16 @@ const (
 )
 
 func DetectTIFFSubtypes(b types.Buffer) *types.Metadata {
+	if b.Has(0, []byte{'I', 'I', 'U', 0x00, 0x18, 0x00, 0x00, 0x00}) {
+		return &types.Metadata{Kind: types.KindTIFFImage, Type: types.TypePanasonicRAW}
+	}
+
 	if !isTIFFHeader(b) {
 		if b.Has(0, []byte{'I', 'I', 'R', 'O', 0x08, 0x00}) || b.Has(0, []byte{'M', 'M', 'O', 'R', 0x00, 0x00}) {
 			return &types.Metadata{Kind: types.KindTIFFImage, Type: types.TypeOlympusRAW}
 		}
 
 		return nil
-	}
-
-	if b.Has(0, []byte{'I', 'I', 'U', 0x00}) {
-		return &types.Metadata{Kind: types.KindTIFFImage, Type: types.TypePanasonicRAW}
 	}
 
 	if b.Has(0, []byte{'I', 'I', 0x2a, 0x00, 0x10, 0x00, 0x00, 0x00, 'C', 'R'}) {

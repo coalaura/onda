@@ -7,7 +7,14 @@ func DetectAppleDiskImage(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
-	if b.Has(b.Len()-512, []byte("koly")) {
+	offset := b.Len() - 512
+
+	version, versionOK := b.U32BE(offset + 4)
+	headerSize, sizeOK := b.U32BE(offset + 8)
+	segmentNumber, segmentOK := b.U32BE(offset + 56)
+	segmentCount, countOK := b.U32BE(offset + 60)
+
+	if b.Has(offset, []byte("koly")) && versionOK && version == 4 && sizeOK && headerSize == 512 && segmentOK && segmentNumber > 0 && countOK && segmentCount > 0 && segmentNumber <= segmentCount {
 		return &types.Metadata{
 			Kind: types.KindAppleDiskImage,
 		}

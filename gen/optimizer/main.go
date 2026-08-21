@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"go/format"
 	"go/parser"
+	"go/scanner"
 	"go/token"
 	"os"
 	"path/filepath"
@@ -42,6 +43,12 @@ type Generator struct {
 	Custom     []string
 	Weak       []string
 	Fallback   []string
+}
+
+type ScannedToken struct {
+	Offset int
+	Token  token.Token
+	Text   string
 }
 
 func main() {
@@ -226,10 +233,21 @@ func checkDuplicateSignatures(strongSigs, weakSigs []Sig) {
 
 	check := func(sigs []Sig, category string) {
 		for _, sig := range sigs {
+			mask := sig.Mask
+			if len(mask) == 0 {
+				mask = bytes.Repeat([]byte{0xff}, len(sig.Magic))
+			}
+
+			magic := make([]byte, len(sig.Magic))
+
+			for i := range sig.Magic {
+				magic[i] = sig.Magic[i] & mask[i]
+			}
+
 			key := SignatureKey{
 				Offset: sig.Offset,
-				Magic:  string(sig.Magic),
-				Mask:   string(sig.Mask),
+				Magic:  string(magic),
+				Mask:   string(mask),
 			}
 
 			if prev, exists := seen[key]; exists {
@@ -475,7 +493,11 @@ func mergeCustomDetectors(dir string, outPath string) {
 		for _, imp := range node.Imports {
 			p := imp.Path.Value
 			if p != `"github.com/coalaura/wtf/types"` && p != `"github.com/coalaura/wtf/types/internal/custom"` {
-				importSet[p] = true
+				var buf bytes.Buffer
+
+				format.Node(&buf, fset, imp)
+
+				importSet[buf.String()] = true
 			}
 		}
 
@@ -529,12 +551,8 @@ func mergeCustomDetectors(dir string, outPath string) {
 		out.WriteString(")\n\n")
 	}
 
-	reTypes := regexp.MustCompile(`\btypes\.([A-Z]\w*)`)
-	reCustom := regexp.MustCompile(`\bcustom\.([A-Z]\w*)`)
-
 	for _, d := range decls {
-		d = reTypes.ReplaceAllString(d, "$1")
-		d = reCustom.ReplaceAllString(d, "$1")
+		d = stripPackageSelectors(d)
 
 		out.WriteString(d)
 		out.WriteString("\n\n")
@@ -552,6 +570,53 @@ func mergeCustomDetectors(dir string, outPath string) {
 
 		os.Exit(1)
 	}
+}
+
+func stripPackageSelectors(source string) string {
+	fset := token.NewFileSet()
+
+	file := fset.AddFile("", -1, len(source))
+
+	var scan scanner.Scanner
+
+	scan.Init(file, []byte(source), nil, scanner.ScanComments)
+
+	var tokens []ScannedToken
+
+	for {
+		position, tok, text := scan.Scan()
+		if tok == token.EOF {
+			break
+		}
+
+		tokens = append(tokens, ScannedToken{Offset: file.Offset(position), Token: tok, Text: text})
+	}
+
+	remove := make(map[int]int)
+
+	for i := 0; i+2 < len(tokens); i++ {
+		current := tokens[i]
+		if current.Token != token.IDENT || current.Text != "types" && current.Text != "custom" || tokens[i+1].Token != token.PERIOD || tokens[i+2].Token != token.IDENT || tokens[i+2].Text[0] < 'A' || tokens[i+2].Text[0] > 'Z' {
+			continue
+		}
+
+		remove[current.Offset] = tokens[i+1].Offset + 1
+	}
+
+	var out strings.Builder
+
+	for offset := 0; offset < len(source); {
+		if end, ok := remove[offset]; ok {
+			offset = end
+			continue
+		}
+
+		out.WriteByte(source[offset])
+
+		offset++
+	}
+
+	return out.String()
 }
 
 func generateFormatList(gen *Generator, outPath string) {
@@ -680,6 +745,8 @@ func extractTypesFromCustom(dir string) map[string][]string {
 
 	kindRe := regexp.MustCompile(`Kind:\s*types\.(Kind\w+)`)
 	typeRe := regexp.MustCompile(`Type:\s*types\.(Type\w+)`)
+	dynamicTypeRe := regexp.MustCompile(`Type:\s*[a-z]\w*`)
+	typeIDRe := regexp.MustCompile(`types\.(Type\w+)`)
 
 	for _, entry := range files {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".go") {
@@ -692,6 +759,8 @@ func extractTypesFromCustom(dir string) map[string][]string {
 		if err != nil {
 			continue
 		}
+
+		dynamicKinds := make(map[string]bool)
 
 		var i int
 
@@ -728,6 +797,17 @@ func extractTypesFromCustom(dir string) map[string][]string {
 				typ := string(typeMatch[1])
 
 				result[kind] = append(result[kind], typ)
+			} else if len(kindMatch) > 1 && dynamicTypeRe.Match(block) {
+				dynamicKinds[string(kindMatch[1])] = true
+			}
+		}
+
+		for kind := range dynamicKinds {
+			for _, match := range typeIDRe.FindAllSubmatch(content, -1) {
+				typ := string(match[1])
+				if typ != "TypeID" && typ != "TypeNone" {
+					result[kind] = append(result[kind], typ)
+				}
 			}
 		}
 	}

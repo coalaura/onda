@@ -144,7 +144,6 @@ func init() {
 	types.RegisterSignature(types.KindWord20Document, types.TypeNone, 0, []byte{0xdb, 0xa5, 0x2d, 0x00})
 	types.RegisterSignature(types.KindWordPerfectDictionary, types.TypeNone, 0, []byte("CBFILE"))
 	types.RegisterSignature(types.KindWordPerfectTextDocument, types.TypeNone, 0, []byte{0x81, 0xcd, 0xab})
-	types.RegisterSignature(types.KindWordStarDocument, types.TypeNone, 0, []byte{0x1d, 0x7d})
 	types.RegisterSignature(types.KindWordStarWindows, types.TypeNone, 0, []byte("WS2000"))
 	types.RegisterSignature(types.KindYamahaSMAF, types.TypeNone, 0, []byte("MMMD\x00\x00"))
 
@@ -159,4 +158,5 @@ func init() {
 	types.RegisterWeakSignature(types.KindMapInfoMIF, types.TypeNone, 0, []byte("Version "))
 	types.RegisterWeakSignature(types.KindMBOXEmailFolder, types.TypeNone, 0, []byte("From "))
 	types.RegisterWeakSignature(types.KindWindowsApplicationLog, types.TypeNone, 0, []byte("{\r\no "))
+	types.RegisterWeakSignature(types.KindWordStarDocument, types.TypeNone, 0, []byte{0x1d, 0x7d})
 }

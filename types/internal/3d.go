@@ -3,10 +3,8 @@ package internal
 import "github.com/coalaura/wtf/types"
 
 func init() {
-	types.RegisterSignature(types.Kind3DStudioMaxModel, types.TypeNone, 0, []byte{0x4d, 0x4d})
 	types.RegisterSignature(types.KindAutodesk123DDesign, types.TypeNone, 0, []byte("123D\x00"))
 	types.RegisterSignature(types.KindAutodeskAliasStudio, types.TypeNone, 0, []byte("AliasStudio"))
-	types.RegisterSignature(types.KindAutodeskInventor, types.TypeNone, 0, []byte{0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1})
 	types.RegisterSignature(types.KindBlenderCache, types.TypeNone, 0, []byte("BPHYSICS"))
 	types.RegisterSignature(types.KindHalfLifeModel, types.TypeHalfLife1, 0, []byte("IDST\x0a\x00\x00\x00"))
 	types.RegisterSignature(types.KindHalfLifeModel, types.TypeHalfLife2, 0, []byte("IDST\x2c\x00\x00\x00"))

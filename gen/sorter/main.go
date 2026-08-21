@@ -492,6 +492,7 @@ func sortIDs(kindPath, typePath string) int {
 	var kindBuf bytes.Buffer
 
 	kindBuf.WriteString("package types\n\n")
+	kindBuf.WriteString("// KindID values are generated in alphabetical order and are not stable across releases.\n")
 	kindBuf.WriteString("type KindID uint16\n\n")
 	kindBuf.WriteString("const (\n")
 
@@ -542,6 +543,7 @@ func sortIDs(kindPath, typePath string) int {
 	var typeBuf bytes.Buffer
 
 	typeBuf.WriteString("package types\n\n")
+	typeBuf.WriteString("// TypeID values are generated in alphabetical order and are not stable across releases.\n")
 	typeBuf.WriteString("type TypeID uint16\n\n")
 	typeBuf.WriteString("const (\n")
 
