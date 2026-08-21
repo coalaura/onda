@@ -652,6 +652,7 @@ func processFormatFile(path string) {
 		sigs           []ast.Stmt
 		maskedSigs     []ast.Stmt
 		weakSigs       []ast.Stmt
+		weakMaskedSigs []ast.Stmt
 		customSigs     []ast.Stmt
 		weakSigsCustom []ast.Stmt
 		fallbackSigs   []ast.Stmt
@@ -687,6 +688,8 @@ func processFormatFile(path string) {
 			maskedSigs = append(maskedSigs, stmt)
 		case "RegisterWeakSignature":
 			weakSigs = append(weakSigs, stmt)
+		case "RegisterWeakMaskedSignature":
+			weakMaskedSigs = append(weakMaskedSigs, stmt)
 		case "Register":
 			customSigs = append(customSigs, stmt)
 		case "RegisterWeak":
@@ -709,6 +712,7 @@ func processFormatFile(path string) {
 	sortStmts(sigs)
 	sortStmts(maskedSigs)
 	sortStmts(weakSigs)
+	sortStmts(weakMaskedSigs)
 	sortStmts(customSigs)
 	sortStmts(weakSigsCustom)
 	sortStmts(fallbackSigs)
@@ -728,7 +732,8 @@ func processFormatFile(path string) {
 
 	bodyBuf.WriteString("{\n")
 
-	groups := [][]ast.Stmt{sigs, maskedSigs, weakSigs, customSigs, weakSigsCustom, fallbackSigs, otherSigs}
+	groups := [][]ast.Stmt{sigs, maskedSigs, weakSigs, weakMaskedSigs, customSigs, weakSigsCustom, fallbackSigs, otherSigs}
+
 	firstGroup := true
 
 	for _, group := range groups {
@@ -741,7 +746,9 @@ func processFormatFile(path string) {
 		}
 
 		for _, s := range group {
-			bodyBuf.WriteString("\t" + stmtToString(fset, s) + "\n")
+			bodyBuf.WriteByte('\t')
+			bodyBuf.WriteString(stmtToString(fset, s))
+			bodyBuf.WriteByte('\n')
 		}
 
 		firstGroup = false

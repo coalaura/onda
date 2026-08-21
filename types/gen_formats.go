@@ -5,7 +5,7 @@ var subtypeMap = map[KindID][]TypeID{
 	KindAACAudio:                 {TypeAudioDataTransportStream},
 	KindAcronisTrueImage:         {TypeVersionB4, TypeVersionCE},
 	KindAtariDiskImage:           {TypeAtari800},
-	KindBerkeleyDatabase:         {TypeLittleEndian},
+	KindBerkeleyDatabase:         {TypeBigEndian, TypeLittleEndian},
 	KindBethesdaArchive:          {TypeVersion2},
 	KindBrotherEmbroidery:        {TypePEC, TypePES},
 	KindCPIOArchive:              {TypeBinaryBigEndian, TypeBinaryLittleEndian, TypeNewASCII, TypeNewASCIIWithCRC, TypeOldASCII},

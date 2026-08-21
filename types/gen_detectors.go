@@ -93,7 +93,7 @@ func DetectDeepAnalysis(b Buffer) *Metadata {
 		}
 	}
 
-	if result.ZeroBytes > 0 || result.PrintableBytes*100/b.Len() < 50 {
+	if result.ZeroBytes > 0 || result.PrintableBytes*100/min(b.Len(), 65536) < 50 {
 		return &Metadata{
 			Kind:       KindHighEntropyData,
 			Type:       TypeBinary,
@@ -763,7 +763,7 @@ func findAnnexBStartCode(b Buffer) int {
 }
 
 func DetectISOBaseMedia(b Buffer) *Metadata {
-	if b.Len() < 12 {
+	if b.Len() < 16 {
 		return nil
 	}
 
@@ -774,11 +774,12 @@ func DetectISOBaseMedia(b Buffer) *Metadata {
 
 	brandOffset := 8
 	compatibleOffset := 16
-	boxEnd := int(boxSize32)
+	boxEnd := uint64(boxSize32)
 
-	if boxSize32 == 1 {
+	switch boxSize32 {
+	case 1:
 		high, ok := b.U32BE(8)
-		if !ok || high != 0 {
+		if !ok {
 			return nil
 		}
 
@@ -787,22 +788,26 @@ func DetectISOBaseMedia(b Buffer) *Metadata {
 			return nil
 		}
 
-		boxEnd = int(low)
+		boxEnd = uint64(high)<<32 | uint64(low)
 		brandOffset = 16
 		compatibleOffset = 24
+	case 0:
+		boxEnd = uint64(b.Len())
 	}
 
-	if boxEnd <= compatibleOffset {
+	if boxEnd < uint64(compatibleOffset) || b.Len() < compatibleOffset {
 		return nil
 	}
 
-	if boxEnd > b.Len() {
-		boxEnd = b.Len()
+	if boxEnd > uint64(b.Len()) {
+		boxEnd = uint64(b.Len())
 	}
 
-	if !hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "mjp2", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw", "MSNV") {
+	if !hasISOBrand(b, brandOffset, compatibleOffset, int(boxEnd), "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "mjp2", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw", "MSNV") {
 		return nil
 	}
+
+	boxLimit := int(boxEnd)
 
 	var majorBrand string
 
@@ -841,55 +846,55 @@ func DetectISOBaseMedia(b Buffer) *Metadata {
 		}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avif") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "avif") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeAVIFImage}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avis") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "avis") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeAVIFImageSequence}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "heic", "heix", "hevc", "hevx", "mif1", "msf1") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "heic", "heix", "hevc", "hevx", "mif1", "msf1") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeHEIFImage}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "M4V ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "M4V ") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeM4VVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "f4v ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "f4v ") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeF4VVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "3g2a", "3g2b") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "3g2a", "3g2b") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: Type3G2Video}
 	}
 
-	if hasISOBrandPrefix(b, brandOffset, compatibleOffset, boxEnd, "3gp", "3g2") {
+	if hasISOBrandPrefix(b, brandOffset, compatibleOffset, boxLimit, "3gp", "3g2") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: Type3GPPVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "M4A ", "M4B ", "M4P ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "M4A ", "M4B ", "M4P ") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeMPEG4Audio}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "qt  ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "qt  ") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeQuickTimeMovie}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "mjp2") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "mjp2") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeMotionJPEG2000Video}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "crx ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "crx ") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeCanonRAW3Image}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "braw") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "braw") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeBlackmagicRAWVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash") {
 		return &Metadata{Kind: KindISOBaseMedia, Type: TypeMP4Video}
 	}
 
@@ -947,6 +952,8 @@ func DetectJSON(b Buffer) *Metadata {
 
 	return nil
 }
+
+const maxScanSize = 128 * 1024
 
 func DetectLZMA(b Buffer) *Metadata {
 	if b.Len() < 13 {
@@ -1041,7 +1048,7 @@ func DetectMachO(b Buffer) *Metadata {
 			}
 		}
 
-		if !isValidFatArchCPUType(b, 8) {
+		if !isValidFatMachO(b, 20) {
 			return nil
 		}
 
@@ -1051,16 +1058,7 @@ func DetectMachO(b Buffer) *Metadata {
 	}
 
 	if b.Has(0, []byte{0xca, 0xfe, 0xba, 0xbf}) {
-		nfatArch, ok := b.U32BE(4)
-		if !ok {
-			return nil
-		}
-
-		if nfatArch == 0 || nfatArch > 32 {
-			return nil
-		}
-
-		if !isValidFatArchCPUType(b, 8) {
+		if !isValidFatMachO(b, 32) {
 			return nil
 		}
 
@@ -1091,11 +1089,13 @@ func isValidMachOHeaderLE(b Buffer, cpuOffset int) bool {
 	return isKnownMachOCPUType(cpuType)
 }
 
-func isValidFatArchCPUType(b Buffer, cpuOffset int) bool {
-	cpuType, ok := b.U32BE(cpuOffset)
-	if !ok {
+func isValidFatMachO(b Buffer, archSize int) bool {
+	nfatArch, ok := b.U32BE(4)
+	if !ok || nfatArch == 0 || nfatArch > 32 || 8+int(nfatArch)*archSize > b.Len() {
 		return false
 	}
+
+	cpuType, _ := b.U32BE(8)
 
 	return isKnownMachOCPUType(cpuType)
 }
@@ -1226,6 +1226,16 @@ func DetectOgg(b Buffer) *Metadata {
 
 	limit := min(b.Len(), 4096)
 	data := b[:limit]
+	fishead := bytes.Index(data, []byte("fishead\x00"))
+
+	if fishead >= 0 && fishead+10 <= len(data) {
+		switch uint16(data[fishead+8]) | uint16(data[fishead+9])<<8 {
+		case 3:
+			return &Metadata{Kind: KindOggSkeleton, Type: TypeOggSkeleton3}
+		case 4:
+			return &Metadata{Kind: KindOggSkeleton, Type: TypeOggSkeleton4}
+		}
+	}
 
 	switch {
 	case bytes.Contains(data, []byte("OpusHead")):
@@ -1261,45 +1271,56 @@ func DetectOLE(b Buffer) *Metadata {
 		return nil
 	}
 
-	if bytes.Contains(b, oleWordDocument) || bytes.Contains(b, []byte("MSWordDoc")) || bytes.Contains(b, []byte("Word.Document.")) {
+	if containsOLE(b, oleWordDocument) || containsOLE(b, []byte("MSWordDoc")) || containsOLE(b, []byte("Word.Document.")) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftWordDocument}
 	}
 
-	if bytes.Contains(b, oleWorkbook) || bytes.Contains(b, oleBook) || bytes.Contains(b, []byte("Excel.Sheet.")) {
+	if containsOLE(b, oleWorkbook) || containsOLE(b, oleBook) || containsOLE(b, []byte("Excel.Sheet.")) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftExcelWorkbook}
 	}
 
-	if bytes.Contains(b, olePowerPointDocument) || bytes.Contains(b, []byte("PowerPoint.Show.")) {
+	if containsOLE(b, olePowerPointDocument) || containsOLE(b, []byte("PowerPoint.Show.")) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftPowerPointPresentation}
 	}
 
-	if bytes.Contains(b, oleMSI) {
+	if containsOLE(b, oleMSI) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftInstaller}
 	}
 
-	if bytes.Contains(b, oleMSP) {
+	if containsOLE(b, oleMSP) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftInstallerPatch}
 	}
 
-	if bytes.Contains(b, oleOutlookMessage) {
+	if containsOLE(b, oleOutlookMessage) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftOutlookMessage}
 	}
 
-	if bytes.Contains(b, oleVisioDocument) {
+	if containsOLE(b, oleVisioDocument) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftVisioDrawing}
 	}
 
-	if bytes.Contains(b, oleProject) {
+	if containsOLE(b, oleProject) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftProjectDocument}
 	}
 
-	if bytes.Contains(b, olePublisher) {
+	if containsOLE(b, olePublisher) {
 		return &Metadata{Kind: KindOLECompoundDocument, Type: TypeMicrosoftPublisherDocument}
 	}
 
 	return &Metadata{
 		Kind: KindOLECompoundDocument,
 	}
+}
+
+func containsOLE(b Buffer, magic []byte) bool {
+	prefixEnd := min(b.Len(), maxScanSize)
+	if bytes.Contains(b[:prefixEnd], magic) {
+		return true
+	}
+
+	suffixStart := max(prefixEnd, b.Len()-maxScanSize)
+
+	return bytes.Contains(b[suffixStart:], magic)
 }
 
 func DetectPCX(b Buffer) *Metadata {
@@ -1554,38 +1575,55 @@ func DetectSQLiteSHM(b Buffer) *Metadata {
 func DetectTar(b Buffer) *Metadata {
 	var isTar bool
 
-	for offset := 0; offset+512 <= b.Len(); offset += 512 {
-		if b.Len() >= offset+262 && string(b[offset+257:offset+262]) == "ustar" {
-			isTar = true
+	limit := min(b.Len(), maxScanSize)
 
-			nameEnd := bytes.IndexByte(b[offset:offset+100], 0)
-			if nameEnd == -1 {
-				nameEnd = 100
-			}
+	for offset := 0; offset+512 <= limit; {
+		header := b[offset : offset+512]
+		if string(header[257:262]) != "ustar" || !validTarChecksum(header) {
+			break
+		}
 
-			if nameEnd > 0 {
-				switch string(b[offset : offset+nameEnd]) {
-				case "package/package.json", "package.json":
-					return &Metadata{Kind: KindTARArchive, Type: TypeNpmPackage}
-				case "oci-layout", "index.json", "manifest.json":
-					return &Metadata{Kind: KindTARArchive, Type: TypeOCIImageLayout}
-				case "PKG-INFO", "setup.py", "pyproject.toml":
-					return &Metadata{Kind: KindTARArchive, Type: TypePythonSourceDistribution}
-				case "info/index.json":
-					return &Metadata{Kind: KindTARArchive, Type: TypeCondaPackage}
-				case ".PKGINFO":
-					return &Metadata{Kind: KindTARArchive, Type: TypeArchLinuxPackage}
-				case "Vagrantfile":
-					return &Metadata{Kind: KindTARArchive, Type: TypeVagrantBox}
-				case "install/doinst.sh":
-					return &Metadata{Kind: KindTARArchive, Type: TypeSlackwarePackage}
-				case "ComicInfo.xml", "comicinfo.xml":
-					return &Metadata{Kind: KindTARArchive, Type: TypeComicBook}
-				case "metadata", "deploy":
-					return &Metadata{Kind: KindTARArchive, Type: TypeFlatpak}
-				}
+		isTar = true
+
+		nameEnd := bytes.IndexByte(header[:100], 0)
+		if nameEnd == -1 {
+			nameEnd = 100
+		}
+
+		if nameEnd > 0 {
+			switch string(header[:nameEnd]) {
+			case "package/package.json", "package.json":
+				return &Metadata{Kind: KindTARArchive, Type: TypeNpmPackage}
+			case "oci-layout", "index.json", "manifest.json":
+				return &Metadata{Kind: KindTARArchive, Type: TypeOCIImageLayout}
+			case "PKG-INFO", "setup.py", "pyproject.toml":
+				return &Metadata{Kind: KindTARArchive, Type: TypePythonSourceDistribution}
+			case "info/index.json":
+				return &Metadata{Kind: KindTARArchive, Type: TypeCondaPackage}
+			case ".PKGINFO":
+				return &Metadata{Kind: KindTARArchive, Type: TypeArchLinuxPackage}
+			case "Vagrantfile":
+				return &Metadata{Kind: KindTARArchive, Type: TypeVagrantBox}
+			case "install/doinst.sh":
+				return &Metadata{Kind: KindTARArchive, Type: TypeSlackwarePackage}
+			case "ComicInfo.xml", "comicinfo.xml":
+				return &Metadata{Kind: KindTARArchive, Type: TypeComicBook}
+			case "metadata", "deploy":
+				return &Metadata{Kind: KindTARArchive, Type: TypeFlatpak}
 			}
 		}
+
+		size, ok := parseTarOctal(header[124:136])
+		if !ok {
+			break
+		}
+
+		next := uint64(offset+512) + ((size + 511) / 512 * 512)
+		if next > uint64(limit) {
+			break
+		}
+
+		offset = int(next)
 	}
 
 	if isTar {
@@ -1593,6 +1631,44 @@ func DetectTar(b Buffer) *Metadata {
 	}
 
 	return nil
+}
+
+func validTarChecksum(header []byte) bool {
+	stored, ok := parseTarOctal(header[148:156])
+	if !ok {
+		return false
+	}
+
+	var sum uint64
+
+	for i, value := range header {
+		if i >= 148 && i < 156 {
+			value = ' '
+		}
+
+		sum += uint64(value)
+	}
+
+	return sum == stored
+}
+
+func parseTarOctal(field []byte) (uint64, bool) {
+	field = bytes.Trim(field, " \x00")
+	if len(field) == 0 {
+		return 0, false
+	}
+
+	var value uint64
+
+	for _, digit := range field {
+		if digit < '0' || digit > '7' {
+			return 0, false
+		}
+
+		value = value*8 + uint64(digit-'0')
+	}
+
+	return value, true
 }
 
 func DetectText(b Buffer) *Metadata {
@@ -2572,6 +2648,19 @@ func DetectZIPContainer(b Buffer) *Metadata {
 		return nil
 	}
 
+	prefixEnd := min(b.Len(), maxScanSize*2)
+	suffixStart := max(prefixEnd, b.Len()-maxScanSize*8)
+
+	if hasZIPEntry(b[:prefixEnd], "bundleconfig.pb") || hasZIPEntry(b[suffixStart:], "bundleconfig.pb") {
+		return &Metadata{Kind: KindZIPArchive, Type: TypeAndroidAppBundle}
+	}
+
+	if hasZIPEntry(b[:prefixEnd], "comicinfo.xml") || hasZIPEntry(b[suffixStart:], "comicinfo.xml") {
+		return &Metadata{Kind: KindZIPArchive, Type: TypeComicBook}
+	}
+
+	b = b[:min(b.Len(), maxScanSize)]
+
 	var (
 		hasManifest         bool
 		hasDex              bool
@@ -2940,6 +3029,45 @@ func DetectZIPContainer(b Buffer) *Metadata {
 	}
 
 	return &Metadata{Kind: KindZIPArchive}
+}
+
+func hasZIPEntry(b []byte, lower string) bool {
+	for offset := 0; offset+30 <= len(b); {
+		index := bytes.Index(b[offset:], []byte{'P', 'K'})
+		if index == -1 {
+			return false
+		}
+
+		offset += index
+
+		headerSize := 0
+		nameOffset := 0
+
+		if offset+30 <= len(b) && b[offset+2] == 3 && b[offset+3] == 4 {
+			headerSize = 30
+			nameOffset = 26
+		} else if offset+46 <= len(b) && b[offset+2] == 1 && b[offset+3] == 2 {
+			headerSize = 46
+			nameOffset = 28
+		} else {
+			offset += 2
+
+			continue
+		}
+
+		nameLen := int(b[offset+nameOffset]) | int(b[offset+nameOffset+1])<<8
+
+		nameStart := offset + headerSize
+		nameEnd := nameStart + nameLen
+
+		if nameEnd <= len(b) && matchASCII(b[nameStart:nameEnd], lower) {
+			return true
+		}
+
+		offset += headerSize
+	}
+
+	return false
 }
 
 func matchASCII(b []byte, lower string) bool {

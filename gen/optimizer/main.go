@@ -112,25 +112,59 @@ func parseSignatures(dir string) *Generator {
 					continue
 				}
 
+				pkg, ok := sel.X.(*ast.Ident)
+				if !ok || pkg.Name != "types" {
+					continue
+				}
+
 				funcName := sel.Sel.Name
+				pos := fset.Position(call.Pos())
 
 				switch funcName {
 				case "RegisterSignature", "RegisterMaskedSignature", "RegisterWeakSignature", "RegisterWeakMaskedSignature":
-					kind := strings.TrimPrefix(extractSelector(call.Args[0]), "types.")
-					typ := strings.TrimPrefix(extractSelector(call.Args[1]), "types.")
-					offset := extractInt(call.Args[2])
-					magic := extractBytes(call.Args[3])
+					isMask := funcName == "RegisterMaskedSignature" || funcName == "RegisterWeakMaskedSignature"
+
+					expectedArgs := 4
+					if isMask {
+						expectedArgs = 5
+					}
+
+					if len(call.Args) != expectedArgs {
+						failRegistration(pos, fmt.Sprintf("%s requires %d arguments", funcName, expectedArgs))
+					}
+
+					kindSelector, ok := extractSelector(call.Args[0])
+					if !ok || !strings.HasPrefix(kindSelector, "types.Kind") {
+						failRegistration(pos, "invalid Kind identifier")
+					}
+
+					typeSelector, ok := extractSelector(call.Args[1])
+					if !ok || !strings.HasPrefix(typeSelector, "types.Type") {
+						failRegistration(pos, "invalid Type identifier")
+					}
+
+					offset, ok := extractInt(call.Args[2])
+					if !ok || offset < 0 {
+						failRegistration(pos, "offset must be a non-negative integer literal")
+					}
+
+					magic, ok := extractBytes(call.Args[3])
+					if !ok || len(magic) == 0 {
+						failRegistration(pos, "magic must be a non-empty byte literal")
+					}
 
 					var mask []byte
 
-					isMask := funcName == "RegisterMaskedSignature" || funcName == "RegisterWeakMaskedSignature"
 					if isMask {
-						mask = extractBytes(call.Args[4])
+						mask, ok = extractBytes(call.Args[4])
+						if !ok || len(mask) != len(magic) {
+							failRegistration(pos, "mask must be a byte literal with the same length as magic")
+						}
 					}
 
 					sig := Sig{
-						Kind:   kind,
-						Type:   typ,
+						Kind:   strings.TrimPrefix(kindSelector, "types."),
+						Type:   strings.TrimPrefix(typeSelector, "types."),
 						Offset: offset,
 						Magic:  magic,
 						Mask:   mask,
@@ -145,17 +179,27 @@ func parseSignatures(dir string) *Generator {
 					}
 				case "Register", "RegisterWeak", "RegisterFallback":
 					if len(call.Args) != 1 {
-						continue
+						failRegistration(pos, fmt.Sprintf("%s requires 1 argument", funcName))
 					}
 
 					argCall, ok := call.Args[0].(*ast.CallExpr)
 					if !ok || len(argCall.Args) != 1 {
-						continue
+						failRegistration(pos, "detector must be wrapped in types.DetectFunc")
+					}
+
+					wrapper, ok := extractSelector(argCall.Fun)
+					if !ok || wrapper != "types.DetectFunc" {
+						failRegistration(pos, "detector must be wrapped in types.DetectFunc")
 					}
 
 					detSel, ok := argCall.Args[0].(*ast.SelectorExpr)
 					if !ok {
-						continue
+						failRegistration(pos, "invalid detector function")
+					}
+
+					detPkg, ok := detSel.X.(*ast.Ident)
+					if !ok || detPkg.Name != "custom" {
+						failRegistration(pos, "detector function must be from the custom package")
 					}
 
 					funcNameStr := detSel.Sel.Name
@@ -388,11 +432,15 @@ func generateOptimizedCode(gen *Generator, outPath string) {
 
 	formatted, err := format.Source([]byte(buf.String()))
 	if err != nil {
-		fmt.Printf("format error: %v\n", err)
+		fmt.Printf("format error: %v\n%s\n", err, buf.String())
+
+		os.Exit(1)
 	}
 
 	if err := os.WriteFile(outPath, formatted, 0644); err != nil {
 		fmt.Printf("write error: %v\n", err)
+
+		os.Exit(1)
 	}
 }
 
@@ -473,7 +521,9 @@ func mergeCustomDetectors(dir string, outPath string) {
 		sort.Strings(imps)
 
 		for _, imp := range imps {
-			out.WriteString("\t" + imp + "\n")
+			out.WriteByte('\t')
+			out.WriteString(imp)
+			out.WriteByte('\n')
 		}
 
 		out.WriteString(")\n\n")
@@ -486,7 +536,8 @@ func mergeCustomDetectors(dir string, outPath string) {
 		d = reTypes.ReplaceAllString(d, "$1")
 		d = reCustom.ReplaceAllString(d, "$1")
 
-		out.WriteString(d + "\n\n")
+		out.WriteString(d)
+		out.WriteString("\n\n")
 	}
 
 	formatted, err := format.Source([]byte(out.String()))
@@ -877,61 +928,96 @@ func emitIfHas(c Sig, buf *strings.Builder, indent string) {
 	fmt.Fprintf(buf, "%s}\n", indent)
 }
 
-func extractSelector(expr ast.Expr) string {
+func failRegistration(pos token.Position, message string) {
+	fmt.Printf("%s: %s\n", pos, message)
+
+	os.Exit(1)
+}
+
+func extractSelector(expr ast.Expr) (string, bool) {
 	if sel, ok := expr.(*ast.SelectorExpr); ok {
 		if x, ok := sel.X.(*ast.Ident); ok {
-			return x.Name + "." + sel.Sel.Name
+			return x.Name + "." + sel.Sel.Name, true
 		}
 	}
 
 	if id, ok := expr.(*ast.Ident); ok {
-		return id.Name
+		return id.Name, true
 	}
 
-	return ""
+	return "", false
 }
 
-func extractInt(expr ast.Expr) int {
+func extractInt(expr ast.Expr) (int, bool) {
 	if bl, ok := expr.(*ast.BasicLit); ok && bl.Kind == token.INT {
-		v, _ := strconv.ParseInt(bl.Value, 0, 64)
+		v, err := strconv.ParseInt(bl.Value, 0, 64)
+		if err != nil || int64(int(v)) != v {
+			return 0, false
+		}
 
-		return int(v)
+		return int(v), true
 	}
 
-	return 0
+	return 0, false
 }
 
-func extractBytes(expr ast.Expr) []byte {
+func extractBytes(expr ast.Expr) ([]byte, bool) {
 	if call, ok := expr.(*ast.CallExpr); ok {
-		if len(call.Args) == 1 {
-			if bl, ok := call.Args[0].(*ast.BasicLit); ok && bl.Kind == token.STRING {
-				s, _ := strconv.Unquote(bl.Value)
-
-				return []byte(s)
+		arrayType, isArray := call.Fun.(*ast.ArrayType)
+		if isArray && arrayType.Len == nil {
+			byteType, isByte := arrayType.Elt.(*ast.Ident)
+			if isByte && byteType.Name == "byte" && len(call.Args) == 1 {
+				if bl, ok := call.Args[0].(*ast.BasicLit); ok && bl.Kind == token.STRING {
+					s, err := strconv.Unquote(bl.Value)
+					if err == nil {
+						return []byte(s), true
+					}
+				}
 			}
 		}
 	}
 
 	if comp, ok := expr.(*ast.CompositeLit); ok {
+		arrayType, isArray := comp.Type.(*ast.ArrayType)
+		if !isArray || arrayType.Len != nil {
+			return nil, false
+		}
+
+		byteType, isByte := arrayType.Elt.(*ast.Ident)
+		if !isByte || byteType.Name != "byte" {
+			return nil, false
+		}
+
 		var b []byte
 
 		for _, elt := range comp.Elts {
-			if bl, ok := elt.(*ast.BasicLit); ok {
-				switch bl.Kind {
-				case token.INT:
-					v, _ := strconv.ParseInt(bl.Value, 0, 64)
+			bl, ok := elt.(*ast.BasicLit)
+			if !ok {
+				return nil, false
+			}
 
-					b = append(b, byte(v))
-				case token.CHAR:
-					s, _ := strconv.Unquote(bl.Value)
-
-					b = append(b, s[0])
+			switch bl.Kind {
+			case token.INT:
+				v, err := strconv.ParseUint(bl.Value, 0, 8)
+				if err != nil {
+					return nil, false
 				}
+
+				b = append(b, byte(v))
+			case token.CHAR:
+				s, err := strconv.Unquote(bl.Value)
+				if err != nil || len(s) != 1 {
+					return nil, false
+				}
+
+				b = append(b, s[0])
+			default:
+				return nil, false
 			}
 		}
 
-		return b
+		return b, true
 	}
 
-	return nil
+	return nil, false
 }

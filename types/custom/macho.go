@@ -57,7 +57,7 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 			}
 		}
 
-		if !isValidFatArchCPUType(b, 8) {
+		if !isValidFatMachO(b, 20) {
 			return nil
 		}
 
@@ -67,16 +67,7 @@ func DetectMachO(b types.Buffer) *types.Metadata {
 	}
 
 	if b.Has(0, []byte{0xca, 0xfe, 0xba, 0xbf}) {
-		nfatArch, ok := b.U32BE(4)
-		if !ok {
-			return nil
-		}
-
-		if nfatArch == 0 || nfatArch > 32 {
-			return nil
-		}
-
-		if !isValidFatArchCPUType(b, 8) {
+		if !isValidFatMachO(b, 32) {
 			return nil
 		}
 
@@ -107,11 +98,13 @@ func isValidMachOHeaderLE(b types.Buffer, cpuOffset int) bool {
 	return isKnownMachOCPUType(cpuType)
 }
 
-func isValidFatArchCPUType(b types.Buffer, cpuOffset int) bool {
-	cpuType, ok := b.U32BE(cpuOffset)
-	if !ok {
+func isValidFatMachO(b types.Buffer, archSize int) bool {
+	nfatArch, ok := b.U32BE(4)
+	if !ok || nfatArch == 0 || nfatArch > 32 || 8+int(nfatArch)*archSize > b.Len() {
 		return false
 	}
+
+	cpuType, _ := b.U32BE(8)
 
 	return isKnownMachOCPUType(cpuType)
 }

@@ -30,7 +30,7 @@ func init() {
 	types.RegisterSignature(types.KindJFSFilesystem, types.TypeNone, 32768, []byte("JFS1"))
 	types.RegisterSignature(types.KindLinuxSwapSpace, types.TypeNone, 4086, []byte("SWAP-SPACE"))
 	types.RegisterSignature(types.KindLinuxSwapSpace, types.TypeNone, 4086, []byte("SWAPSPACE2"))
-	types.RegisterSignature(types.KindLUKS2DiskEncryption, types.TypeNone, 0, []byte{'S', 'K', 'U', 'L', 0xba, 0xbe})
+	types.RegisterSignature(types.KindLUKS2DiskEncryption, types.TypeNone, 0, []byte{'L', 'U', 'K', 'S', 0xba, 0xbe, 0x00, 0x02})
 	types.RegisterSignature(types.KindLUKSDiskEncryption, types.TypeNone, 0, []byte{'L', 'U', 'K', 'S', 0xba, 0xbe})
 	types.RegisterSignature(types.KindMacriumReflectDiskImage, types.TypeNone, 0, []byte("REFLECT "))
 	types.RegisterSignature(types.KindNILFS2Filesystem, types.TypeNone, 1032, []byte{0x02, 0x09, 0x01, 0x12})

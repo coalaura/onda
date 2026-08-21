@@ -11,6 +11,19 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
+	prefixEnd := min(b.Len(), maxScanSize*2)
+	suffixStart := max(prefixEnd, b.Len()-maxScanSize*8)
+
+	if hasZIPEntry(b[:prefixEnd], "bundleconfig.pb") || hasZIPEntry(b[suffixStart:], "bundleconfig.pb") {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeAndroidAppBundle}
+	}
+
+	if hasZIPEntry(b[:prefixEnd], "comicinfo.xml") || hasZIPEntry(b[suffixStart:], "comicinfo.xml") {
+		return &types.Metadata{Kind: types.KindZIPArchive, Type: types.TypeComicBook}
+	}
+
+	b = b[:min(b.Len(), maxScanSize)]
+
 	var (
 		hasManifest         bool
 		hasDex              bool
@@ -384,6 +397,45 @@ func DetectZIPContainer(b types.Buffer) *types.Metadata {
 	}
 
 	return &types.Metadata{Kind: types.KindZIPArchive}
+}
+
+func hasZIPEntry(b []byte, lower string) bool {
+	for offset := 0; offset+30 <= len(b); {
+		index := bytes.Index(b[offset:], []byte{'P', 'K'})
+		if index == -1 {
+			return false
+		}
+
+		offset += index
+
+		headerSize := 0
+		nameOffset := 0
+
+		if offset+30 <= len(b) && b[offset+2] == 3 && b[offset+3] == 4 {
+			headerSize = 30
+			nameOffset = 26
+		} else if offset+46 <= len(b) && b[offset+2] == 1 && b[offset+3] == 2 {
+			headerSize = 46
+			nameOffset = 28
+		} else {
+			offset += 2
+
+			continue
+		}
+
+		nameLen := int(b[offset+nameOffset]) | int(b[offset+nameOffset+1])<<8
+
+		nameStart := offset + headerSize
+		nameEnd := nameStart + nameLen
+
+		if nameEnd <= len(b) && matchASCII(b[nameStart:nameEnd], lower) {
+			return true
+		}
+
+		offset += headerSize
+	}
+
+	return false
 }
 
 // matchASCII compares a byte slice to a lowercase string without allocating.

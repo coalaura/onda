@@ -42,7 +42,7 @@ func DetectDeepAnalysis(b types.Buffer) *types.Metadata {
 	}
 
 	// Check for binary data that's not high entropy
-	if result.ZeroBytes > 0 || result.PrintableBytes*100/b.Len() < 50 {
+	if result.ZeroBytes > 0 || result.PrintableBytes*100/min(b.Len(), 65536) < 50 {
 		return &types.Metadata{
 			Kind:       types.KindHighEntropyData,
 			Type:       types.TypeBinary,

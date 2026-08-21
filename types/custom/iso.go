@@ -7,7 +7,7 @@ import (
 )
 
 func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
-	if b.Len() < 12 {
+	if b.Len() < 16 {
 		return nil
 	}
 
@@ -18,11 +18,12 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 
 	brandOffset := 8
 	compatibleOffset := 16
-	boxEnd := int(boxSize32)
+	boxEnd := uint64(boxSize32)
 
-	if boxSize32 == 1 {
+	switch boxSize32 {
+	case 1:
 		high, ok := b.U32BE(8)
-		if !ok || high != 0 {
+		if !ok {
 			return nil
 		}
 
@@ -31,22 +32,26 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 			return nil
 		}
 
-		boxEnd = int(low)
+		boxEnd = uint64(high)<<32 | uint64(low)
 		brandOffset = 16
 		compatibleOffset = 24
+	case 0:
+		boxEnd = uint64(b.Len())
 	}
 
-	if boxEnd <= compatibleOffset {
+	if boxEnd < uint64(compatibleOffset) || b.Len() < compatibleOffset {
 		return nil
 	}
 
-	if boxEnd > b.Len() {
-		boxEnd = b.Len()
+	if boxEnd > uint64(b.Len()) {
+		boxEnd = uint64(b.Len())
 	}
 
-	if !hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "mjp2", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw", "MSNV") {
+	if !hasISOBrand(b, brandOffset, compatibleOffset, int(boxEnd), "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash", "avif", "avis", "heic", "heix", "hevc", "hevx", "mif1", "msf1", "mjp2", "M4A ", "M4B ", "M4P ", "M4V ", "f4v ", "qt  ", "3gp4", "3gp5", "3gp6", "3gs7", "3ge6", "3gg6", "3gp1", "3gp2", "3g2a", "3g2b", "crx ", "braw", "MSNV") {
 		return nil
 	}
+
+	boxLimit := int(boxEnd)
 
 	// Get major brand
 	var majorBrand string
@@ -89,55 +94,55 @@ func DetectISOBaseMedia(b types.Buffer) *types.Metadata {
 	}
 
 	// For generic major brands (isom, iso2, mp41, etc.), check compatible brands
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avif") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "avif") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeAVIFImage}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "avis") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "avis") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeAVIFImageSequence}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "heic", "heix", "hevc", "hevx", "mif1", "msf1") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "heic", "heix", "hevc", "hevx", "mif1", "msf1") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeHEIFImage}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "M4V ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "M4V ") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeM4VVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "f4v ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "f4v ") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeF4VVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "3g2a", "3g2b") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "3g2a", "3g2b") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.Type3G2Video}
 	}
 
-	if hasISOBrandPrefix(b, brandOffset, compatibleOffset, boxEnd, "3gp", "3g2") {
+	if hasISOBrandPrefix(b, brandOffset, compatibleOffset, boxLimit, "3gp", "3g2") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.Type3GPPVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "M4A ", "M4B ", "M4P ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "M4A ", "M4B ", "M4P ") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeMPEG4Audio}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "qt  ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "qt  ") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeQuickTimeMovie}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "mjp2") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "mjp2") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeMotionJPEG2000Video}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "crx ") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "crx ") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeCanonRAW3Image}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "braw") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "braw") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeBlackmagicRAWVideo}
 	}
 
-	if hasISOBrand(b, brandOffset, compatibleOffset, boxEnd, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash") {
+	if hasISOBrand(b, brandOffset, compatibleOffset, boxLimit, "isom", "iso2", "iso3", "iso4", "iso5", "iso6", "mp41", "mp42", "dash") {
 		return &types.Metadata{Kind: types.KindISOBaseMedia, Type: types.TypeMP4Video}
 	}
 

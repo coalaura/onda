@@ -60,7 +60,7 @@ func main() {
 			log.Println("\nUsage: wtf [flags] <file>")
 			log.Println("\nFlags:")
 			log.Println("  -l, --list       List all supported formats and sub-formats")
-			log.Println("  -p, --porcelain  Print easily parseable output (tab-separated: Kind\\tType)")
+			log.Println("  -p, --porcelain  Print easily parseable output (tab-separated: Kind\\tType\\tConfidence)")
 			log.Println("  -t, --time       Print time taken (read / sniff; disabled by -p)")
 			log.Println("  -d, --deep       Enable deep analysis (entropy, byte distribution) for unknown files")
 			log.Println("      --completion Print shell completion script (bash)")
@@ -133,7 +133,7 @@ func processFile(path string, porcelain bool, timing bool, deepAnalysis bool) {
 		return
 	}
 
-	readSize := min(int(info.Size()), MaxReadSize)
+	readSize := int(min(info.Size(), int64(MaxReadSize)))
 
 	if readSize == 0 {
 		log.Errorln("empty file")
@@ -173,11 +173,30 @@ func processFile(path string, porcelain bool, timing bool, deepAnalysis bool) {
 		os.Exit(1)
 	}
 
+	if errors.Is(err, types.ErrUnknownFormat) && info.Size() > int64(n) && info.Size() >= 512 {
+		tail := make([]byte, 512)
+
+		_, tailErr := file.ReadAt(tail, info.Size()-int64(len(tail)))
+		if tailErr != nil {
+			log.Errorln(tailErr)
+
+			os.Exit(1)
+		}
+
+		tailMeta := types.DetectAppleDiskImage(types.Buffer(tail))
+		if tailMeta != nil {
+			tailMeta.File = name
+			meta = tailMeta
+			err = nil
+		}
+	}
+
 	d1 := time.Since(t1)
 
 	if deepAnalysis || errors.Is(err, types.ErrUnknownFormat) {
 		deep := types.DetectDeepAnalysis(types.Buffer(buf[:n]))
 		if deep != nil {
+			deep.File = name
 			meta = deep
 		}
 	}

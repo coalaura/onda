@@ -112,7 +112,7 @@ func TestDetectFixtures(t *testing.T) {
 		{file: "rar4.rar", kind: types.KindRARArchive, typ: types.TypeLegacy},
 		{file: "rar5.rar", kind: types.KindRARArchive, typ: types.TypeVersion5},
 		{file: "sqlite.db-shm", kind: types.KindSQLite3SharedMemory, typ: types.TypeLittleEndian},
-		{file: "sqlite.db-wal", kind: types.KindSQLite3WriteAheadLog, typ: types.TypeBigEndian},
+		{file: "sqlite.db-wal", kind: types.KindSQLite3WriteAheadLog, typ: types.TypeLittleEndian},
 		{file: "sqlite.db", kind: types.KindSQLiteDatabase, typ: types.TypeNone},
 		{file: "svg.svg", kind: types.KindSVGImage, typ: types.TypeNone},
 		{file: "tar.tar", kind: types.KindTARArchive, typ: types.TypeNone},

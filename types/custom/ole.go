@@ -24,43 +24,54 @@ func DetectOLE(b types.Buffer) *types.Metadata {
 		return nil
 	}
 
-	if bytes.Contains(b, oleWordDocument) || bytes.Contains(b, []byte("MSWordDoc")) || bytes.Contains(b, []byte("Word.Document.")) {
+	if containsOLE(b, oleWordDocument) || containsOLE(b, []byte("MSWordDoc")) || containsOLE(b, []byte("Word.Document.")) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftWordDocument}
 	}
 
-	if bytes.Contains(b, oleWorkbook) || bytes.Contains(b, oleBook) || bytes.Contains(b, []byte("Excel.Sheet.")) {
+	if containsOLE(b, oleWorkbook) || containsOLE(b, oleBook) || containsOLE(b, []byte("Excel.Sheet.")) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftExcelWorkbook}
 	}
 
-	if bytes.Contains(b, olePowerPointDocument) || bytes.Contains(b, []byte("PowerPoint.Show.")) {
+	if containsOLE(b, olePowerPointDocument) || containsOLE(b, []byte("PowerPoint.Show.")) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftPowerPointPresentation}
 	}
 
-	if bytes.Contains(b, oleMSI) {
+	if containsOLE(b, oleMSI) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftInstaller}
 	}
 
-	if bytes.Contains(b, oleMSP) {
+	if containsOLE(b, oleMSP) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftInstallerPatch}
 	}
 
-	if bytes.Contains(b, oleOutlookMessage) {
+	if containsOLE(b, oleOutlookMessage) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftOutlookMessage}
 	}
 
-	if bytes.Contains(b, oleVisioDocument) {
+	if containsOLE(b, oleVisioDocument) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftVisioDrawing}
 	}
 
-	if bytes.Contains(b, oleProject) {
+	if containsOLE(b, oleProject) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftProjectDocument}
 	}
 
-	if bytes.Contains(b, olePublisher) {
+	if containsOLE(b, olePublisher) {
 		return &types.Metadata{Kind: types.KindOLECompoundDocument, Type: types.TypeMicrosoftPublisherDocument}
 	}
 
 	return &types.Metadata{
 		Kind: types.KindOLECompoundDocument,
 	}
+}
+
+func containsOLE(b types.Buffer, magic []byte) bool {
+	prefixEnd := min(b.Len(), maxScanSize)
+	if bytes.Contains(b[:prefixEnd], magic) {
+		return true
+	}
+
+	suffixStart := max(prefixEnd, b.Len()-maxScanSize)
+
+	return bytes.Contains(b[suffixStart:], magic)
 }

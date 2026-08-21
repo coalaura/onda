@@ -12,7 +12,7 @@ func (b Buffer) Len() int {
 }
 
 func (b Buffer) Has(offset int, magic []byte) bool {
-	if offset < 0 || offset+len(magic) > len(b) {
+	if offset < 0 || offset > len(b)-len(magic) {
 		return false
 	}
 
@@ -20,7 +20,7 @@ func (b Buffer) Has(offset int, magic []byte) bool {
 }
 
 func (b Buffer) HasMask(offset int, magic string, mask string) bool {
-	if offset < 0 || offset+len(magic) > len(b) || len(magic) != len(mask) {
+	if offset < 0 || len(magic) != len(mask) || offset > len(b)-len(magic) {
 		return false
 	}
 
@@ -34,7 +34,7 @@ func (b Buffer) HasMask(offset int, magic string, mask string) bool {
 	}
 
 	for i := 0; i < len(magic); i++ {
-		if target[i]&mask[i] != magic[i] {
+		if target[i]&mask[i] != magic[i]&mask[i] {
 			return false
 		}
 	}
@@ -43,7 +43,7 @@ func (b Buffer) HasMask(offset int, magic string, mask string) bool {
 }
 
 func (b Buffer) U16LE(offset int) (uint16, bool) {
-	if offset < 0 || offset+2 > len(b) {
+	if offset < 0 || offset > len(b)-2 {
 		return 0, false
 	}
 
@@ -51,7 +51,7 @@ func (b Buffer) U16LE(offset int) (uint16, bool) {
 }
 
 func (b Buffer) U16BE(offset int) (uint16, bool) {
-	if offset < 0 || offset+2 > len(b) {
+	if offset < 0 || offset > len(b)-2 {
 		return 0, false
 	}
 
@@ -59,7 +59,7 @@ func (b Buffer) U16BE(offset int) (uint16, bool) {
 }
 
 func (b Buffer) U32LE(offset int) (uint32, bool) {
-	if offset < 0 || offset+4 > len(b) {
+	if offset < 0 || offset > len(b)-4 {
 		return 0, false
 	}
 
@@ -67,7 +67,7 @@ func (b Buffer) U32LE(offset int) (uint32, bool) {
 }
 
 func (b Buffer) U32BE(offset int) (uint32, bool) {
-	if offset < 0 || offset+4 > len(b) {
+	if offset < 0 || offset > len(b)-4 {
 		return 0, false
 	}
 

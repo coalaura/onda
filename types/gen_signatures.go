@@ -232,11 +232,11 @@ func detectOptimized(b Buffer) *Metadata {
 						switch b[2] {
 						case 0x09:
 							if len(b) >= 4 && string(b[:4]) == "\x00\x04\t\x88" {
-								return &Metadata{Kind: KindBerkeleyDatabase}
+								return &Metadata{Kind: KindBerkeleyDatabase, Type: TypeBigEndian}
 							}
 						case 0x22:
 							if len(b) >= 4 && string(b[:4]) == "\x00\x04\"S" {
-								return &Metadata{Kind: KindBerkeleyDatabase}
+								return &Metadata{Kind: KindBerkeleyDatabase, Type: TypeBigEndian}
 							}
 						}
 					}
@@ -258,7 +258,7 @@ func detectOptimized(b Buffer) *Metadata {
 							}
 						case 0x31:
 							if len(b) >= 4 && string(b[:4]) == "\x00\x051b" {
-								return &Metadata{Kind: KindBerkeleyDatabase}
+								return &Metadata{Kind: KindBerkeleyDatabase, Type: TypeBigEndian}
 							}
 						}
 					}
@@ -271,7 +271,7 @@ func detectOptimized(b Buffer) *Metadata {
 							}
 						case 0x15:
 							if len(b) >= 4 && string(b[:4]) == "\x00\x06\x15a" {
-								return &Metadata{Kind: KindBerkeleyDatabase}
+								return &Metadata{Kind: KindBerkeleyDatabase, Type: TypeBigEndian}
 							}
 						}
 					}
@@ -1192,7 +1192,7 @@ func detectOptimized(b Buffer) *Metadata {
 						switch b[3] {
 						case 0x82:
 							if len(b) >= 4 && string(b[:4]) == "7\x7f\x06\x82" {
-								return &Metadata{Kind: KindSQLite3WriteAheadLog, Type: TypeBigEndian}
+								return &Metadata{Kind: KindSQLite3WriteAheadLog, Type: TypeLittleEndian}
 							}
 						case 0x83:
 							if len(b) >= 4 && string(b[:4]) == "7\x7f\x06\x83" {
@@ -2438,12 +2438,32 @@ func detectOptimized(b Buffer) *Metadata {
 						case 0x53:
 							if len(b) > 4 {
 								switch b[4] {
-								case 0x00:
-									if len(b) >= 8 && string(b[:8]) == "IDST\x00\x00\x00\x00" {
+								case 0x0a:
+									if len(b) >= 8 && string(b[:8]) == "IDST\n\x00\x00\x00" {
 										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife1}
 									}
-								case 0x01:
-									if len(b) >= 8 && string(b[:8]) == "IDST\x01\x00\x00\x00" {
+								case 0x2c:
+									if len(b) >= 8 && string(b[:8]) == "IDST,\x00\x00\x00" {
+										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife2}
+									}
+								case 0x2d:
+									if len(b) >= 8 && string(b[:8]) == "IDST-\x00\x00\x00" {
+										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife2}
+									}
+								case 0x2e:
+									if len(b) >= 8 && string(b[:8]) == "IDST.\x00\x00\x00" {
+										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife2}
+									}
+								case 0x2f:
+									if len(b) >= 8 && string(b[:8]) == "IDST/\x00\x00\x00" {
+										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife2}
+									}
+								case 0x30:
+									if len(b) >= 8 && string(b[:8]) == "IDST0\x00\x00\x00" {
+										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife2}
+									}
+								case 0x31:
+									if len(b) >= 8 && string(b[:8]) == "IDST1\x00\x00\x00" {
 										return &Metadata{Kind: KindHalfLifeModel, Type: TypeHalfLife2}
 									}
 								}
@@ -2729,6 +2749,9 @@ func detectOptimized(b Buffer) *Metadata {
 						return &Metadata{Kind: KindLrzipArchive}
 					}
 				case 0x55:
+					if len(b) >= 8 && string(b[:8]) == "LUKS\xba\xbe\x00\x02" {
+						return &Metadata{Kind: KindLUKS2DiskEncryption}
+					}
 					if len(b) >= 6 && string(b[:6]) == "LUKS\xba\xbe" {
 						return &Metadata{Kind: KindLUKSDiskEncryption}
 					}
@@ -3798,10 +3821,6 @@ func detectOptimized(b Buffer) *Metadata {
 							}
 						}
 					}
-				case 0x4b:
-					if len(b) >= 6 && string(b[:6]) == "SKUL\xba\xbe" {
-						return &Metadata{Kind: KindLUKS2DiskEncryption}
-					}
 				case 0x4d:
 					if len(b) > 2 {
 						switch b[2] {
@@ -4601,19 +4620,6 @@ func detectOptimized(b Buffer) *Metadata {
 					if len(b) >= 8 && string(b[:8]) == "farbfeld" {
 						return &Metadata{Kind: KindFarbfeldImage}
 					}
-				case 0x69:
-					if len(b) > 11 {
-						switch b[11] {
-						case 0x03:
-							if b.HasMask(0, "fishead\x00\x00\x00\x00\x03\x00\x00\x00", "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff") {
-								return &Metadata{Kind: KindOggSkeleton, Type: TypeOggSkeleton3}
-							}
-						case 0x04:
-							if b.HasMask(0, "fishead\x00\x00\x00\x00\x04\x00\x00\x00", "\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff") {
-								return &Metadata{Kind: KindOggSkeleton, Type: TypeOggSkeleton4}
-							}
-						}
-					}
 				}
 			}
 		case 0x67:
@@ -4798,7 +4804,7 @@ func detectOptimized(b Buffer) *Metadata {
 						return &Metadata{Kind: KindTAKAudio}
 					}
 				case 0x72:
-					if len(b) >= 5 && string(b[:5]) == "true\x00" {
+					if len(b) >= 4 && string(b[:4]) == "true" {
 						return &Metadata{Kind: KindTrueTypeFont}
 					}
 				case 0x74:
@@ -5011,14 +5017,6 @@ func detectOptimized(b Buffer) *Metadata {
 						return &Metadata{Kind: KindWordPerfectTextDocument}
 					}
 				}
-			}
-		case 0x82:
-			if len(b) >= 4 && string(b[:4]) == "\x82\x06\x7f7" {
-				return &Metadata{Kind: KindSQLite3WriteAheadLog, Type: TypeLittleEndian}
-			}
-		case 0x83:
-			if len(b) >= 4 && string(b[:4]) == "\x83\x06\x7f7" {
-				return &Metadata{Kind: KindSQLite3WriteAheadLog, Type: TypeLittleEndian}
 			}
 		case 0x84:
 			if len(b) >= 4 && string(b[:4]) == "\x84\x10\xff\xff" {
